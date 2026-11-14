@@ -63,7 +63,11 @@
       "polar": "Polar chart",
       "panorama": "Horizon panorama",
       "elevation": "Elevation",
-      "azimuth": "Azimuth"
+      "azimuth": "Azimuth",
+      "sunUp": "The Sun is above the horizon",
+      "sunDown": "The Sun is below the horizon",
+      "earthUp": "Earth is visible: radio contact is possible",
+      "earthDown": "Earth is hidden: no radio contact"
     },
     "polar": {
       "title": "Polar sky chart",

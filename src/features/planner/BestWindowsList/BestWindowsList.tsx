@@ -4,6 +4,7 @@ import Badge from '@/components/ui/Badge/Badge';
 import type { Criteria } from '@/domain/criteria/criteria';
 import { verdictFor } from '@/domain/metrics/verdict/verdict';
 import type { PlannerSite } from '@/features/planner/plannerSites';
+import { useMode } from '@/hooks/useMode/useMode';
 
 export interface BestWindow {
   site: PlannerSite;
@@ -38,16 +39,22 @@ export default function BestWindowsList({
   className,
 }: BestWindowsListProps) {
   const { t, i18n } = useTranslation();
-  const dateFormat = new Intl.DateTimeFormat(i18n.language, {
-    timeZone: 'UTC',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-    timeZoneName: 'short',
-  });
+  const beginner = useMode() === 'beginner';
+  const dateFormat = new Intl.DateTimeFormat(
+    i18n.language,
+    beginner
+      ? { timeZone: 'UTC', day: 'numeric', month: 'long', year: 'numeric' }
+      : {
+          timeZone: 'UTC',
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false,
+          timeZoneName: 'short',
+        }
+  );
 
   // The best start of every site, then the best sites
   const top = [...windows]

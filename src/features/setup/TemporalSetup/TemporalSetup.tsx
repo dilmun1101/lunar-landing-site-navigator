@@ -9,6 +9,7 @@ import {
   dateAtPhase,
   lunarPhase,
 } from '@/domain/time/lunarDay/lunarDay';
+import { useMode } from '@/hooks/useMode/useMode';
 import { formatUtcDateTime, parseUtcDateTime } from '@/lib/format/format';
 import { useScenarioStore } from '@/state/useScenarioStore/useScenarioStore';
 
@@ -18,6 +19,7 @@ interface TemporalSetupProps {
 
 export default function TemporalSetup({ className }: TemporalSetupProps) {
   const { t, i18n } = useTranslation();
+  const beginner = useMode() === 'beginner';
   const epoch = useScenarioStore((state) => state.epoch);
   const setEpoch = useScenarioStore((state) => state.setEpoch);
   // Text while the user is typing; null — show the current epoch
@@ -68,9 +70,11 @@ export default function TemporalSetup({ className }: TemporalSetupProps) {
       <div className="flex flex-col gap-2">
         <div className="flex items-baseline justify-between text-[11px] font-semibold tracking-wider text-slate-500 uppercase">
           <label htmlFor="lunar-day-slider">{t('setup.lunarDay')}</label>
-          <span className="font-mono text-slate-300 normal-case">
-            {t('setup.phase')}: {phaseText}
-          </span>
+          {!beginner && (
+            <span className="font-mono text-slate-300 normal-case">
+              {t('setup.phase')}: {phaseText}
+            </span>
+          )}
         </div>
         <input
           id="lunar-day-slider"

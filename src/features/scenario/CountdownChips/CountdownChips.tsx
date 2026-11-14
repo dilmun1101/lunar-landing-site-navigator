@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { formatDuration } from '@/lib/formatDuration/formatDuration';
+import { useMode } from '@/hooks/useMode/useMode';
+import { formatDurationFor } from '@/lib/formatDuration/formatDuration';
 import type { Duration } from '@/types';
 
 interface CountdownChipsProps {
@@ -17,13 +18,16 @@ export default function CountdownChips({
   className,
 }: CountdownChipsProps) {
   const { t } = useTranslation();
+  const beginner = useMode() === 'beginner';
 
   const chips = [
     {
       key: 'sunset',
       dot: 'bg-sun',
       text: sunset
-        ? t('scenario.countdown.sunset', { time: formatDuration(t, sunset) })
+        ? t('scenario.countdown.sunset', {
+            time: formatDurationFor(t, sunset, beginner),
+          })
         : t('scenario.countdown.sunBelow'),
     },
     {
@@ -31,7 +35,7 @@ export default function CountdownChips({
       dot: 'bg-earth',
       text: earthset
         ? t('scenario.countdown.earthset', {
-            time: formatDuration(t, earthset),
+            time: formatDurationFor(t, earthset, beginner),
           })
         : t('scenario.countdown.earthBelow'),
     },

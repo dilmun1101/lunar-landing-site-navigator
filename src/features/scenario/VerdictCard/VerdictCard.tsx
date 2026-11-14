@@ -7,7 +7,8 @@ import Panel from '@/components/ui/Panel/Panel';
 import SectionTitle from '@/components/ui/SectionTitle/SectionTitle';
 import { addDays } from '@/domain/time/lunarDay/lunarDay';
 import type { ScenarioView } from '@/features/scenario/demoScenario';
-import { formatDuration } from '@/lib/formatDuration/formatDuration';
+import { useMode } from '@/hooks/useMode/useMode';
+import { formatDurationFor } from '@/lib/formatDuration/formatDuration';
 import { formatUtcDateTime } from '@/lib/format/format';
 
 interface VerdictCardProps {
@@ -23,11 +24,21 @@ export default function VerdictCard({
   className,
 }: VerdictCardProps) {
   const { t, i18n } = useTranslation();
-  const start = formatUtcDateTime(scenario.epoch, i18n.language);
-  const end = formatUtcDateTime(
-    addDays(scenario.epoch, scenario.durationDays),
-    i18n.language
-  );
+  const beginner = useMode() === 'beginner';
+  const endDate = addDays(scenario.epoch, scenario.durationDays);
+  // Beginners get calendar dates only: no hours, minutes or time zone
+  const dayFormat = new Intl.DateTimeFormat(i18n.language, {
+    timeZone: 'UTC',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+  const start = beginner
+    ? dayFormat.format(scenario.epoch)
+    : formatUtcDateTime(scenario.epoch, i18n.language);
+  const end = beginner
+    ? dayFormat.format(endDate)
+    : formatUtcDateTime(endDate, i18n.language);
 
   return (
     <Panel className={classNames('flex flex-col gap-5', className)}>
@@ -43,7 +54,8 @@ export default function VerdictCard({
           <p className="text-sm text-slate-400">
             {t('scenario.verdict.missionWindow')}:{' '}
             <span className="font-mono">
-              {start} – {end} UTC
+              {start} – {end}
+              {beginner ? '' : ' UTC'}
             </span>
           </p>
         </div>
@@ -81,7 +93,7 @@ export default function VerdictCard({
             {t('scenario.verdict.longestDarkness')}
           </dt>
           <dd className="font-mono text-sm text-slate-100">
-            {formatDuration(t, scenario.longestDarkness)}
+            {formatDurationFor(t, scenario.longestDarkness, beginner)}
           </dd>
           {scenario.blackoutExceeded && (
             <dd className="text-xs text-red-300">
@@ -94,7 +106,7 @@ export default function VerdictCard({
             {t('scenario.verdict.longestCommsGap')}
           </dt>
           <dd className="font-mono text-sm text-slate-100">
-            {formatDuration(t, scenario.longestCommsGap)}
+            {formatDurationFor(t, scenario.longestCommsGap, beginner)}
           </dd>
         </div>
       </dl>
