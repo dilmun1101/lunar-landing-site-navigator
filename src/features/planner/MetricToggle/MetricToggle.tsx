@@ -1,14 +1,30 @@
 import { useTranslation } from 'react-i18next';
+import SegmentedControl from '@/components/ui/SegmentedControl/SegmentedControl';
+import type { PlannerMetric } from '@/features/planner/demoPlanner';
 
-export default function MetricToggle() {
+interface MetricToggleProps {
+  value: PlannerMetric;
+  onChange: (value: PlannerMetric) => void;
+  className?: string;
+}
+
+export default function MetricToggle({
+  value,
+  onChange,
+  className,
+}: MetricToggleProps) {
   const { t } = useTranslation();
+
   return (
-    <section data-stub="MetricToggle">
-      <h3>{t('planner.metric.title')}</h3>
-      <ul>
-        <li>{t('planner.metric.sunlight')}</li>
-        <li>{t('planner.metric.comms')}</li>
-      </ul>
-    </section>
+    <SegmentedControl
+      label={t('planner.metric.title')}
+      value={value}
+      onChange={onChange}
+      className={className}
+      options={[
+        { value: 'sunlight', label: t('planner.metric.sunlight') },
+        { value: 'comms', label: t('planner.metric.comms') },
+      ]}
+    />
   );
 }

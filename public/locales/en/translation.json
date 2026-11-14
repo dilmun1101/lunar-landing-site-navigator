@@ -117,6 +117,15 @@
       "site": "Site",
       "date": "Date",
       "value": "Value"
+    },
+    "demoNote": "Demo data — calculations are not connected yet",
+    "hint": "Hover a cell to see details",
+    "legend": {
+      "low": "Low",
+      "high": "High"
+    },
+    "best": {
+      "title": "Best launch windows"
     }
   },
   "time": {
