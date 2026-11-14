@@ -30,3 +30,41 @@ body {
     color: var(--color-accent);
   }
 }
+
+/* Тонкие скроллбары в стиле сайта */
+@layer base {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(255 255 255 / 0.18) transparent;
+  }
+
+  /* Chrome/Edge/Safari: отдельные стили, чтобы работал hover */
+  @supports selector(::-webkit-scrollbar) {
+    * {
+      scrollbar-width: auto;
+      scrollbar-color: auto;
+    }
+
+    *::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    *::-webkit-scrollbar-track,
+    *::-webkit-scrollbar-corner {
+      background: transparent;
+    }
+
+    *::-webkit-scrollbar-thumb {
+      border: 2px solid transparent;
+      border-radius: 9999px;
+      background-clip: content-box;
+      background-color: rgb(255 255 255 / 0.18);
+    }
+
+    *::-webkit-scrollbar-thumb:hover,
+    *::-webkit-scrollbar-thumb:active {
+      background-color: var(--color-accent);
+    }
+  }
+}

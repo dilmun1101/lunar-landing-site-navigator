@@ -95,7 +95,8 @@
       "solarElevation": "Solar elevation",
       "sunlightDuration": "Sunlight duration",
       "earthWindow": "Earth visibility window",
-      "remove": "Remove"
+      "remove": "Remove",
+      "windowDays": "Window days"
     },
     "best": {
       "title": "Best alternative",

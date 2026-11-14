@@ -95,7 +95,8 @@
       "solarElevation": "Высота Солнца",
       "sunlightDuration": "Длительность освещения",
       "earthWindow": "Окно видимости Земли",
-      "remove": "Убрать"
+      "remove": "Убрать",
+      "windowDays": "Дни окна"
     },
     "best": {
       "title": "Лучшая альтернатива",
