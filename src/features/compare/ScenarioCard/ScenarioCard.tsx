@@ -80,6 +80,21 @@ export default function ScenarioCard({
         ))}
       </dl>
 
+      <p
+        className={classNames('text-xs', {
+          'text-slate-400': !scenario.blackoutExceeded,
+          'text-red-300': scenario.blackoutExceeded,
+        })}
+      >
+        {t('compare.card.longestDarkness')}:{' '}
+        <span className="font-mono text-slate-100">
+          {formatDuration(t, scenario.longestDarkness)}
+        </span>
+        {scenario.blackoutExceeded
+          ? ` — ${t('scenario.verdict.blackoutExceeded')}`
+          : null}
+      </p>
+
       <div className="flex flex-col gap-1.5">
         <div className="flex items-center justify-between gap-2 text-[11px] tracking-wider text-slate-400 uppercase">
           <span className="flex items-center gap-1.5">

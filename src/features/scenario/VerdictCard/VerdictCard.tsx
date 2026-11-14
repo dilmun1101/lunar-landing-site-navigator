@@ -7,6 +7,7 @@ import Panel from '@/components/ui/Panel/Panel';
 import SectionTitle from '@/components/ui/SectionTitle/SectionTitle';
 import { addDays } from '@/domain/time/lunarDay/lunarDay';
 import type { ScenarioView } from '@/features/scenario/demoScenario';
+import { formatDuration } from '@/lib/formatDuration/formatDuration';
 import { formatUtcDateTime } from '@/lib/format/format';
 
 interface VerdictCardProps {
@@ -66,6 +67,37 @@ export default function VerdictCard({
           color="emerald"
         />
       </div>
+
+      <dl className="grid gap-3 sm:grid-cols-2">
+        <div
+          className={classNames(
+            'flex flex-col gap-0.5 rounded-lg border px-3 py-2',
+            scenario.blackoutExceeded
+              ? 'border-red-400/50 bg-red-400/10'
+              : 'border-white/10 bg-white/5'
+          )}
+        >
+          <dt className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">
+            {t('scenario.verdict.longestDarkness')}
+          </dt>
+          <dd className="font-mono text-sm text-slate-100">
+            {formatDuration(t, scenario.longestDarkness)}
+          </dd>
+          {scenario.blackoutExceeded && (
+            <dd className="text-xs text-red-300">
+              {t('scenario.verdict.blackoutExceeded')}
+            </dd>
+          )}
+        </div>
+        <div className="flex flex-col gap-0.5 rounded-lg border border-white/10 bg-white/5 px-3 py-2">
+          <dt className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">
+            {t('scenario.verdict.longestCommsGap')}
+          </dt>
+          <dd className="font-mono text-sm text-slate-100">
+            {formatDuration(t, scenario.longestCommsGap)}
+          </dd>
+        </div>
+      </dl>
     </Panel>
   );
 }

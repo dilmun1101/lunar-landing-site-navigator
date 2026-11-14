@@ -10,6 +10,7 @@ const fields: (keyof Criteria)[] = [
   'minSunElevation',
   'minEarthElevation',
   'minWindowHours',
+  'maxBlackoutHours',
   'viablePercent',
   'marginalPercent',
 ];

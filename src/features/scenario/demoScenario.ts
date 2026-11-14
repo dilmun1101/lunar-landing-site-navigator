@@ -22,6 +22,12 @@ export interface ScenarioView {
   windowPercent: number;
   sunlightDuration: Duration;
   earthWindowDuration: Duration;
+  /** The longest period without the Sun */
+  longestDarkness: Duration;
+  /** The longest period without a direct link to the Earth */
+  longestCommsGap: Duration;
+  /** The darkness is longer than the battery limit from the criteria */
+  blackoutExceeded: boolean;
   /** null — the body is currently below the horizon */
   sunset: Duration | null;
   earthset: Duration | null;
@@ -82,6 +88,9 @@ export const demoScenario: ScenarioView = {
   windowPercent: 51,
   sunlightDuration: { days: 23, hours: 0 },
   earthWindowDuration: { days: 18, hours: 0 },
+  longestDarkness: { days: 3, hours: 0 },
+  longestCommsGap: { days: 4, hours: 12 },
+  blackoutExceeded: false,
   sunset: { days: 4, hours: 11 },
   earthset: { days: 2, hours: 3 },
   sun: { azimuth: 120, elevation: 2.4 },

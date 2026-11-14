@@ -47,7 +47,10 @@
       "earthLink": "Direct Earth link",
       "earthLinkExpert": "Earth DTE",
       "missionWindow": "Mission window",
-      "window": "Power + comms"
+      "window": "Power + comms",
+      "longestDarkness": "Longest darkness",
+      "longestCommsGap": "Longest gap in Earth link",
+      "blackoutExceeded": "Longer than the battery limit"
     },
     "countdown": {
       "sunset": "Sunset in {{time}}",
@@ -113,7 +116,8 @@
       "earthWindow": "Earth visibility window",
       "remove": "Remove",
       "windowDays": "Window days",
-      "loading": "Loading…"
+      "loading": "Loading…",
+      "longestDarkness": "Longest darkness"
     },
     "best": {
       "title": "Best alternative",
@@ -189,6 +193,10 @@
     "minWindowHours": {
       "label": "Min. continuous window, h",
       "hint": "Periods with both Sun and Earth that are shorter than this are not counted. 0 — count everything."
+    },
+    "maxBlackoutHours": {
+      "label": "Max. darkness, h (0 — no limit)",
+      "hint": "The longest period without the Sun that the lander survives on its battery. A mission with a longer darkness is not viable. Applies to the scenario and the comparison, not to the planner."
     },
     "viablePercent": {
       "label": "“Viable” from, %",

@@ -15,6 +15,7 @@ import {
   timeUntilSet,
 } from '@/domain/metrics/countdowns/countdowns';
 import { terrainElevationAt } from '@/domain/horizon/horizonProfile/horizonProfile';
+import { longestGapMs } from '@/domain/metrics/gaps/gaps';
 import { verdictFor } from '@/domain/metrics/verdict/verdict';
 import { toDaySegments, totalMs } from '@/domain/metrics/windows/windows';
 import type { ScenarioView, SkyPoint } from '@/features/scenario/demoScenario';
@@ -93,6 +94,10 @@ export function buildScenarioView({
   const percentOf = (segments: [number, number][]) =>
     Math.round((totalMs(segments) / (toMs - fromMs)) * 100);
   const windowPercent = percentOf(windowSegments);
+  const darknessMs = longestGapMs(sunSegments, fromMs, toMs);
+  const blackoutExceeded =
+    criteria.maxBlackoutHours > 0 &&
+    darknessMs > criteria.maxBlackoutHours * 3_600_000;
 
   const sunSet = timeUntilSet(visible.sun, visible, fromMs);
   const earthSet = timeUntilSet(visible.earth, visible, fromMs);
@@ -109,12 +114,18 @@ export function buildScenarioView({
     siteName,
     epoch,
     durationDays,
-    verdict: verdictFor(windowPercent, criteria),
+    // The lander does not survive a darkness longer than its battery allows
+    verdict: blackoutExceeded
+      ? 'not-viable'
+      : verdictFor(windowPercent, criteria),
     sunlightPercent: percentOf(sunSegments),
     earthLinkPercent: percentOf(earthSegments),
     windowPercent,
     sunlightDuration: msToDuration(totalMs(sunSegments)),
     earthWindowDuration: msToDuration(totalMs(earthSegments)),
+    longestDarkness: msToDuration(darknessMs),
+    longestCommsGap: msToDuration(longestGapMs(earthSegments, fromMs, toMs)),
+    blackoutExceeded,
     sunset: sunSet,
     earthset: earthSet,
     sun,

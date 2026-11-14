@@ -9,6 +9,11 @@ export interface Criteria {
   minEarthElevation: number;
   /** Periods with both Sun and Earth shorter than this are not counted, hours */
   minWindowHours: number;
+  /**
+   * The longest period without the Sun the lander survives on its battery, hours.
+   * A mission with a longer darkness is not viable. 0 — no limit.
+   */
+  maxBlackoutHours: number;
   /** The site is "viable" from this share of the mission with power and communication, percent */
   viablePercent: number;
   /** The site is "marginal" from this share, percent */
@@ -19,6 +24,7 @@ export const defaultCriteria: Criteria = {
   minSunElevation: 0,
   minEarthElevation: 0,
   minWindowHours: 0,
+  maxBlackoutHours: 0,
   viablePercent: 60,
   marginalPercent: 30,
 };
@@ -31,6 +37,7 @@ export const criteriaLimits: Record<
   minSunElevation: { min: 0, max: 10, step: 0.5 },
   minEarthElevation: { min: 0, max: 10, step: 0.5 },
   minWindowHours: { min: 0, max: 240, step: 1 },
+  maxBlackoutHours: { min: 0, max: 720, step: 10 },
   viablePercent: { min: 0, max: 100, step: 5 },
   marginalPercent: { min: 0, max: 100, step: 5 },
 };
