@@ -14,7 +14,7 @@ body {
 }
 
 @layer base {
-  /* Курсор-рука на всём кликабельном (Tailwind 4 по умолчанию её не ставит) */
+  /* Pointer cursor on everything clickable (Tailwind 4 does not set it by default) */
   button:not(:disabled),
   [role='button']:not([aria-disabled='true']),
   a[href],
@@ -24,21 +24,21 @@ body {
     cursor: pointer;
   }
 
-  /* Цвет при наведении по умолчанию; классы text-* в компонентах его переопределяют */
+  /* Default hover color; text-* classes in components override it */
   a[href]:hover,
   button:not(:disabled):hover {
     color: var(--color-accent);
   }
 }
 
-/* Тонкие скроллбары в стиле сайта */
+/* Thin scrollbars in the site style */
 @layer base {
   * {
     scrollbar-width: thin;
     scrollbar-color: rgb(255 255 255 / 0.18) transparent;
   }
 
-  /* Chrome/Edge/Safari: отдельные стили, чтобы работал hover */
+  /* Chrome/Edge/Safari: separate styles so that hover works */
   @supports selector(::-webkit-scrollbar) {
     * {
       scrollbar-width: auto;

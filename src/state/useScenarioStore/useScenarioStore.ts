@@ -3,7 +3,7 @@ import { siteCatalog } from '@/features/sites/siteCatalog';
 
 export type DurationKey = '7' | '14' | 'cycle';
 
-/** Длительность миссии в сутках; «cycle» — полный лунный цикл. */
+/** Mission duration in days; "cycle" is a full lunar cycle. */
 export const durationDays: Record<DurationKey, number> = {
   '7': 7,
   '14': 14,
@@ -16,7 +16,7 @@ export interface CustomSite {
 }
 
 interface ScenarioState {
-  /** Выбранная площадка из каталога; null, если заданы свои координаты */
+  /** Selected catalog site; null if custom coordinates are set */
   siteId: string | null;
   customSite: CustomSite | null;
   epoch: Date;
@@ -38,7 +38,7 @@ export const useScenarioStore = create<ScenarioState>()((set) => ({
   setDuration: (duration) => set({ duration }),
 }));
 
-/** Читаемое имя текущей площадки (для заголовков и списка сравнения). */
+/** Readable name of the current site (for headings and the compare list). */
 export function getSiteName(
   state: Pick<ScenarioState, 'siteId' | 'customSite'>
 ): string {
@@ -47,4 +47,17 @@ export function getSiteName(
     return `${lat.toFixed(2)}°, ${lon.toFixed(2)}°`;
   }
   return siteCatalog.find((site) => site.id === state.siteId)?.name ?? '';
+}
+
+/**
+ * Coordinates of the selected site: custom or from the catalog.
+ * null — the site has no coordinates (e.g. Leibnitz Beta Plateau).
+ * Returns the same object for the same arguments (safe for hook dependencies).
+ */
+export function resolveCoordinates(
+  siteId: string | null,
+  customSite: CustomSite | null
+): { lat: number; lon: number; approximate?: boolean } | null {
+  if (customSite) return customSite;
+  return siteCatalog.find((site) => site.id === siteId)?.coordinates ?? null;
 }

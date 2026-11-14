@@ -10,7 +10,7 @@ interface ViabilityTimelineProps {
   sunSegments: Segment[];
   earthSegments: Segment[];
   windowSegments: Segment[];
-  /** Текущий момент на шкале, в днях от начала */
+  /** Current moment on the scale, in days from the start */
   nowDay?: number;
   className?: string;
 }

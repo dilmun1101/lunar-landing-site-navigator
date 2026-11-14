@@ -44,7 +44,9 @@
     },
     "countdown": {
       "sunset": "Sunset in {{time}}",
-      "earthset": "Earthset in {{time}}"
+      "earthset": "Earthset in {{time}}",
+      "sunBelow": "Sun is below the horizon",
+      "earthBelow": "Earth is below the horizon"
     },
     "sky": {
       "title": "Sky view",
@@ -83,7 +85,12 @@
       "earth": "Earth",
       "horizon": "Terrain horizon"
     },
-    "demoNote": "Demo data — calculations are not connected yet"
+    "demoNote": "Demo data — calculations are not connected yet",
+    "dataNote": "Data: JPL Horizons (DE441), airless, flat horizon — terrain (LOLA) is not included yet",
+    "dataNoteApprox": "Data: JPL Horizons (DE441), airless, flat horizon — site coordinates are the approximate region center; terrain (LOLA) is not included yet",
+    "noData": "This site has no coordinates yet — showing demo values",
+    "fetchError": "Could not load data from JPL Horizons — showing demo values",
+    "loading": "Loading data from JPL Horizons…"
   },
   "compare": {
     "title": "Compare scenarios",
@@ -96,7 +103,8 @@
       "sunlightDuration": "Sunlight duration",
       "earthWindow": "Earth visibility window",
       "remove": "Remove",
-      "windowDays": "Window days"
+      "windowDays": "Window days",
+      "loading": "Loading…"
     },
     "best": {
       "title": "Best alternative",

@@ -10,6 +10,8 @@ export interface CompareItem {
   /** ISO 8601, UTC */
   epoch: string;
   duration: DurationKey;
+  /** null — the site has no coordinates, so data cannot be requested */
+  coordinates: { lat: number; lon: number; approximate?: boolean } | null;
 }
 
 interface CompareState {

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 interface HeatmapTooltipProps {
   site?: string;
   date?: Date;
-  /** Процент 0–100 */
+  /** Percent, 0–100 */
   value?: number;
   className?: string;
 }

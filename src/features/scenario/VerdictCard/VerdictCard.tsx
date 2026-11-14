@@ -11,7 +11,7 @@ import { formatUtcDateTime } from '@/lib/format/format';
 
 interface VerdictCardProps {
   scenario: ScenarioView;
-  /** Например, таймеры до заката — выводятся справа в шапке карточки */
+  /** E.g. sunset timers — shown on the right of the card header */
   children?: ReactNode;
   className?: string;
 }

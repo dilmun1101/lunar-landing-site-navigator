@@ -11,7 +11,7 @@ export interface HoveredCell {
 }
 
 interface ViabilityHeatmapProps {
-  /** values[siteIndex][dateIndex], проценты */
+  /** values[siteIndex][dateIndex], percent */
   values: number[][];
   hovered: HoveredCell | null;
   onHover: (cell: HoveredCell | null) => void;

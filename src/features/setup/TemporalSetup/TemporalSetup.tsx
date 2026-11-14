@@ -20,7 +20,7 @@ export default function TemporalSetup({ className }: TemporalSetupProps) {
   const { t, i18n } = useTranslation();
   const epoch = useScenarioStore((state) => state.epoch);
   const setEpoch = useScenarioStore((state) => state.setEpoch);
-  // Текст, пока пользователь печатает; null — показываем текущую эпоху
+  // Text while the user is typing; null — show the current epoch
   const [draft, setDraft] = useState<string | null>(null);
 
   const phase = lunarPhase(epoch);

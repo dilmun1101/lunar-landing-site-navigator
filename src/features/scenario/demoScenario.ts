@@ -1,13 +1,13 @@
 import type { Duration, Verdict } from '@/types';
 
-// ДЕМО-ДАННЫЕ: статичные значения для отображения. Расчёты пока не подключены.
+// DEMO DATA: static display values. Calculations are not connected yet.
 
 export type Segment = [startDay: number, endDay: number];
 
 export interface SkyPoint {
-  /** Азимут, градусы от севера по часовой стрелке */
+  /** Azimuth, degrees clockwise from north */
   azimuth: number;
-  /** Высота над горизонтом, градусы */
+  /** Elevation above the horizon, degrees */
   elevation: number;
 }
 
@@ -22,8 +22,9 @@ export interface ScenarioView {
   windowPercent: number;
   sunlightDuration: Duration;
   earthWindowDuration: Duration;
-  sunset: Duration;
-  earthset: Duration;
+  /** null — the body is currently below the horizon */
+  sunset: Duration | null;
+  earthset: Duration | null;
   sun: SkyPoint;
   earth: SkyPoint;
   sunSegments: Segment[];
@@ -31,11 +32,11 @@ export interface ScenarioView {
   windowSegments: Segment[];
   sunTrack: SkyPoint[];
   earthTrack: SkyPoint[];
-  /** Высота рельефа на горизонте через каждые 5° азимута (72 значения) */
+  /** Terrain height on the horizon every 5° of azimuth (72 values) */
   horizon: number[];
 }
 
-// Условный рельеф вокруг площадки
+// Synthetic terrain around the site
 const horizon = Array.from({ length: 72 }, (_, index) => {
   const a = (index * 5 * Math.PI) / 180;
   const value =
@@ -49,7 +50,7 @@ const horizon = Array.from({ length: 72 }, (_, index) => {
 const terrainAt = (azimuth: number) =>
   horizon[Math.round((((azimuth % 360) + 360) % 360) / 5) % 72] ?? 0;
 
-/** Путь светила до захода: высота линейно падает до нуля, азимут сдвигается. */
+/** Path of a body until it sets: elevation falls linearly to zero, azimuth shifts. */
 function buildTrack(
   startAzimuth: number,
   azimuthPerDay: number,

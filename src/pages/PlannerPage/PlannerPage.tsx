@@ -17,7 +17,7 @@ import ViabilityHeatmap, {
 
 export default function PlannerPage() {
   const { t } = useTranslation();
-  // Только переключение отображения; расчётов нет
+  // Only toggles the display; there are no calculations
   const [metric, setMetric] = useState<PlannerMetric>('sunlight');
   const [hovered, setHovered] = useState<HoveredCell | null>(null);
 

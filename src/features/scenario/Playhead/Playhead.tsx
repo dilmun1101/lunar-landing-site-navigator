@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 interface PlayheadProps {
-  /** Положение на шкале, 0–100 % */
+  /** Position on the scale, 0–100 % */
   leftPercent: number;
   className?: string;
 }

@@ -3,6 +3,7 @@ import Button from '@/components/ui/Button/Button';
 import { useCompareList } from '@/state/useCompareList/useCompareList';
 import {
   getSiteName,
+  resolveCoordinates,
   useScenarioStore,
 } from '@/state/useScenarioStore/useScenarioStore';
 
@@ -18,8 +19,13 @@ export default function AddToComparisonButton({
   const siteName = useScenarioStore((state) => getSiteName(state));
 
   const handleClick = () => {
-    const { epoch, duration } = useScenarioStore.getState();
-    add({ siteName, epoch: epoch.toISOString(), duration });
+    const { epoch, duration, siteId, customSite } = useScenarioStore.getState();
+    add({
+      siteName,
+      epoch: epoch.toISOString(),
+      duration,
+      coordinates: resolveCoordinates(siteId, customSite),
+    });
   };
 
   return (

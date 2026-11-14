@@ -1,13 +1,13 @@
-// Раскладывает каждый модуль в свою папку:
+// Puts every module into its own folder:
 //   Button.tsx  →  Button/Button.tsx + Button/index.ts
-// Тесты (X.test.ts[x] / X.spec.ts[x]) переезжают вместе с модулем.
-// Импорты менять не нужно: `@/components/ui/Button` теперь ведёт на Button/index.ts.
+// Tests (X.test.ts[x] / X.spec.ts[x]) move together with the module.
+// Imports do not need changes: `@/components/ui/Button` now resolves to Button/index.ts.
 //
-// Запуск из корня проекта:
-//   node scripts/restructure-folders.mjs          — выполнить
-//   node scripts/restructure-folders.mjs --dry    — только показать, что будет сделано
+// Run from the project root:
+//   node scripts/restructure-folders.mjs          — apply
+//   node scripts/restructure-folders.mjs --dry    — only show what would be done
 //
-// Скрипт безопасно запускать повторно: уже разложенные модули пропускаются.
+// The script is safe to re-run: modules that are already moved are skipped.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -20,7 +20,7 @@ const srcDir = path.resolve(
 );
 const dry = process.argv.includes('--dry');
 
-// Что раскладываем
+// What gets moved
 const ROOT_DIRS = [
   'components',
   'features',
@@ -32,7 +32,7 @@ const ROOT_DIRS = [
   'domain',
 ];
 const ROOT_FILES = ['App.tsx'];
-// Данные и типы остаются как есть (main.tsx, router.tsx, i18n, styles — вне списка)
+// Data and types stay as they are (main.tsx, router.tsx, i18n, styles are outside the list)
 const EXCLUDE = new Set(['siteCatalog.ts', 'types.ts']);
 
 const TEST_SUFFIXES = ['.test.ts', '.test.tsx', '.spec.ts', '.spec.tsx'];
@@ -67,7 +67,7 @@ for (const file of files) {
   const name = path.basename(file);
   const stem = name.replace(/\.(ts|tsx)$/, '');
 
-  // уже лежит в папке с тем же именем
+  // already inside a folder with the same name
   if (path.basename(dir) === stem) {
     skipped++;
     continue;
@@ -75,7 +75,7 @@ for (const file of files) {
 
   const target = path.join(dir, stem);
   if (fs.existsSync(target)) {
-    console.warn(`пропуск (папка уже есть): ${rel(target)}`);
+    console.warn(`skipped (folder already exists): ${rel(target)}`);
     skipped++;
     continue;
   }
@@ -111,5 +111,5 @@ for (const file of files) {
 }
 
 console.log(
-  `\n${dry ? 'Будет перенесено' : 'Перенесено'}: ${moved}, пропущено: ${skipped}`
+  `\n${dry ? 'Would move' : 'Moved'}: ${moved}, skipped: ${skipped}`
 );
