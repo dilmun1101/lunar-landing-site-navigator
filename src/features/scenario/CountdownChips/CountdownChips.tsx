@@ -1,15 +1,47 @@
+import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
+import { formatDuration } from '@/lib/formatDuration/formatDuration';
+import type { Duration } from '@/types';
 
-export default function CountdownChips() {
+interface CountdownChipsProps {
+  sunset: Duration;
+  earthset: Duration;
+  className?: string;
+}
+
+export default function CountdownChips({
+  sunset,
+  earthset,
+  className,
+}: CountdownChipsProps) {
   const { t } = useTranslation();
-  // Placeholder values: sunset in 4 d 11 h, Earthset in 2 d 3 h
-  const sunset = `${t('time.days', { count: 4 })} ${t('time.hours', { count: 11 })}`;
-  const earthset = `${t('time.days', { count: 2 })} ${t('time.hours', { count: 3 })}`;
+
+  const chips = [
+    {
+      key: 'sunset',
+      dot: 'bg-sun',
+      text: t('scenario.countdown.sunset', { time: formatDuration(t, sunset) }),
+    },
+    {
+      key: 'earthset',
+      dot: 'bg-earth',
+      text: t('scenario.countdown.earthset', {
+        time: formatDuration(t, earthset),
+      }),
+    },
+  ];
 
   return (
-    <div data-stub="CountdownChips" className="flex gap-2">
-      <span>{t('scenario.countdown.sunset', { time: sunset })}</span>
-      <span>{t('scenario.countdown.earthset', { time: earthset })}</span>
-    </div>
+    <ul className={classNames('flex flex-wrap gap-2', className)}>
+      {chips.map((chip) => (
+        <li
+          key={chip.key}
+          className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-sm text-slate-200"
+        >
+          <span className={classNames('size-2 rounded-full', chip.dot)} />
+          {chip.text}
+        </li>
+      ))}
+    </ul>
   );
 }

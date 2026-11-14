@@ -1,13 +1,23 @@
+import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
+import Panel from '@/components/ui/Panel/Panel';
 
-export default function EmptyState() {
+interface EmptyStateProps {
+  className?: string;
+}
+
+export default function EmptyState({ className }: EmptyStateProps) {
   const { t } = useTranslation();
+
   return (
-    <section data-stub="EmptyState">
-      <h3>{t('compare.empty.title')}</h3>
-      <ul>
-        <li>{t('compare.empty.hint')}</li>
-      </ul>
-    </section>
+    <Panel
+      className={classNames(
+        'flex flex-col items-center gap-1 border-dashed py-8 text-center',
+        className
+      )}
+    >
+      <p className="font-medium text-slate-200">{t('compare.empty.title')}</p>
+      <p className="text-sm text-slate-500">{t('compare.empty.hint')}</p>
+    </Panel>
   );
 }

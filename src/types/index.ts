@@ -1,5 +1,10 @@
 export type Verdict = 'viable' | 'marginal' | 'not-viable';
 
+export interface Duration {
+  days: number;
+  hours: number;
+}
+
 export interface Site {
   id: string;
   name: string;

@@ -67,7 +67,7 @@ export default function AppShell({ className }: AppShellProps) {
         <Outlet />
       </main>
 
-      <footer className="col-span-2 border-t border-white/10 p-4">
+      <footer className="border-t border-white/10 p-4">
         <ComparePanel />
       </footer>
     </div>

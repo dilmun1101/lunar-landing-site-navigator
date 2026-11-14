@@ -38,7 +38,9 @@
       "title": "Verdict",
       "sunlight": "Sunlight",
       "earthLink": "Direct Earth link",
-      "earthLinkExpert": "Earth DTE"
+      "earthLinkExpert": "Earth DTE",
+      "missionWindow": "Mission window",
+      "window": "Power + comms"
     },
     "countdown": {
       "sunset": "Sunset in {{time}}",
@@ -47,14 +49,18 @@
     "sky": {
       "title": "Sky view",
       "polar": "Polar chart",
-      "panorama": "Horizon panorama"
+      "panorama": "Horizon panorama",
+      "elevation": "Elevation",
+      "azimuth": "Azimuth"
     },
     "polar": {
       "title": "Polar sky chart",
       "north": "N",
       "east": "E",
       "south": "S",
-      "west": "W"
+      "west": "W",
+      "elevationNote": "Rings show elevation above the horizon (0–8°, zoomed in).",
+      "trackNote": "Dashed lines: path until sunset and Earthset."
     },
     "panorama": {
       "title": "360° horizon panorama"
@@ -66,7 +72,8 @@
       "window": "Power + communication window",
       "play": "Play",
       "pause": "Pause",
-      "speed": "Speed"
+      "speed": "Speed",
+      "axis": "Days from start"
     },
     "playhead": {
       "now": "Now"
@@ -75,7 +82,8 @@
       "sun": "Sun",
       "earth": "Earth",
       "horizon": "Terrain horizon"
-    }
+    },
+    "demoNote": "Demo data — calculations are not connected yet"
   },
   "compare": {
     "title": "Compare scenarios",

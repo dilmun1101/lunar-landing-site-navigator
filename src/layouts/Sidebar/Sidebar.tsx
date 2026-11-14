@@ -12,7 +12,7 @@ export default function Sidebar({ className }: SidebarProps) {
   return (
     <aside
       className={classNames(
-        'sticky top-14 flex h-[calc(100vh-3.5rem)] flex-col gap-5 overflow-y-auto border-r border-white/10 p-4',
+        'sticky top-14 row-span-2 flex h-[calc(100vh-3.5rem)] flex-col gap-5 overflow-y-auto border-r border-white/10 bg-space-900 p-4',
         className
       )}
     >

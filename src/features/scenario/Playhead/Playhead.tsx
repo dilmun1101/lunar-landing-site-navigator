@@ -1,10 +1,27 @@
+import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-export default function Playhead() {
+interface PlayheadProps {
+  /** Положение на шкале, 0–100 % */
+  leftPercent: number;
+  className?: string;
+}
+
+export default function Playhead({ leftPercent, className }: PlayheadProps) {
   const { t } = useTranslation();
+
   return (
-    <section data-stub="Playhead">
-      <h3>{t('scenario.playhead.now')}</h3>
-    </section>
+    <div
+      className={classNames(
+        'pointer-events-none absolute inset-y-[-6px] z-10',
+        className
+      )}
+      style={{ left: `${leftPercent}%` }}
+    >
+      <div className="h-full w-0.5 -translate-x-1/2 bg-white" />
+      <span className="absolute -top-5 left-0 -translate-x-1/2 text-[11px] font-semibold whitespace-nowrap text-white">
+        {t('scenario.playhead.now')}
+      </span>
+    </div>
   );
 }
