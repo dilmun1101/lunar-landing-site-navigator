@@ -5,7 +5,10 @@ import EmptyState from '@/features/compare/EmptyState/EmptyState';
 import PendingCard from '@/features/compare/PendingCard/PendingCard';
 import ScenarioCard from '@/features/compare/ScenarioCard/ScenarioCard';
 import { useCompareViews } from '@/features/compare/useCompareViews/useCompareViews';
-import { useCompareList } from '@/state/useCompareList/useCompareList';
+import {
+  MAX_COMPARE_ITEMS,
+  useCompareList,
+} from '@/state/useCompareList/useCompareList';
 
 interface ComparePanelProps {
   className?: string;
@@ -19,7 +22,9 @@ export default function ComparePanel({ className }: ComparePanelProps) {
 
   return (
     <section className={classNames('flex flex-col gap-3', className)}>
-      <SectionTitle>{t('compare.title')}</SectionTitle>
+      <SectionTitle>
+        {t('compare.title')} · {items.length}/{MAX_COMPARE_ITEMS}
+      </SectionTitle>
 
       {items.length === 0 ? (
         <EmptyState />

@@ -10,6 +10,7 @@ import {
 } from '@/domain/planner/plannerValues/plannerValues';
 import BestWindowsList, {
   type BestWindow,
+  type CompareState,
 } from '@/features/planner/BestWindowsList/BestWindowsList';
 import HeatmapTooltip from '@/features/planner/HeatmapTooltip/HeatmapTooltip';
 import MetricToggle from '@/features/planner/MetricToggle/MetricToggle';
@@ -18,7 +19,10 @@ import { usePlannerData } from '@/features/planner/usePlannerData/usePlannerData
 import ViabilityHeatmap, {
   type HoveredCell,
 } from '@/features/planner/ViabilityHeatmap/ViabilityHeatmap';
-import { useCompareList } from '@/state/useCompareList/useCompareList';
+import {
+  MAX_COMPARE_ITEMS,
+  useCompareList,
+} from '@/state/useCompareList/useCompareList';
 import { useCriteriaStore } from '@/state/useCriteriaStore/useCriteriaStore';
 import {
   durationDays,
@@ -35,6 +39,7 @@ export default function PlannerPage() {
   const selectSite = useScenarioStore((state) => state.selectSite);
   const setEpoch = useScenarioStore((state) => state.setEpoch);
   const addToCompare = useCompareList((state) => state.add);
+  const compareItems = useCompareList((state) => state.items);
   const navigate = useNavigate();
   const [metric, setMetric] = useState<PlannerMetric>('window');
   const [hovered, setHovered] = useState<HoveredCell | null>(null);
@@ -69,6 +74,22 @@ export default function PlannerPage() {
       duration,
       coordinates: window.site.coordinates,
     });
+
+  // The list ignores duplicates and more than MAX_COMPARE_ITEMS scenarios, so the button says why
+  const compareState = (window: BestWindow): CompareState => {
+    const epoch = new Date(window.startMs).toISOString();
+    if (
+      compareItems.some(
+        (item) =>
+          item.siteName === window.site.name &&
+          item.epoch === epoch &&
+          item.duration === duration
+      )
+    ) {
+      return 'added';
+    }
+    return compareItems.length >= MAX_COMPARE_ITEMS ? 'full' : 'add';
+  };
 
   const hoveredValue = hovered ? values[hovered.row]?.[hovered.col] : undefined;
 
@@ -116,6 +137,7 @@ export default function PlannerPage() {
           criteria={criteria}
           onOpen={openWindow}
           onAdd={addWindow}
+          compareState={compareState}
         />
       </Panel>
 

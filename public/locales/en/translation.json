@@ -149,7 +149,10 @@
     "best": {
       "title": "Best launch windows",
       "empty": "Waiting for the first calculated site…",
-      "hint": "Click a window to open it in the scenario. The start time is searched every 12 hours."
+      "hint": "Click a window to open it in the scenario. The start time is searched every 12 hours.",
+      "added": "Added",
+      "compareFull": "List is full",
+      "compareFullHint": "The comparison holds up to 4 scenarios. Remove one in the panel at the bottom of the page."
     },
     "dataNote": "Data: JPL Horizons (DE441), airless, terrain horizon from LOLA. Each cell is the share of a {{days}}-day mission starting on that date.",
     "progress": "Calculated {{done}} of {{total}} sites…",

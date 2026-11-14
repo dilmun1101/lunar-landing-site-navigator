@@ -12,6 +12,9 @@ export interface BestWindow {
   percent: number;
 }
 
+/** Whether the window can be added to the comparison */
+export type CompareState = 'add' | 'added' | 'full';
+
 interface BestWindowsListProps {
   windows: BestWindow[];
   criteria: Criteria;
@@ -19,6 +22,8 @@ interface BestWindowsListProps {
   onOpen: (window: BestWindow) => void;
   /** Add the window to the comparison */
   onAdd: (window: BestWindow) => void;
+  /** State of the comparison list for the window: tells why the button may be disabled */
+  compareState: (window: BestWindow) => CompareState;
   limit?: number;
   className?: string;
 }
@@ -28,6 +33,7 @@ export default function BestWindowsList({
   criteria,
   onOpen,
   onAdd,
+  compareState,
   limit = 5,
   className,
 }: BestWindowsListProps) {
@@ -89,9 +95,19 @@ export default function BestWindowsList({
             <button
               type="button"
               onClick={() => onAdd(item)}
-              className="text-xs text-slate-400 transition-colors hover:text-accent"
+              disabled={compareState(item) !== 'add'}
+              title={
+                compareState(item) === 'full'
+                  ? t('planner.best.compareFullHint')
+                  : undefined
+              }
+              className="text-xs text-slate-400 transition-colors hover:text-accent disabled:cursor-not-allowed disabled:text-slate-600 disabled:hover:text-slate-600"
             >
-              {t('common.addToComparison')}
+              {compareState(item) === 'added'
+                ? t('planner.best.added')
+                : compareState(item) === 'full'
+                  ? t('planner.best.compareFull')
+                  : t('common.addToComparison')}
             </button>
           </li>
         ))}
