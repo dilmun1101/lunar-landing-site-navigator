@@ -1,14 +1,23 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import SegmentedControl from '@/components/ui/SegmentedControl';
+
+type Mode = 'beginner' | 'expert';
 
 export default function ModeSwitch() {
   const { t } = useTranslation();
+  // TODO: перенести в общее состояние (hooks/useMode.ts), когда режимы будут влиять на интерфейс
+  const [mode, setMode] = useState<Mode>('expert');
+
   return (
-    <section data-stub="ModeSwitch">
-      <h3>{t('mode.label')}</h3>
-      <ul>
-        <li>{t('mode.beginner')}</li>
-        <li>{t('mode.expert')}</li>
-      </ul>
-    </section>
+    <SegmentedControl
+      label={t('mode.label')}
+      options={[
+        { value: 'beginner', label: t('mode.beginner') },
+        { value: 'expert', label: t('mode.expert') },
+      ]}
+      value={mode}
+      onChange={setMode}
+    />
   );
 }
