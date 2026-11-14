@@ -1,10 +1,10 @@
 import classNames from 'classnames';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import SearchIcon from '@/components/ui/SearchIcon';
-import SectionTitle from '@/components/ui/SectionTitle';
-import TextInput from '@/components/ui/TextInput';
-import CustomCoordinates from '@/features/sites/CustomCoordinates';
+import SearchIcon from '@/components/ui/SearchIcon/SearchIcon';
+import SectionTitle from '@/components/ui/SectionTitle/SectionTitle';
+import TextInput from '@/components/ui/TextInput/TextInput';
+import CustomCoordinates from '@/features/sites/CustomCoordinates/CustomCoordinates';
 import { siteCatalog } from '@/features/sites/siteCatalog';
 import type { SiteGroup } from '@/features/sites/types';
 

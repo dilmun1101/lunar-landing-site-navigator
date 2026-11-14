@@ -1,8 +1,8 @@
 import classNames from 'classnames';
-import AddToComparisonButton from '@/features/compare/AddToComparisonButton';
-import MissionDuration from '@/features/setup/MissionDuration';
-import TemporalSetup from '@/features/setup/TemporalSetup';
-import SitePicker from '@/features/sites/SitePicker';
+import AddToComparisonButton from '@/features/compare/AddToComparisonButton/AddToComparisonButton';
+import MissionDuration from '@/features/setup/MissionDuration/MissionDuration';
+import TemporalSetup from '@/features/setup/TemporalSetup/TemporalSetup';
+import SitePicker from '@/features/sites/SitePicker/SitePicker';
 
 interface SidebarProps {
   className?: string;

@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { addDays, dateAtPhase, lunarPhase } from '@/domain/time/lunarDay';
+import {
+  addDays,
+  dateAtPhase,
+  lunarPhase,
+} from '@/domain/time/lunarDay/lunarDay';
 
 describe('lunarPhase', () => {
   it('is 0 at the reference new moon', () => {

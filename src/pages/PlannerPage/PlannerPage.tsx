@@ -1,5 +1,5 @@
-import MetricToggle from '@/features/planner/MetricToggle';
-import ViabilityHeatmap from '@/features/planner/ViabilityHeatmap';
+import MetricToggle from '@/features/planner/MetricToggle/MetricToggle';
+import ViabilityHeatmap from '@/features/planner/ViabilityHeatmap/ViabilityHeatmap';
 
 export default function PlannerPage() {
   return (

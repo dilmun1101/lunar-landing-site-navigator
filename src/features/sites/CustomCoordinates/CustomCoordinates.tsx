@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import Button from '@/components/ui/Button';
-import TextInput from '@/components/ui/TextInput';
+import Button from '@/components/ui/Button/Button';
+import TextInput from '@/components/ui/TextInput/TextInput';
 
 /** Принимает и точку, и запятую; возвращает null, если пусто или вне диапазона. */
 function parseCoordinate(value: string, limit: number): number | null {

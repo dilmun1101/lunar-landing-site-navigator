@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import SegmentedControl from '@/components/ui/SegmentedControl';
+import SegmentedControl from '@/components/ui/SegmentedControl/SegmentedControl';
 import { supportedLanguages } from '@/i18n/i18n';
 
 interface LanguageSwitchProps {

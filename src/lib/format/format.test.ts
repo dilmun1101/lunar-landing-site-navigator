@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatUtcDateTime, parseUtcDateTime } from '@/lib/format';
+import { formatUtcDateTime, parseUtcDateTime } from '@/lib/format/format';
 
 const date = new Date('2026-01-05T03:07:00Z');
 

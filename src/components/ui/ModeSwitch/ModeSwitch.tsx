@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import SegmentedControl from '@/components/ui/SegmentedControl';
+import SegmentedControl from '@/components/ui/SegmentedControl/SegmentedControl';
 
 type Mode = 'beginner' | 'expert';
 

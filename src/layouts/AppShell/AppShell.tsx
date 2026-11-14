@@ -1,11 +1,11 @@
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { NavLink, Outlet } from 'react-router';
-import LanguageSwitch from '@/components/ui/LanguageSwitch';
-import Logo from '@/components/ui/Logo';
-import ModeSwitch from '@/components/ui/ModeSwitch';
-import ComparePanel from '@/features/compare/ComparePanel';
-import Sidebar from '@/layouts/Sidebar';
+import LanguageSwitch from '@/components/ui/LanguageSwitch/LanguageSwitch';
+import Logo from '@/components/ui/Logo/Logo';
+import ModeSwitch from '@/components/ui/ModeSwitch/ModeSwitch';
+import ComparePanel from '@/features/compare/ComparePanel/ComparePanel';
+import Sidebar from '@/layouts/Sidebar/Sidebar';
 
 const tabs = [
   { to: '/scenario', labelKey: 'nav.scenario' },

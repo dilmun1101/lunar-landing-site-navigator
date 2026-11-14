@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import Select from '@/components/ui/Select';
+import Select from '@/components/ui/Select/Select';
 
 type Duration = '7' | '14' | 'cycle';
 
