@@ -5,7 +5,7 @@ import LanguageSwitch from '@/components/ui/LanguageSwitch';
 import Logo from '@/components/ui/Logo';
 import ModeSwitch from '@/components/ui/ModeSwitch';
 import ComparePanel from '@/features/compare/ComparePanel';
-import SitePicker from '@/features/sites/SitePicker';
+import Sidebar from '@/layouts/Sidebar';
 
 const tabs = [
   { to: '/scenario', labelKey: 'nav.scenario' },
@@ -61,9 +61,7 @@ export default function AppShell({ className }: AppShellProps) {
         </div>
       </header>
 
-      <aside className="sticky top-14 h-[calc(100vh-3.5rem)] overflow-y-auto border-r border-white/10 p-4">
-        <SitePicker />
-      </aside>
+      <Sidebar />
 
       <main className="p-4">
         <Outlet />

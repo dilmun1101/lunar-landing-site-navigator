@@ -2,6 +2,9 @@ import classNames from 'classnames';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import SearchIcon from '@/components/ui/SearchIcon';
+import SectionTitle from '@/components/ui/SectionTitle';
+import TextInput from '@/components/ui/TextInput';
+import CustomCoordinates from '@/features/sites/CustomCoordinates';
 import { siteCatalog } from '@/features/sites/siteCatalog';
 import type { SiteGroup } from '@/features/sites/types';
 
@@ -34,19 +37,17 @@ export default function SitePicker({ className }: SitePickerProps) {
 
   return (
     <section className={classNames('flex flex-col gap-5', className)}>
-      <h2 className="text-xs font-semibold tracking-[0.18em] text-slate-400 uppercase">
-        {t('sites.title')}
-      </h2>
+      <SectionTitle>{t('sites.title')}</SectionTitle>
 
       <div className="relative">
         <SearchIcon className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-500" />
-        <input
+        <TextInput
           type="text"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder={t('sites.search')}
           aria-label={t('sites.search')}
-          className="w-full rounded-lg border border-white/10 bg-white/5 py-2 pr-3 pl-9 text-sm text-slate-100 placeholder:text-slate-500 focus:border-accent focus:outline-none"
+          className="pl-9"
         />
       </div>
 
@@ -75,6 +76,8 @@ export default function SitePicker({ className }: SitePickerProps) {
           </div>
         ))
       )}
+
+      <CustomCoordinates />
     </section>
   );
 }

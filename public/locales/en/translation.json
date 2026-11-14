@@ -28,7 +28,8 @@
       "title": "Custom coordinates",
       "lat": "Latitude",
       "lon": "Longitude",
-      "apply": "Apply"
+      "apply": "Apply",
+      "invalid": "Latitude −90…90, longitude −180…180"
     },
     "noResults": "No sites found"
   },
@@ -115,5 +116,19 @@
     "days_other": "{{count}} days",
     "hours_one": "{{count}} hour",
     "hours_other": "{{count}} hours"
+  },
+  "setup": {
+    "title": "Temporal setup",
+    "epoch": "Current time (UTC)",
+    "lunarDay": "Lunar day",
+    "phase": "Phase",
+    "prevDay": "−1 d",
+    "nextDay": "+1 d",
+    "reset": "Reset",
+    "duration": {
+      "label": "Duration of mission",
+      "cycle": "Full lunar cycle"
+    },
+    "epochHint": "Format: YYYY-MM-DD HH:mm, UTC"
   }
 }
