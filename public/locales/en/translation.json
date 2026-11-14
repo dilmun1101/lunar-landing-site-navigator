@@ -1,0 +1,119 @@
+{
+  "nav": {
+    "scenario": "Scenario",
+    "planner": "Planner"
+  },
+  "common": {
+    "language": "Language",
+    "addToComparison": "Add to comparison"
+  },
+  "mode": {
+    "label": "Mode",
+    "beginner": "Beginner",
+    "expert": "Expert"
+  },
+  "verdict": {
+    "viable": "Viable",
+    "marginal": "Marginal",
+    "notViable": "Not viable"
+  },
+  "sites": {
+    "title": "Site selection",
+    "search": "Search lunar sites…",
+    "groups": {
+      "apollo": "Historical (Apollo)",
+      "clps": "CLPS / Artemis candidates",
+      "international": "International"
+    },
+    "custom": {
+      "title": "Custom coordinates",
+      "lat": "Latitude",
+      "lon": "Longitude",
+      "apply": "Apply"
+    }
+  },
+  "scenario": {
+    "verdict": {
+      "title": "Verdict",
+      "sunlight": "Sunlight",
+      "earthLink": "Direct Earth link",
+      "earthLinkExpert": "Earth DTE"
+    },
+    "countdown": {
+      "sunset": "Sunset in {{time}}",
+      "earthset": "Earthset in {{time}}"
+    },
+    "sky": {
+      "title": "Sky view",
+      "polar": "Polar chart",
+      "panorama": "Horizon panorama"
+    },
+    "polar": {
+      "title": "Polar sky chart",
+      "north": "N",
+      "east": "E",
+      "south": "S",
+      "west": "W"
+    },
+    "panorama": {
+      "title": "360° horizon panorama"
+    },
+    "timeline": {
+      "title": "Viability timeline",
+      "sunAbove": "Sun above horizon",
+      "earthAbove": "Earth above horizon",
+      "window": "Power + communication window",
+      "play": "Play",
+      "pause": "Pause",
+      "speed": "Speed"
+    },
+    "playhead": {
+      "now": "Now"
+    },
+    "legend": {
+      "sun": "Sun",
+      "earth": "Earth",
+      "horizon": "Terrain horizon"
+    }
+  },
+  "compare": {
+    "title": "Compare scenarios",
+    "empty": {
+      "title": "No scenarios yet",
+      "hint": "Pick a site and a date, then add it to compare."
+    },
+    "card": {
+      "solarElevation": "Solar elevation",
+      "sunlightDuration": "Sunlight duration",
+      "earthWindow": "Earth visibility window",
+      "remove": "Remove"
+    },
+    "best": {
+      "title": "Best alternative",
+      "text": "Shift launch by {{days}} days: +{{percent}}% sunlight"
+    }
+  },
+  "planner": {
+    "metric": {
+      "title": "Metric",
+      "sunlight": "% sunlight",
+      "comms": "Communication window"
+    },
+    "heatmap": {
+      "title": "Site × date viability",
+      "rows": "Sites",
+      "columns": "Dates"
+    },
+    "tooltip": {
+      "site": "Site",
+      "date": "Date",
+      "value": "Value"
+    }
+  },
+  "time": {
+    "days_one": "{{count}} day",
+    "days_other": "{{count}} days",
+    "hours_one": "{{count}} hour",
+    "hours_other": "{{count}} hours"
+  }
+}
