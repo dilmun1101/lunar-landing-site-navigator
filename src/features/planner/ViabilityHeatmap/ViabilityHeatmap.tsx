@@ -1,9 +1,5 @@
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import {
-  demoPlannerDates,
-  demoPlannerSites,
-} from '@/features/planner/demoPlanner';
 
 export interface HoveredCell {
   row: number;
@@ -11,14 +7,18 @@ export interface HoveredCell {
 }
 
 interface ViabilityHeatmapProps {
-  /** values[siteIndex][dateIndex], percent */
-  values: number[][];
+  sites: { id: string; name: string }[];
+  dates: Date[];
+  /** values[siteIndex][dateIndex], percent; null — the site is not calculated yet */
+  values: (number[] | null)[];
   hovered: HoveredCell | null;
   onHover: (cell: HoveredCell | null) => void;
   className?: string;
 }
 
 export default function ViabilityHeatmap({
+  sites,
+  dates,
   values,
   hovered,
   onHover,
@@ -42,14 +42,14 @@ export default function ViabilityHeatmap({
       <div
         className="grid min-w-[44rem] items-center gap-1"
         style={{
-          gridTemplateColumns: `9.5rem repeat(${demoPlannerDates.length}, minmax(0, 1fr))`,
+          gridTemplateColumns: `9.5rem repeat(${dates.length}, minmax(0, 1fr))`,
         }}
         onMouseLeave={() => onHover(null)}
       >
         <span className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">
           {t('planner.heatmap.rows')} / {t('planner.heatmap.columns')}
         </span>
-        {demoPlannerDates.map((date, col) => (
+        {dates.map((date, col) => (
           <span
             key={date.toISOString()}
             className="h-4 text-center font-mono text-[10px] whitespace-nowrap text-slate-500"
@@ -58,34 +58,46 @@ export default function ViabilityHeatmap({
           </span>
         ))}
 
-        {demoPlannerSites.map((site, row) => (
-          <div key={site.id} className="contents">
-            <span className="truncate pr-2 text-sm text-slate-300">
-              {site.name}
-            </span>
-            {demoPlannerDates.map((date, col) => {
-              const value = values[row]?.[col] ?? 0;
-              const isHovered = hovered?.row === row && hovered.col === col;
-              return (
-                <button
-                  key={date.toISOString()}
-                  type="button"
-                  aria-label={`${site.name}, ${dateFormat.format(date)}: ${value}%`}
-                  onMouseEnter={() => onHover({ row, col })}
-                  onFocus={() => onHover({ row, col })}
-                  onBlur={() => onHover(null)}
-                  className={classNames(
-                    'h-7 cursor-pointer rounded-sm border border-white/5 transition-shadow hover:ring-2 hover:ring-accent focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none',
-                    { 'ring-2 ring-accent': isHovered }
-                  )}
-                  style={{
-                    backgroundColor: `rgb(52 211 153 / ${value / 100})`,
-                  }}
-                />
-              );
-            })}
-          </div>
-        ))}
+        {sites.map((site, row) => {
+          const rowValues = values[row];
+          return (
+            <div key={site.id} className="contents">
+              <span className="truncate pr-2 text-sm text-slate-300">
+                {site.name}
+              </span>
+              {dates.map((date, col) => {
+                const value = rowValues?.[col];
+                if (value === undefined) {
+                  return (
+                    <span
+                      key={date.toISOString()}
+                      aria-label={`${site.name}, ${dateFormat.format(date)}: ${t('planner.cellPending')}`}
+                      className="h-7 rounded-sm border border-white/5 bg-white/[0.03]"
+                    />
+                  );
+                }
+                const isHovered = hovered?.row === row && hovered.col === col;
+                return (
+                  <button
+                    key={date.toISOString()}
+                    type="button"
+                    aria-label={`${site.name}, ${dateFormat.format(date)}: ${value}%`}
+                    onMouseEnter={() => onHover({ row, col })}
+                    onFocus={() => onHover({ row, col })}
+                    onBlur={() => onHover(null)}
+                    className={classNames(
+                      'h-7 cursor-pointer rounded-sm border border-white/5 transition-shadow hover:ring-2 hover:ring-accent focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none',
+                      { 'ring-2 ring-accent': isHovered }
+                    )}
+                    style={{
+                      backgroundColor: `rgb(52 211 153 / ${value / 100})`,
+                    }}
+                  />
+                );
+              })}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

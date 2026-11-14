@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import Button from '@/components/ui/Button/Button';
 import { buildScenarioView } from '@/features/scenario/buildScenarioView';
 import CountdownChips from '@/features/scenario/CountdownChips/CountdownChips';
 import {
@@ -77,7 +78,20 @@ export default function ScenarioPage() {
 
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-xs text-slate-500">{note}</p>
+      <div className="flex items-center justify-between gap-3">
+        <p className="text-xs text-slate-500">{note}</p>
+        {data.status !== 'idle' && data.status !== 'loading' && (
+          <Button
+            className="shrink-0 px-2 py-1 text-xs"
+            onClick={() => {
+              data.reload();
+              terrain.reload();
+            }}
+          >
+            {t('common.refresh')}
+          </Button>
+        )}
+      </div>
 
       <VerdictCard scenario={scenario}>
         <CountdownChips sunset={scenario.sunset} earthset={scenario.earthset} />

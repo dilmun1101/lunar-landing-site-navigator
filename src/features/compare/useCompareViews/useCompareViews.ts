@@ -12,11 +12,17 @@ export type CompareViewState =
   | { status: 'noData' }
   | { status: 'ready'; view: ScenarioView };
 
+export interface CompareViews {
+  states: Record<string, CompareViewState>;
+  /** Requests the data of one scenario again */
+  reload: (id: string) => void;
+}
+
 /** Requests Horizons data for every scenario in the compare list and calculates its metrics. */
-export function useCompareViews(
-  items: CompareItem[]
-): Record<string, CompareViewState> {
+export function useCompareViews(items: CompareItem[]): CompareViews {
   const [states, setStates] = useState<Record<string, CompareViewState>>({});
+  // Changes on every reload so that the effect below runs again
+  const [version, setVersion] = useState(0);
   // ids whose request has already been sent, so it is not resent on every render
   const started = useRef(new Set<string>());
 
@@ -59,7 +65,13 @@ export function useCompareViews(
           set({ status: 'error' });
         });
     }
-  }, [items]);
+  }, [items, version]);
 
-  return states;
+  const reload = (id: string) => {
+    started.current.delete(id);
+    setStates((current) => ({ ...current, [id]: { status: 'loading' } }));
+    setVersion((current) => current + 1);
+  };
+
+  return { states, reload };
 }

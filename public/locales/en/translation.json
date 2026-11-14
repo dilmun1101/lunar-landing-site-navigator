@@ -5,7 +5,8 @@
   },
   "common": {
     "language": "Language",
-    "addToComparison": "Add to comparison"
+    "addToComparison": "Add to comparison",
+    "refresh": "Refresh"
   },
   "mode": {
     "label": "Mode",
@@ -115,6 +116,7 @@
   },
   "planner": {
     "metric": {
+      "window": "Power + comms",
       "title": "Metric",
       "sunlight": "% sunlight",
       "comms": "Communication window"
@@ -129,15 +131,21 @@
       "date": "Date",
       "value": "Value"
     },
-    "demoNote": "Demo data — calculations are not connected yet",
     "hint": "Hover a cell to see details",
     "legend": {
       "low": "Low",
       "high": "High"
     },
     "best": {
-      "title": "Best launch windows"
-    }
+      "title": "Best launch windows",
+      "empty": "Waiting for the first calculated site…"
+    },
+    "dataNote": "Data: JPL Horizons (DE441), airless, terrain horizon from LOLA. Each cell is the share of a {{days}}-day mission starting on that date.",
+    "progress": "Calculated {{done}} of {{total}} sites…",
+    "flatNote": "Flat horizon (no LOLA data): {{sites}}.",
+    "cellPending": "calculating",
+    "failed_one": "{{count}} site failed to load.",
+    "failed_other": "{{count}} sites failed to load."
   },
   "time": {
     "days_one": "{{count}} day",

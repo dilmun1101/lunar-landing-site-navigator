@@ -15,7 +15,7 @@ export default function ComparePanel({ className }: ComparePanelProps) {
   const { t } = useTranslation();
   const items = useCompareList((state) => state.items);
   const remove = useCompareList((state) => state.remove);
-  const views = useCompareViews(items);
+  const { states, reload } = useCompareViews(items);
 
   return (
     <section className={classNames('flex flex-col gap-3', className)}>
@@ -26,7 +26,7 @@ export default function ComparePanel({ className }: ComparePanelProps) {
       ) : (
         <div className="grid grid-cols-[repeat(auto-fit,minmax(18rem,1fr))] gap-3">
           {items.map((item) => {
-            const state = views[item.id] ?? { status: 'loading' as const };
+            const state = states[item.id] ?? { status: 'loading' as const };
             return state.status === 'ready' ? (
               <ScenarioCard
                 key={item.id}
@@ -39,6 +39,7 @@ export default function ComparePanel({ className }: ComparePanelProps) {
                 siteName={item.siteName}
                 status={state.status}
                 onRemove={() => remove(item.id)}
+                onRetry={() => reload(item.id)}
               />
             );
           })}

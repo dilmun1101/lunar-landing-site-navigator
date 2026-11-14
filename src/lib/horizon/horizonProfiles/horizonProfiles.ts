@@ -35,6 +35,17 @@ export function peekHorizonProfile(site: HorizonSite): number[] | null {
   return null;
 }
 
+/** Forgets the stored profile so that the next request goes to the web service again. */
+export function forgetHorizonProfile(site: HorizonSite): void {
+  const key = horizonKey(site);
+  memory.delete(key);
+  try {
+    localStorage.removeItem(STORAGE_PREFIX + key);
+  } catch {
+    // storage is unavailable — nothing to forget
+  }
+}
+
 /**
  * Terrain horizon of a point (72 values, every 5° of azimuth from north): LOLA elevations are
  * requested from the USGS web service and the horizon is calculated in the browser.
