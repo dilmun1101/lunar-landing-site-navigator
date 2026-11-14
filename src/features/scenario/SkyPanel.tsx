@@ -1,3 +1,14 @@
+import { useTranslation } from 'react-i18next';
+
 export default function SkyPanel() {
-  return <div data-stub="SkyPanel">SkyPanel</div>;
+  const { t } = useTranslation();
+  return (
+    <section data-stub="SkyPanel">
+      <h3>{t('scenario.sky.title')}</h3>
+      <ul>
+        <li>{t('scenario.sky.polar')}</li>
+        <li>{t('scenario.sky.panorama')}</li>
+      </ul>
+    </section>
+  );
 }

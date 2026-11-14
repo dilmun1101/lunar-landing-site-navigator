@@ -1,0 +1,123 @@
+{
+  "nav": {
+    "scenario": "Сценарий",
+    "planner": "Планировщик"
+  },
+  "common": {
+    "language": "Язык",
+    "addToComparison": "Добавить к сравнению"
+  },
+  "mode": {
+    "label": "Режим",
+    "beginner": "Новичок",
+    "expert": "Эксперт"
+  },
+  "verdict": {
+    "viable": "Подходит",
+    "marginal": "На грани",
+    "notViable": "Не подходит"
+  },
+  "sites": {
+    "title": "Выбор площадки",
+    "search": "Поиск лунных площадок…",
+    "groups": {
+      "apollo": "Исторические (Apollo)",
+      "clps": "Кандидаты CLPS / Artemis",
+      "international": "Международные"
+    },
+    "custom": {
+      "title": "Свои координаты",
+      "lat": "Широта",
+      "lon": "Долгота",
+      "apply": "Применить"
+    }
+  },
+  "scenario": {
+    "verdict": {
+      "title": "Вердикт",
+      "sunlight": "Освещённость",
+      "earthLink": "Прямая связь с Землёй",
+      "earthLinkExpert": "Прямая связь (DTE)"
+    },
+    "countdown": {
+      "sunset": "Закат через {{time}}",
+      "earthset": "Земля зайдёт через {{time}}"
+    },
+    "sky": {
+      "title": "Вид неба",
+      "polar": "Полярная карта",
+      "panorama": "Панорама горизонта"
+    },
+    "polar": {
+      "title": "Полярная карта неба",
+      "north": "С",
+      "east": "В",
+      "south": "Ю",
+      "west": "З"
+    },
+    "panorama": {
+      "title": "Панорама горизонта 360°"
+    },
+    "timeline": {
+      "title": "Временная шкала пригодности",
+      "sunAbove": "Солнце над горизонтом",
+      "earthAbove": "Земля над горизонтом",
+      "window": "Окно: питание + связь",
+      "play": "Пуск",
+      "pause": "Пауза",
+      "speed": "Скорость"
+    },
+    "playhead": {
+      "now": "Сейчас"
+    },
+    "legend": {
+      "sun": "Солнце",
+      "earth": "Земля",
+      "horizon": "Горизонт по рельефу"
+    }
+  },
+  "compare": {
+    "title": "Сравнение сценариев",
+    "empty": {
+      "title": "Сценариев пока нет",
+      "hint": "Выберите площадку и дату и добавьте сценарий к сравнению."
+    },
+    "card": {
+      "solarElevation": "Высота Солнца",
+      "sunlightDuration": "Длительность освещения",
+      "earthWindow": "Окно видимости Земли",
+      "remove": "Убрать"
+    },
+    "best": {
+      "title": "Лучшая альтернатива",
+      "text": "Сдвиг старта на {{days}} дн.: +{{percent}}% света"
+    }
+  },
+  "planner": {
+    "metric": {
+      "title": "Показатель",
+      "sunlight": "% освещённости",
+      "comms": "Окно связи"
+    },
+    "heatmap": {
+      "title": "Пригодность: площадка × дата",
+      "rows": "Площадки",
+      "columns": "Даты"
+    },
+    "tooltip": {
+      "site": "Площадка",
+      "date": "Дата",
+      "value": "Значение"
+    }
+  },
+  "time": {
+    "days_one": "{{count}} день",
+    "days_few": "{{count}} дня",
+    "days_many": "{{count}} дней",
+    "days_other": "{{count}} дня",
+    "hours_one": "{{count}} час",
+    "hours_few": "{{count}} часа",
+    "hours_many": "{{count}} часов",
+    "hours_other": "{{count}} часа"
+  }
+}

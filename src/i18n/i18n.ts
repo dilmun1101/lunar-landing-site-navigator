@@ -21,7 +21,7 @@ i18n
     load: 'languageOnly',
 
     backend: {
-      loadPath: '/locales/{{lng}}/{{ns}}.json',
+      loadPath: `${import.meta.env.BASE_URL}locales/{{lng}}/{{ns}}.json`,
     },
 
     detection: {

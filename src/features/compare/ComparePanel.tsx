@@ -1,3 +1,10 @@
+import { useTranslation } from 'react-i18next';
+
 export default function ComparePanel() {
-  return <div data-stub="ComparePanel">ComparePanel</div>;
+  const { t } = useTranslation();
+  return (
+    <section data-stub="ComparePanel">
+      <h3>{t('compare.title')}</h3>
+    </section>
+  );
 }
