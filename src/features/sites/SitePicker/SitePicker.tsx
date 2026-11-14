@@ -7,6 +7,7 @@ import TextInput from '@/components/ui/TextInput/TextInput';
 import CustomCoordinates from '@/features/sites/CustomCoordinates/CustomCoordinates';
 import { siteCatalog } from '@/features/sites/siteCatalog';
 import type { SiteGroup } from '@/features/sites/types';
+import { useScenarioStore } from '@/state/useScenarioStore/useScenarioStore';
 
 const groups: { id: SiteGroup; labelKey: string }[] = [
   { id: 'clps', labelKey: 'sites.groups.clps' },
@@ -20,8 +21,8 @@ interface SitePickerProps {
 export default function SitePicker({ className }: SitePickerProps) {
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
-  // TODO: хранить выбранную площадку в URL (state/useScenarioParams.ts)
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const selectedId = useScenarioStore((state) => state.siteId);
+  const selectSite = useScenarioStore((state) => state.selectSite);
 
   const normalized = query.trim().toLowerCase();
   const visibleGroups = groups
@@ -65,7 +66,7 @@ export default function SitePicker({ className }: SitePickerProps) {
                   <button
                     type="button"
                     aria-pressed={site.id === selectedId}
-                    onClick={() => setSelectedId(site.id)}
+                    onClick={() => selectSite(site.id)}
                     className="w-full rounded-md border-l-2 border-transparent px-2 py-1.5 text-left text-sm text-slate-300 transition-colors hover:bg-white/5 hover:text-accent aria-pressed:border-accent aria-pressed:bg-accent/10 aria-pressed:text-accent"
                   >
                     {site.name}

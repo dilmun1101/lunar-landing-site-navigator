@@ -1,9 +1,10 @@
 import classNames from 'classnames';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Select from '@/components/ui/Select/Select';
-
-type Duration = '7' | '14' | 'cycle';
+import {
+  type DurationKey,
+  useScenarioStore,
+} from '@/state/useScenarioStore/useScenarioStore';
 
 interface MissionDurationProps {
   className?: string;
@@ -11,8 +12,8 @@ interface MissionDurationProps {
 
 export default function MissionDuration({ className }: MissionDurationProps) {
   const { t } = useTranslation();
-  // TODO: хранить длительность в URL (state/useScenarioParams.ts)
-  const [duration, setDuration] = useState<Duration>('cycle');
+  const duration = useScenarioStore((state) => state.duration);
+  const setDuration = useScenarioStore((state) => state.setDuration);
 
   return (
     <label
@@ -24,7 +25,7 @@ export default function MissionDuration({ className }: MissionDurationProps) {
       {t('setup.duration.label')}
       <Select
         value={duration}
-        onChange={(event) => setDuration(event.target.value as Duration)}
+        onChange={(event) => setDuration(event.target.value as DurationKey)}
         className="normal-case"
       >
         <option value="7">{t('time.days', { count: 7 })}</option>

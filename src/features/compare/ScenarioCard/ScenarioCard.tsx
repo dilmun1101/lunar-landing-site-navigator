@@ -8,11 +8,13 @@ import { formatUtcDateTime } from '@/lib/format/format';
 
 interface ScenarioCardProps {
   scenario: ScenarioView;
+  onRemove?: () => void;
   className?: string;
 }
 
 export default function ScenarioCard({
   scenario,
+  onRemove,
   className,
 }: ScenarioCardProps) {
   const { t, i18n } = useTranslation();
@@ -135,6 +137,7 @@ export default function ScenarioCard({
 
       <button
         type="button"
+        onClick={onRemove}
         className="self-end text-xs text-slate-500 hover:text-accent"
       >
         {t('compare.card.remove')}

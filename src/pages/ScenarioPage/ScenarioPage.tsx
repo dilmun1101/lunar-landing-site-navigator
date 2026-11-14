@@ -1,14 +1,42 @@
 import { useTranslation } from 'react-i18next';
 import CountdownChips from '@/features/scenario/CountdownChips/CountdownChips';
-import { demoScenario } from '@/features/scenario/demoScenario';
+import {
+  demoScenario,
+  type ScenarioView,
+  type Segment,
+} from '@/features/scenario/demoScenario';
 import SkyPanel from '@/features/scenario/SkyPanel/SkyPanel';
 import VerdictCard from '@/features/scenario/VerdictCard/VerdictCard';
 import ViabilityTimeline from '@/features/scenario/ViabilityTimeline/ViabilityTimeline';
+import {
+  durationDays,
+  getSiteName,
+  useScenarioStore,
+} from '@/state/useScenarioStore/useScenarioStore';
+
+/** Обрезает отрезки по длительности миссии. */
+const clipSegments = (segments: Segment[], limit: number): Segment[] =>
+  segments
+    .filter(([start]) => start < limit)
+    .map(([start, end]): Segment => [start, Math.min(end, limit)]);
 
 export default function ScenarioPage() {
   const { t } = useTranslation();
-  // TODO: заменить демо-данные расчётом по выбранной площадке и дате
-  const scenario = demoScenario;
+  const siteName = useScenarioStore((state) => getSiteName(state));
+  const epoch = useScenarioStore((state) => state.epoch);
+  const duration = useScenarioStore((state) => state.duration);
+
+  // TODO: заменить демо-цифры расчётом по выбранной площадке и дате
+  const days = durationDays[duration];
+  const scenario: ScenarioView = {
+    ...demoScenario,
+    siteName,
+    epoch,
+    durationDays: days,
+    sunSegments: clipSegments(demoScenario.sunSegments, days),
+    earthSegments: clipSegments(demoScenario.earthSegments, days),
+    windowSegments: clipSegments(demoScenario.windowSegments, days),
+  };
 
   return (
     <div className="flex flex-col gap-4">
