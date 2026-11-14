@@ -18,26 +18,29 @@
     "notViable": "Not viable"
   },
   "sites": {
-    "title": "Site selection",
-    "search": "Search lunar sites…",
+    "title": "Landing site",
+    "search": "Search landing sites…",
     "groups": {
       "apollo": "Historical (Apollo)",
-      "clps": "CLPS / Artemis candidates",
-      "international": "International"
+      "clps": "CLPS / Artemis candidates"
     },
     "custom": {
       "title": "Custom coordinates",
       "lat": "Latitude",
       "lon": "Longitude",
-      "apply": "Apply"
-    }
+      "apply": "Apply",
+      "invalid": "Latitude −90…90, longitude −180…180"
+    },
+    "noResults": "No sites found"
   },
   "scenario": {
     "verdict": {
       "title": "Verdict",
       "sunlight": "Sunlight",
       "earthLink": "Direct Earth link",
-      "earthLinkExpert": "Earth DTE"
+      "earthLinkExpert": "Earth DTE",
+      "missionWindow": "Mission window",
+      "window": "Power + comms"
     },
     "countdown": {
       "sunset": "Sunset in {{time}}",
@@ -46,14 +49,18 @@
     "sky": {
       "title": "Sky view",
       "polar": "Polar chart",
-      "panorama": "Horizon panorama"
+      "panorama": "Horizon panorama",
+      "elevation": "Elevation",
+      "azimuth": "Azimuth"
     },
     "polar": {
       "title": "Polar sky chart",
       "north": "N",
       "east": "E",
       "south": "S",
-      "west": "W"
+      "west": "W",
+      "elevationNote": "Rings show elevation above the horizon (0–8°, zoomed in).",
+      "trackNote": "Dashed lines: path until sunset and Earthset."
     },
     "panorama": {
       "title": "360° horizon panorama"
@@ -65,7 +72,8 @@
       "window": "Power + communication window",
       "play": "Play",
       "pause": "Pause",
-      "speed": "Speed"
+      "speed": "Speed",
+      "axis": "Days from start"
     },
     "playhead": {
       "now": "Now"
@@ -74,7 +82,8 @@
       "sun": "Sun",
       "earth": "Earth",
       "horizon": "Terrain horizon"
-    }
+    },
+    "demoNote": "Demo data — calculations are not connected yet"
   },
   "compare": {
     "title": "Compare scenarios",
@@ -86,7 +95,8 @@
       "solarElevation": "Solar elevation",
       "sunlightDuration": "Sunlight duration",
       "earthWindow": "Earth visibility window",
-      "remove": "Remove"
+      "remove": "Remove",
+      "windowDays": "Window days"
     },
     "best": {
       "title": "Best alternative",
@@ -108,6 +118,15 @@
       "site": "Site",
       "date": "Date",
       "value": "Value"
+    },
+    "demoNote": "Demo data — calculations are not connected yet",
+    "hint": "Hover a cell to see details",
+    "legend": {
+      "low": "Low",
+      "high": "High"
+    },
+    "best": {
+      "title": "Best launch windows"
     }
   },
   "time": {
@@ -115,5 +134,19 @@
     "days_other": "{{count}} days",
     "hours_one": "{{count}} hour",
     "hours_other": "{{count}} hours"
+  },
+  "setup": {
+    "title": "Temporal setup",
+    "epoch": "Current time (UTC)",
+    "lunarDay": "Lunar day",
+    "phase": "Phase",
+    "prevDay": "−1 d",
+    "nextDay": "+1 d",
+    "reset": "Reset",
+    "duration": {
+      "label": "Duration of mission",
+      "cycle": "Full lunar cycle"
+    },
+    "epochHint": "Format: YYYY-MM-DD HH:mm, UTC"
   }
 }
