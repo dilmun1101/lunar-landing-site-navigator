@@ -166,5 +166,30 @@
       "cycle": "Full lunar cycle"
     },
     "epochHint": "Format: YYYY-MM-DD HH:mm, UTC"
+  },
+  "criteria": {
+    "title": "Suitability criteria",
+    "note": "Project assumptions, not NASA requirements. They apply to the scenario, the comparison and the planner.",
+    "reset": "Reset to defaults",
+    "minSunElevation": {
+      "label": "Min. Sun elevation, °",
+      "hint": "The Sun counts as lit only above this angle over the terrain horizon. Grazing light gives little power."
+    },
+    "minEarthElevation": {
+      "label": "Min. Earth elevation, °",
+      "hint": "The Earth counts as visible only above this angle over the terrain horizon."
+    },
+    "minWindowHours": {
+      "label": "Min. continuous window, h",
+      "hint": "Periods with both Sun and Earth that are shorter than this are not counted. 0 — count everything."
+    },
+    "viablePercent": {
+      "label": "“Viable” from, %",
+      "hint": "Share of the mission with power and communication from which the site is viable."
+    },
+    "marginalPercent": {
+      "label": "“Marginal” from, %",
+      "hint": "Share of the mission from which the site is marginal; below it the site is not viable."
+    }
   }
 }

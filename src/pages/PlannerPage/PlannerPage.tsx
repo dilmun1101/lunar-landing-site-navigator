@@ -15,6 +15,7 @@ import { usePlannerData } from '@/features/planner/usePlannerData/usePlannerData
 import ViabilityHeatmap, {
   type HoveredCell,
 } from '@/features/planner/ViabilityHeatmap/ViabilityHeatmap';
+import { useCriteriaStore } from '@/state/useCriteriaStore/useCriteriaStore';
 import {
   durationDays,
   useScenarioStore,
@@ -26,6 +27,7 @@ export default function PlannerPage() {
   const { t } = useTranslation();
   const epoch = useScenarioStore((state) => state.epoch);
   const duration = useScenarioStore((state) => state.duration);
+  const criteria = useCriteriaStore((state) => state.criteria);
   const [metric, setMetric] = useState<PlannerMetric>('window');
   const [hovered, setHovered] = useState<HoveredCell | null>(null);
 
@@ -33,7 +35,7 @@ export default function PlannerPage() {
   // Columns start at the beginning of the selected UTC day
   const startMs = Math.floor(epoch.getTime() / DAY_MS) * DAY_MS;
   const dates = plannerStarts(startMs).map((ms) => new Date(ms));
-  const { states, reload } = usePlannerData(startMs, days);
+  const { states, reload } = usePlannerData(startMs, days, criteria);
 
   const values = plannerSites.map((site) => {
     const state = states[site.id];
@@ -114,7 +116,12 @@ export default function PlannerPage() {
 
       <Panel className="flex flex-col gap-3">
         <SectionTitle>{t('planner.best.title')}</SectionTitle>
-        <BestWindowsList sites={plannerSites} dates={dates} values={values} />
+        <BestWindowsList
+          sites={plannerSites}
+          dates={dates}
+          values={values}
+          criteria={criteria}
+        />
       </Panel>
     </div>
   );

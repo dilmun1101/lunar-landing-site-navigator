@@ -12,6 +12,7 @@ import { useHorizonProfile } from '@/features/scenario/useHorizonProfile/useHori
 import { useSiteEphemeris } from '@/features/scenario/useSiteEphemeris/useSiteEphemeris';
 import VerdictCard from '@/features/scenario/VerdictCard/VerdictCard';
 import ViabilityTimeline from '@/features/scenario/ViabilityTimeline/ViabilityTimeline';
+import { useCriteriaStore } from '@/state/useCriteriaStore/useCriteriaStore';
 import {
   durationDays,
   getSiteName,
@@ -32,6 +33,7 @@ export default function ScenarioPage() {
   const siteName = useScenarioStore((state) => getSiteName(state));
   const epoch = useScenarioStore((state) => state.epoch);
   const duration = useScenarioStore((state) => state.duration);
+  const criteria = useCriteriaStore((state) => state.criteria);
 
   const days = durationDays[duration];
   const coordinates = resolveCoordinates(siteId, customSite);
@@ -47,6 +49,7 @@ export default function ScenarioPage() {
           durationDays: days,
           ephemeris: data.ephemeris,
           horizon: terrain.status === 'ready' ? terrain.profile : null,
+          criteria,
         })
       : null;
 

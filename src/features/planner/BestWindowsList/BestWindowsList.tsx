@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import Badge from '@/components/ui/Badge/Badge';
+import type { Criteria } from '@/domain/criteria/criteria';
 import { verdictFor } from '@/domain/metrics/verdict/verdict';
 
 interface BestWindowsListProps {
@@ -8,6 +9,7 @@ interface BestWindowsListProps {
   dates: Date[];
   /** values[siteIndex][dateIndex], percent; null — the site is not calculated yet */
   values: (number[] | null)[];
+  criteria: Criteria;
   limit?: number;
   className?: string;
 }
@@ -16,6 +18,7 @@ export default function BestWindowsList({
   sites,
   dates,
   values,
+  criteria,
   limit = 5,
   className,
 }: BestWindowsListProps) {
@@ -70,7 +73,7 @@ export default function BestWindowsList({
           <span className="font-mono text-sm text-slate-100">
             {item.value}%
           </span>
-          <Badge verdict={verdictFor(item.value)} />
+          <Badge verdict={verdictFor(item.value, criteria)} />
         </li>
       ))}
     </ol>

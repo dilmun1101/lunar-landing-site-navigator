@@ -1,4 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import type { Criteria } from '@/domain/criteria/criteria';
+import type { Ephemeris } from '@/domain/ephemeris/sunEarthPosition/sunEarthPosition';
 import {
   computePlannerValues,
   plannerSpanDays,
@@ -15,16 +17,17 @@ import {
 } from '@/lib/horizon/horizonProfiles/horizonProfiles';
 import { fetchEphemeris } from '@/lib/horizons/horizonsClient/horizonsClient';
 
-interface ReadyRow {
-  values: PlannerValues;
-  /** false — the LOLA profile could not be loaded and the horizon is flat */
-  terrain: boolean;
+/** Loaded data of a site: the criteria are applied to it without new requests. */
+interface SiteData {
+  ephemeris: Ephemeris;
+  /** null — the LOLA profile could not be loaded and the horizon is flat */
+  terrain: number[] | null;
 }
 
 export type PlannerRowState =
   | { status: 'loading' }
   | { status: 'error' }
-  | ({ status: 'ready' } & ReadyRow);
+  | { status: 'ready'; values: PlannerValues; terrain: boolean };
 
 export interface PlannerData {
   /** State of every planner site by its id */
@@ -35,7 +38,7 @@ export interface PlannerData {
 
 const DEBOUNCE_MS = 400;
 const CONCURRENCY = 2;
-const cache = new Map<string, ReadyRow>();
+const cache = new Map<string, SiteData>();
 
 const cacheKey = (site: PlannerSite, startMs: number, durationDays: number) =>
   `${site.coordinates.lat},${site.coordinates.lon}|${startMs}|${durationDays}`;
@@ -46,10 +49,11 @@ const cacheKey = (site: PlannerSite, startMs: number, durationDays: number) =>
  */
 export function usePlannerData(
   startMs: number,
-  durationDays: number
+  durationDays: number,
+  criteria: Criteria
 ): PlannerData {
   // Results of the finished requests; null — the request failed.
-  const [results, setResults] = useState<Record<string, ReadyRow | null>>({});
+  const [results, setResults] = useState<Record<string, SiteData | null>>({});
   // Changes on every reload so that the effect below runs again
   const [version, setVersion] = useState(0);
 
@@ -75,17 +79,11 @@ export function usePlannerData(
           ),
           fetchHorizonProfile(site.coordinates).catch(() => null),
         ]);
-        const row: ReadyRow = {
-          values: computePlannerValues(
-            ephemeris,
-            terrain,
-            starts,
-            durationDays
-          ),
-          terrain: terrain !== null,
-        };
-        cache.set(key, row);
-        setResults((current) => ({ ...current, [`${key}#${version}`]: row }));
+        // Throws if the data does not cover the mission, so such a site counts as failed
+        computePlannerValues(ephemeris, terrain, starts, durationDays);
+        const data: SiteData = { ephemeris, terrain };
+        cache.set(key, data);
+        setResults((current) => ({ ...current, [`${key}#${version}`]: data }));
       } catch (error) {
         if ((error as Error).name === 'AbortError') return;
         console.error(error);
@@ -111,24 +109,39 @@ export function usePlannerData(
   }, [startMs, durationDays, version]);
 
   // The state is derived from the caches, so no setState is needed inside the effect.
-  const states: Record<string, PlannerRowState> = {};
-  for (const site of plannerSites) {
-    const key = cacheKey(site, startMs, durationDays);
-    const cached = cache.get(key);
-    if (cached) {
-      states[site.id] = { status: 'ready', ...cached };
-    } else {
-      states[site.id] =
-        results[`${key}#${version}`] === null
-          ? { status: 'error' }
-          : { status: 'loading' };
+  const states = useMemo(() => {
+    const starts = plannerStarts(startMs);
+    const result: Record<string, PlannerRowState> = {};
+    for (const site of plannerSites) {
+      const key = cacheKey(site, startMs, durationDays);
+      const cached = cache.get(key);
+      if (cached) {
+        result[site.id] = {
+          status: 'ready',
+          values: computePlannerValues(
+            cached.ephemeris,
+            cached.terrain,
+            starts,
+            durationDays,
+            criteria
+          ),
+          terrain: cached.terrain !== null,
+        };
+      } else {
+        result[site.id] =
+          results[`${key}#${version}`] === null
+            ? { status: 'error' }
+            : { status: 'loading' };
+      }
     }
-  }
+    return result;
+    // `results` changes whenever a site is loaded, which is when the cache changes
+  }, [results, version, startMs, durationDays, criteria]);
 
   const reload = () => {
     for (const site of plannerSites) {
       const key = cacheKey(site, startMs, durationDays);
-      if (cache.get(key)?.terrain === true) continue;
+      if (cache.get(key)?.terrain) continue;
       cache.delete(key);
       forgetHorizonProfile(site.coordinates);
     }

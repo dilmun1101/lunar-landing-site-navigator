@@ -1,3 +1,8 @@
+import { type Criteria, defaultCriteria } from '@/domain/criteria/criteria';
+import {
+  maskEphemeris,
+  missionSegments,
+} from '@/domain/criteria/missionSegments';
 import {
   type BodySeries,
   endMs,
@@ -10,14 +15,8 @@ import {
   timeUntilSet,
 } from '@/domain/metrics/countdowns/countdowns';
 import { terrainElevationAt } from '@/domain/horizon/horizonProfile/horizonProfile';
-import { maskByTerrain } from '@/domain/horizon/visibility/visibility';
 import { verdictFor } from '@/domain/metrics/verdict/verdict';
-import {
-  aboveHorizon,
-  intersect,
-  toDaySegments,
-  totalMs,
-} from '@/domain/metrics/windows/windows';
+import { toDaySegments, totalMs } from '@/domain/metrics/windows/windows';
 import type { ScenarioView, SkyPoint } from '@/features/scenario/demoScenario';
 
 const DAY_MS = 86_400_000;
@@ -32,6 +31,8 @@ export interface ScenarioInput {
   ephemeris: Ephemeris;
   /** Terrain horizon (5° azimuth step); null or omitted — flat horizon */
   horizon?: number[] | null;
+  /** Suitability criteria; the defaults are used if omitted */
+  criteria?: Criteria;
 }
 
 /** Path of a body across the sky from fromMs onward while it is above the terrain horizon. */
@@ -72,6 +73,7 @@ export function buildScenarioView({
   durationDays,
   ephemeris,
   horizon: terrain,
+  criteria = defaultCriteria,
 }: ScenarioInput): ScenarioView | null {
   const fromMs = epoch.getTime();
   const toMs = fromMs + durationDays * DAY_MS;
@@ -81,17 +83,12 @@ export function buildScenarioView({
 
   const horizon = terrain ?? Array.from({ length: 72 }, () => 0);
   // Elevation above the terrain: positive means the body is visible
-  const visible = terrain
-    ? {
-        ...ephemeris,
-        sun: maskByTerrain(ephemeris.sun, terrain),
-        earth: maskByTerrain(ephemeris.earth, terrain),
-      }
-    : ephemeris;
-
-  const sunSegments = aboveHorizon(visible.sun, visible, fromMs, toMs);
-  const earthSegments = aboveHorizon(visible.earth, visible, fromMs, toMs);
-  const windowSegments = intersect(sunSegments, earthSegments);
+  const visible = maskEphemeris(ephemeris, terrain ?? null);
+  const {
+    sun: sunSegments,
+    earth: earthSegments,
+    window: windowSegments,
+  } = missionSegments(visible, fromMs, toMs, criteria);
 
   const percentOf = (segments: [number, number][]) =>
     Math.round((totalMs(segments) / (toMs - fromMs)) * 100);
@@ -112,7 +109,7 @@ export function buildScenarioView({
     siteName,
     epoch,
     durationDays,
-    verdict: verdictFor(windowPercent),
+    verdict: verdictFor(windowPercent, criteria),
     sunlightPercent: percentOf(sunSegments),
     earthLinkPercent: percentOf(earthSegments),
     windowPercent,

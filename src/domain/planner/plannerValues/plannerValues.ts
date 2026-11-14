@@ -1,13 +1,13 @@
+import { type Criteria, defaultCriteria } from '@/domain/criteria/criteria';
+import {
+  maskEphemeris,
+  missionSegments,
+} from '@/domain/criteria/missionSegments';
 import {
   endMs,
   type Ephemeris,
 } from '@/domain/ephemeris/sunEarthPosition/sunEarthPosition';
-import { maskByTerrain } from '@/domain/horizon/visibility/visibility';
-import {
-  aboveHorizon,
-  intersect,
-  totalMs,
-} from '@/domain/metrics/windows/windows';
+import { totalMs } from '@/domain/metrics/windows/windows';
 
 /** sunlight — Sun visible, comms — Earth visible, window — both at the same time. */
 export type PlannerMetric = 'sunlight' | 'comms' | 'window';
@@ -33,22 +33,17 @@ export const plannerSpanDays = (missionDays: number): number =>
 
 /**
  * For every start time, the share of the mission (percent) during which the Sun, the Earth and
- * both together are above the terrain horizon. Without a terrain profile the horizon is flat (0°).
+ * both together satisfy the criteria. Without a terrain profile the horizon is flat (0°).
  * Throws if the ephemeris does not cover a mission.
  */
 export function computePlannerValues(
   ephemeris: Ephemeris,
   terrain: number[] | null,
   startsMs: number[],
-  missionDays: number
+  missionDays: number,
+  criteria: Criteria = defaultCriteria
 ): PlannerValues {
-  const visible = terrain
-    ? {
-        ...ephemeris,
-        sun: maskByTerrain(ephemeris.sun, terrain),
-        earth: maskByTerrain(ephemeris.earth, terrain),
-      }
-    : ephemeris;
+  const visible = maskEphemeris(ephemeris, terrain);
   const missionMs = missionDays * DAY_MS;
   const lastMs = Math.min(
     endMs(ephemeris, ephemeris.sun),
@@ -63,11 +58,10 @@ export function computePlannerValues(
     if (fromMs < ephemeris.startMs || toMs > lastMs) {
       throw new Error('Planner: the ephemeris does not cover the mission');
     }
-    const sun = aboveHorizon(visible.sun, visible, fromMs, toMs);
-    const earth = aboveHorizon(visible.earth, visible, fromMs, toMs);
-    values.sunlight.push(percentOf(totalMs(sun)));
-    values.comms.push(percentOf(totalMs(earth)));
-    values.window.push(percentOf(totalMs(intersect(sun, earth))));
+    const segments = missionSegments(visible, fromMs, toMs, criteria);
+    values.sunlight.push(percentOf(totalMs(segments.sun)));
+    values.comms.push(percentOf(totalMs(segments.earth)));
+    values.window.push(percentOf(totalMs(segments.window)));
   }
   return values;
 }

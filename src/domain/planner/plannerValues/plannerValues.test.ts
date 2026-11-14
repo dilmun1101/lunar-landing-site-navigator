@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { Ephemeris } from '@/domain/ephemeris/sunEarthPosition/sunEarthPosition';
+import { defaultCriteria } from '@/domain/criteria/criteria';
 import { computePlannerValues } from '@/domain/planner/plannerValues/plannerValues';
 
 const HOUR = 3_600_000;
@@ -50,6 +51,31 @@ describe('computePlannerValues', () => {
     const values = computePlannerValues(makeEphemeris(5), terrain, [0], 2);
     expect(values.sunlight).toEqual([100]);
     expect(values.comms).toEqual([100]);
+  });
+
+  it('counts the Sun only above the minimum elevation', () => {
+    const criteria = { ...defaultCriteria, minSunElevation: 6 };
+    const values = computePlannerValues(
+      makeEphemeris(5),
+      null,
+      [0],
+      2,
+      criteria
+    );
+    expect(values.sunlight).toEqual([0]);
+    expect(values.comms).toEqual([100]);
+    expect(values.window).toEqual([0]);
+  });
+
+  it('drops windows shorter than the minimum', () => {
+    const short = { ...defaultCriteria, minWindowHours: 72 };
+    const long = { ...defaultCriteria, minWindowHours: 24 };
+    expect(
+      computePlannerValues(makeEphemeris(5), null, [0], 2, short).window
+    ).toEqual([0]);
+    expect(
+      computePlannerValues(makeEphemeris(5), null, [0], 2, long).window
+    ).toEqual([100]);
   });
 
   it('throws if the ephemeris is too short', () => {
