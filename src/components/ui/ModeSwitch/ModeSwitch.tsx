@@ -10,7 +10,7 @@ interface ModeSwitchProps {
 
 export default function ModeSwitch({ className }: ModeSwitchProps) {
   const { t } = useTranslation();
-  // TODO: перенести в общее состояние (hooks/useMode.ts), когда режимы будут влиять на интерфейс
+  // TODO: move to shared state (hooks/useMode.ts) once modes affect the interface
   const [mode, setMode] = useState<Mode>('expert');
 
   return (

@@ -10,8 +10,7 @@ import {
   lunarPhase,
 } from '@/domain/time/lunarDay/lunarDay';
 import { formatUtcDateTime, parseUtcDateTime } from '@/lib/format/format';
-
-const getInitialEpoch = () => new Date();
+import { useScenarioStore } from '@/state/useScenarioStore/useScenarioStore';
 
 interface TemporalSetupProps {
   className?: string;
@@ -19,9 +18,9 @@ interface TemporalSetupProps {
 
 export default function TemporalSetup({ className }: TemporalSetupProps) {
   const { t, i18n } = useTranslation();
-  // TODO: хранить эпоху в URL (state/useScenarioParams.ts)
-  const [epoch, setEpoch] = useState(getInitialEpoch);
-  // Текст, пока пользователь печатает; null — показываем текущую эпоху
+  const epoch = useScenarioStore((state) => state.epoch);
+  const setEpoch = useScenarioStore((state) => state.setEpoch);
+  // Text while the user is typing; null — show the current epoch
   const [draft, setDraft] = useState<string | null>(null);
 
   const phase = lunarPhase(epoch);

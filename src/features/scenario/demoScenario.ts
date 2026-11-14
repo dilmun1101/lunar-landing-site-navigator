@@ -1,13 +1,13 @@
 import type { Duration, Verdict } from '@/types';
 
-// ДЕМО-ДАННЫЕ: статичные значения для отображения. Расчёты пока не подключены.
+// DEMO DATA: static display values. Calculations are not connected yet.
 
 export type Segment = [startDay: number, endDay: number];
 
 export interface SkyPoint {
-  /** Азимут, градусы от севера по часовой стрелке */
+  /** Azimuth, degrees clockwise from north */
   azimuth: number;
-  /** Высота над горизонтом, градусы */
+  /** Elevation above the horizon, degrees */
   elevation: number;
 }
 
@@ -22,8 +22,15 @@ export interface ScenarioView {
   windowPercent: number;
   sunlightDuration: Duration;
   earthWindowDuration: Duration;
-  sunset: Duration;
-  earthset: Duration;
+  /** The longest period without the Sun */
+  longestDarkness: Duration;
+  /** The longest period without a direct link to the Earth */
+  longestCommsGap: Duration;
+  /** The darkness is longer than the battery limit from the criteria */
+  blackoutExceeded: boolean;
+  /** null — the body is currently below the horizon */
+  sunset: Duration | null;
+  earthset: Duration | null;
   sun: SkyPoint;
   earth: SkyPoint;
   sunSegments: Segment[];
@@ -31,11 +38,11 @@ export interface ScenarioView {
   windowSegments: Segment[];
   sunTrack: SkyPoint[];
   earthTrack: SkyPoint[];
-  /** Высота рельефа на горизонте через каждые 5° азимута (72 значения) */
+  /** Terrain height on the horizon every 5° of azimuth (72 values) */
   horizon: number[];
 }
 
-// Условный рельеф вокруг площадки
+// Synthetic terrain around the site
 const horizon = Array.from({ length: 72 }, (_, index) => {
   const a = (index * 5 * Math.PI) / 180;
   const value =
@@ -49,7 +56,7 @@ const horizon = Array.from({ length: 72 }, (_, index) => {
 const terrainAt = (azimuth: number) =>
   horizon[Math.round((((azimuth % 360) + 360) % 360) / 5) % 72] ?? 0;
 
-/** Путь светила до захода: высота линейно падает до нуля, азимут сдвигается. */
+/** Path of a body until it sets: elevation falls linearly to zero, azimuth shifts. */
 function buildTrack(
   startAzimuth: number,
   azimuthPerDay: number,
@@ -81,6 +88,9 @@ export const demoScenario: ScenarioView = {
   windowPercent: 51,
   sunlightDuration: { days: 23, hours: 0 },
   earthWindowDuration: { days: 18, hours: 0 },
+  longestDarkness: { days: 3, hours: 0 },
+  longestCommsGap: { days: 4, hours: 12 },
+  blackoutExceeded: false,
   sunset: { days: 4, hours: 11 },
   earthset: { days: 2, hours: 3 },
   sun: { azimuth: 120, elevation: 2.4 },

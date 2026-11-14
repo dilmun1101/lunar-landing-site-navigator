@@ -1,16 +1,16 @@
-// Убирает файлы-«проводники» index.ts, которые создал restructure-folders.mjs,
-// и заменяет импорты на прямые пути:
+// Removes the pass-through index.ts files created by restructure-folders.mjs
+// and replaces imports with direct paths:
 //   '@/components/ui/Button'  →  '@/components/ui/Button/Button'
-// Экспорты внутри самих файлов (Button.tsx и т.д.) остаются как есть.
+// Exports inside the files themselves (Button.tsx, etc.) stay as they are.
 //
-// Запуск из корня проекта:
-//   node scripts/remove-index-files.mjs --dry   — только показать
-//   node scripts/remove-index-files.mjs         — выполнить
+// Run from the project root:
+//   node scripts/remove-index-files.mjs --dry   — only show
+//   node scripts/remove-index-files.mjs         — apply
 //
-// Удаляются только index.ts, состоящие из одних строк вида
-//   export { default } from './Имя';   /   export * from './Имя';
-// где «Имя» совпадает с названием папки. Остальные index.ts (например types/index.ts)
-// не трогаются. Скрипт безопасно запускать повторно.
+// Only index.ts files consisting solely of lines like
+//   export { default } from './Name';   /   export * from './Name';
+// where "Name" matches the folder name are removed. Other index.ts files (e.g. types/index.ts)
+// are left alone. The script is safe to re-run.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -36,7 +36,7 @@ const aliasOf = (dir) => '@/' + toPosix(path.relative(srcDir, dir));
 
 const allFiles = [...walk(srcDir)];
 
-// 1. Ищем index.ts-проводники
+// 1. Find pass-through index.ts files
 const BARREL_LINE = /^export (?:\{ default \}|\*) from '\.\/([\w.-]+)';$/;
 const barrels = []; // { file, dir, stem }
 
@@ -62,22 +62,22 @@ for (const file of allFiles) {
     ['.ts', '.tsx'].some((ext) => fs.existsSync(path.join(dir, stem + ext)));
 
   if (sourceExists) barrels.push({ file, dir, stem });
-  else console.log(`пропуск (не проводник): ${toPosix(path.relative(srcDir, file))}`);
+  else console.log(`skipped (not a pass-through): ${toPosix(path.relative(srcDir, file))}`);
 }
 
-// 2. Таблица замен: '@/папка' → '@/папка/Имя'
+// 2. Replacement table: '@/folder' → '@/folder/Name'
 const replacements = new Map(
   barrels.map(({ dir, stem }) => [aliasOf(dir), `${aliasOf(dir)}/${stem}`])
 );
 
-// 3. Переписываем импорты (точное совпадение строки в кавычках:
-//    import, динамический import(), vi.mock() и т.п.)
+// 3. Rewrite imports (exact match of the quoted string:
+//    import, dynamic import(), vi.mock(), etc.)
 let changedFiles = 0;
 let changedImports = 0;
 
 for (const file of allFiles) {
   if (!/\.(ts|tsx)$/.test(file)) continue;
-  // Сами проводники удаляем ниже, их содержимое не правим
+  // The pass-through files themselves are removed below; their content is not edited
   if (barrels.some((barrel) => barrel.file === file)) continue;
 
   const original = fs.readFileSync(file, 'utf8');
@@ -94,7 +94,7 @@ for (const file of allFiles) {
 
   if (count > 0) {
     console.log(
-      `импорты (${count}): ${toPosix(path.relative(srcDir, file))}`
+      `imports (${count}): ${toPosix(path.relative(srcDir, file))}`
     );
     changedFiles++;
     changedImports += count;
@@ -102,13 +102,13 @@ for (const file of allFiles) {
   }
 }
 
-// 4. Удаляем проводники
+// 4. Remove pass-through files
 for (const { file } of barrels) {
-  console.log(`удаление: ${toPosix(path.relative(srcDir, file))}`);
+  console.log(`removing: ${toPosix(path.relative(srcDir, file))}`);
   if (!dry) fs.unlinkSync(file);
 }
 
 console.log(
-  `\n${dry ? 'Будет изменено' : 'Изменено'}: импортов ${changedImports} в ${changedFiles} файлах; ` +
-    `${dry ? 'будет удалено' : 'удалено'} index.ts: ${barrels.length}`
+  `\n${dry ? 'Would change' : 'Changed'}: ${changedImports} imports in ${changedFiles} files; ` +
+    `${dry ? 'would remove' : 'removed'} index.ts: ${barrels.length}`
 );

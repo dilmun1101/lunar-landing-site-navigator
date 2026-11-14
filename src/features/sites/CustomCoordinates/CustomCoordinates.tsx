@@ -3,8 +3,9 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Button from '@/components/ui/Button/Button';
 import TextInput from '@/components/ui/TextInput/TextInput';
+import { useScenarioStore } from '@/state/useScenarioStore/useScenarioStore';
 
-/** Принимает и точку, и запятую; возвращает null, если пусто или вне диапазона. */
+/** Accepts both a dot and a comma; returns null if empty or out of range. */
 function parseCoordinate(value: string, limit: number): number | null {
   const normalized = value.trim().replace(',', '.');
   if (normalized === '') return null;
@@ -24,8 +25,12 @@ export default function CustomCoordinates({
   const [lat, setLat] = useState('');
   const [lon, setLon] = useState('');
 
-  const latValid = parseCoordinate(lat, 90) !== null;
-  const lonValid = parseCoordinate(lon, 180) !== null;
+  const setCustomSite = useScenarioStore((state) => state.setCustomSite);
+
+  const latValue = parseCoordinate(lat, 90);
+  const lonValue = parseCoordinate(lon, 180);
+  const latValid = latValue !== null;
+  const lonValid = lonValue !== null;
   const latInvalid = lat.trim() !== '' && !latValid;
   const lonInvalid = lon.trim() !== '' && !lonValid;
 
@@ -72,8 +77,14 @@ export default function CustomCoordinates({
             <p className="text-xs text-red-300">{t('sites.custom.invalid')}</p>
           )}
 
-          {/* TODO: передать координаты в сценарий (state/useScenarioParams.ts) */}
-          <Button disabled={!latValid || !lonValid}>
+          <Button
+            disabled={!latValid || !lonValid}
+            onClick={() => {
+              if (latValue !== null && lonValue !== null) {
+                setCustomSite({ lat: latValue, lon: lonValue });
+              }
+            }}
+          >
             {t('sites.custom.apply')}
           </Button>
         </div>

@@ -10,7 +10,7 @@ const barColor = {
 
 interface MetricTileProps {
   label: string;
-  /** Значение в процентах, 0–100 */
+  /** Value in percent, 0–100 */
   percent: number;
   color: keyof typeof barColor;
   className?: string;

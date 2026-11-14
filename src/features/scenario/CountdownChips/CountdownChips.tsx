@@ -4,8 +4,10 @@ import { formatDuration } from '@/lib/formatDuration/formatDuration';
 import type { Duration } from '@/types';
 
 interface CountdownChipsProps {
-  sunset: Duration;
-  earthset: Duration;
+  /** null — the Sun is currently below the horizon */
+  sunset: Duration | null;
+  /** null — the Earth is currently below the horizon */
+  earthset: Duration | null;
   className?: string;
 }
 
@@ -20,14 +22,18 @@ export default function CountdownChips({
     {
       key: 'sunset',
       dot: 'bg-sun',
-      text: t('scenario.countdown.sunset', { time: formatDuration(t, sunset) }),
+      text: sunset
+        ? t('scenario.countdown.sunset', { time: formatDuration(t, sunset) })
+        : t('scenario.countdown.sunBelow'),
     },
     {
       key: 'earthset',
       dot: 'bg-earth',
-      text: t('scenario.countdown.earthset', {
-        time: formatDuration(t, earthset),
-      }),
+      text: earthset
+        ? t('scenario.countdown.earthset', {
+            time: formatDuration(t, earthset),
+          })
+        : t('scenario.countdown.earthBelow'),
     },
   ];
 

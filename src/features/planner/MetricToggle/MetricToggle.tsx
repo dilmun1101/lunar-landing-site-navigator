@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import SegmentedControl from '@/components/ui/SegmentedControl/SegmentedControl';
-import type { PlannerMetric } from '@/features/planner/demoPlanner';
+import type { PlannerMetric } from '@/domain/planner/plannerValues/plannerValues';
 
 interface MetricToggleProps {
   value: PlannerMetric;
@@ -22,6 +22,7 @@ export default function MetricToggle({
       onChange={onChange}
       className={className}
       options={[
+        { value: 'window', label: t('planner.metric.window') },
         { value: 'sunlight', label: t('planner.metric.sunlight') },
         { value: 'comms', label: t('planner.metric.comms') },
       ]}

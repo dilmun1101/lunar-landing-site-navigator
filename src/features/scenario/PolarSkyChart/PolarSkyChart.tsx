@@ -12,9 +12,9 @@ interface PolarSkyChartProps {
   earth: SkyPoint;
   sunTrack: SkyPoint[];
   earthTrack: SkyPoint[];
-  /** Высота рельефа по азимуту, равномерно на 360° */
+  /** Terrain height by azimuth, evenly over 360° */
   horizon: number[];
-  /** Высота в центре диаграммы, градусы (масштаб «увеличен» у горизонта) */
+  /** Elevation at the center of the chart, degrees (scale is zoomed in near the horizon) */
   maxElevation?: number;
   className?: string;
 }

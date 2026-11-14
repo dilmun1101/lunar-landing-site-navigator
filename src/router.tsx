@@ -1,8 +1,8 @@
 import { createHashRouter, Navigate } from 'react-router';
 import AppShell from '@/layouts/AppShell/AppShell';
 
-// Hash-роутер: работает на любом статическом хостинге (GitHub Pages и т.п.)
-// и не ломает относительный base в vite.config.ts.
+// Hash router: works on any static hosting (GitHub Pages, etc.)
+// and does not break the relative base in vite.config.ts.
 export const router = createHashRouter([
   {
     path: '/',

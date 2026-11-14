@@ -1,7 +1,7 @@
 import type { TFunction } from 'i18next';
 import type { Duration } from '@/types';
 
-/** `4 days 11 hours` / `4 дня 11 часов`. Нулевые часы опускаются. */
+/** `4 days 11 hours`; the plural forms come from i18n. Zero hours are omitted. */
 export function formatDuration(
   t: TFunction,
   { days, hours }: Duration

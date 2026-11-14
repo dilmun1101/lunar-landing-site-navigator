@@ -1,4 +1,4 @@
-// ДЕМО-ДАННЫЕ: значения псевдослучайные (синусоиды), расчёты не подключены.
+// DEMO DATA: pseudo-random values (sine waves); calculations are not connected.
 
 export type PlannerMetric = 'sunlight' | 'comms';
 
@@ -29,7 +29,7 @@ export const demoPlannerDates: Date[] = Array.from(
 
 const clamp = (value: number) => Math.round(Math.min(98, Math.max(4, value)));
 
-/** values[metric][siteIndex][dateIndex] — проценты 0–100 */
+/** values[metric][siteIndex][dateIndex] — percent, 0–100 */
 export const demoPlannerValues: Record<PlannerMetric, number[][]> = {
   sunlight: demoPlannerSites.map((_, row) =>
     demoPlannerDates.map((_, col) => {

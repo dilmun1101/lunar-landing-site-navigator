@@ -1,7 +1,9 @@
 import classNames from 'classnames';
 import AddToComparisonButton from '@/features/compare/AddToComparisonButton/AddToComparisonButton';
+import CriteriaPanel from '@/features/setup/CriteriaPanel/CriteriaPanel';
 import MissionDuration from '@/features/setup/MissionDuration/MissionDuration';
 import TemporalSetup from '@/features/setup/TemporalSetup/TemporalSetup';
+import LandingDate from '@/features/sites/LandingDate/LandingDate';
 import SitePicker from '@/features/sites/SitePicker/SitePicker';
 
 interface SidebarProps {
@@ -17,9 +19,11 @@ export default function Sidebar({ className }: SidebarProps) {
       )}
     >
       <SitePicker />
+      <LandingDate />
       <div className="flex flex-col gap-5 border-t border-white/10 pt-5">
         <TemporalSetup />
         <MissionDuration />
+        <CriteriaPanel />
       </div>
       <AddToComparisonButton className="mt-auto" />
     </aside>

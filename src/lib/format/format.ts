@@ -1,8 +1,8 @@
 const pad = (value: number) => String(value).padStart(2, '0');
 
 /**
- * Дата → строка в UTC. Формат зависит от языка:
- * ru — `14.11.2026 12:00`, остальные — `2026-11-14 12:00`.
+ * Date → UTC string. The format depends on the language:
+ * ru — `14.11.2026 12:00`, others — `2026-11-14 12:00`.
  */
 export function formatUtcDateTime(date: Date, language: string): string {
   const year = date.getUTCFullYear();
@@ -27,7 +27,7 @@ function buildUtcDate(
 ): Date | null {
   const date = new Date(Date.UTC(year, month - 1, day, hour, minute));
 
-  // Отсекаем 31 февраля, 25 часов и т.п.: после сборки компоненты должны совпасть.
+  // Reject Feb 31, hour 25, etc.: the components must match after the Date is built.
   const isSame =
     date.getUTCFullYear() === year &&
     date.getUTCMonth() === month - 1 &&
@@ -39,8 +39,8 @@ function buildUtcDate(
 }
 
 /**
- * Строка в UTC → Date. Принимает оба формата (ISO `ГГГГ-ММ-ДД ЧЧ:ММ` и
- * русский `ДД.ММ.ГГГГ ЧЧ:ММ`) независимо от языка. Неверное значение → null.
+ * UTC string → Date. Accepts both formats (ISO `YYYY-MM-DD HH:MM` and
+ * Russian `DD.MM.YYYY HH:MM`) regardless of the language. Invalid value → null.
  */
 export function parseUtcDateTime(text: string): Date | null {
   const value = text.trim();

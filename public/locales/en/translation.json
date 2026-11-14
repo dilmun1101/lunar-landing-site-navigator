@@ -5,7 +5,8 @@
   },
   "common": {
     "language": "Language",
-    "addToComparison": "Add to comparison"
+    "addToComparison": "Add to comparison",
+    "refresh": "Refresh"
   },
   "mode": {
     "label": "Mode",
@@ -31,7 +32,13 @@
       "apply": "Apply",
       "invalid": "Latitude −90…90, longitude −180…180"
     },
-    "noResults": "No sites found"
+    "noResults": "No sites found",
+    "landing": {
+      "label": "Historical landing",
+      "set": "Set landing date",
+      "isSet": "The scenario time is the real landing time.",
+      "note": "The scenario time is not the landing time, so the Sun and the Earth are shown for another date."
+    }
   },
   "scenario": {
     "verdict": {
@@ -40,11 +47,16 @@
       "earthLink": "Direct Earth link",
       "earthLinkExpert": "Earth DTE",
       "missionWindow": "Mission window",
-      "window": "Power + comms"
+      "window": "Power + comms",
+      "longestDarkness": "Longest darkness",
+      "longestCommsGap": "Longest gap in Earth link",
+      "blackoutExceeded": "Longer than the battery limit"
     },
     "countdown": {
       "sunset": "Sunset in {{time}}",
-      "earthset": "Earthset in {{time}}"
+      "earthset": "Earthset in {{time}}",
+      "sunBelow": "Sun is below the horizon",
+      "earthBelow": "Earth is below the horizon"
     },
     "sky": {
       "title": "Sky view",
@@ -83,7 +95,14 @@
       "earth": "Earth",
       "horizon": "Terrain horizon"
     },
-    "demoNote": "Demo data — calculations are not connected yet"
+    "demoNote": "Demo data — calculations are not connected yet",
+    "dataNote": "Data: JPL Horizons (DE441), airless, terrain horizon from LOLA",
+    "dataNoteApprox": "Data: JPL Horizons (DE441), airless, terrain horizon from LOLA — site coordinates are the approximate region center",
+    "dataNoteFlat": "Data: JPL Horizons (DE441), airless, flat horizon — no LOLA terrain data for this site",
+    "dataNoteFlatApprox": "Data: JPL Horizons (DE441), airless, flat horizon — no LOLA terrain data for this site; coordinates are the approximate region center",
+    "noData": "This site has no coordinates yet — showing demo values",
+    "fetchError": "Could not load data from JPL Horizons — showing demo values",
+    "loading": "Loading data from JPL Horizons…"
   },
   "compare": {
     "title": "Compare scenarios",
@@ -96,7 +115,9 @@
       "sunlightDuration": "Sunlight duration",
       "earthWindow": "Earth visibility window",
       "remove": "Remove",
-      "windowDays": "Window days"
+      "windowDays": "Window days",
+      "loading": "Loading…",
+      "longestDarkness": "Longest darkness"
     },
     "best": {
       "title": "Best alternative",
@@ -105,6 +126,7 @@
   },
   "planner": {
     "metric": {
+      "window": "Power + comms",
       "title": "Metric",
       "sunlight": "% sunlight",
       "comms": "Communication window"
@@ -119,15 +141,25 @@
       "date": "Date",
       "value": "Value"
     },
-    "demoNote": "Demo data — calculations are not connected yet",
     "hint": "Hover a cell to see details",
     "legend": {
       "low": "Low",
       "high": "High"
     },
     "best": {
-      "title": "Best launch windows"
-    }
+      "title": "Best launch windows",
+      "empty": "Waiting for the first calculated site…",
+      "hint": "Click a window to open it in the scenario. The start time is searched every 12 hours.",
+      "added": "Added",
+      "compareFull": "List is full",
+      "compareFullHint": "The comparison holds up to 4 scenarios. Remove one in the panel at the bottom of the page."
+    },
+    "dataNote": "Data: JPL Horizons (DE441), airless, terrain horizon from LOLA. Each cell is the share of a {{days}}-day mission starting on that date.",
+    "progress": "Calculated {{done}} of {{total}} sites…",
+    "flatNote": "Flat horizon (no LOLA data): {{sites}}.",
+    "cellPending": "calculating",
+    "failed_one": "{{count}} site failed to load.",
+    "failed_other": "{{count}} sites failed to load."
   },
   "time": {
     "days_one": "{{count}} day",
@@ -148,5 +180,34 @@
       "cycle": "Full lunar cycle"
     },
     "epochHint": "Format: YYYY-MM-DD HH:mm, UTC"
+  },
+  "criteria": {
+    "title": "Suitability criteria",
+    "note": "Project assumptions, not NASA requirements. They apply to the scenario, the comparison and the planner.",
+    "reset": "Reset to defaults",
+    "minSunElevation": {
+      "label": "Min. Sun elevation, °",
+      "hint": "The Sun counts as lit only above this angle over the terrain horizon. Grazing light gives little power."
+    },
+    "minEarthElevation": {
+      "label": "Min. Earth elevation, °",
+      "hint": "The Earth counts as visible only above this angle over the terrain horizon."
+    },
+    "minWindowHours": {
+      "label": "Min. continuous window, h",
+      "hint": "Periods with both Sun and Earth that are shorter than this are not counted. 0 — count everything."
+    },
+    "maxBlackoutHours": {
+      "label": "Max. darkness, h (0 — no limit)",
+      "hint": "The longest period without the Sun that the lander survives on its battery. A mission with a longer darkness is not viable. Applies to the scenario and the comparison, not to the planner."
+    },
+    "viablePercent": {
+      "label": "“Viable” from, %",
+      "hint": "Share of the mission with power and communication from which the site is viable."
+    },
+    "marginalPercent": {
+      "label": "“Marginal” from, %",
+      "hint": "Share of the mission from which the site is marginal; below it the site is not viable."
+    }
   }
 }
