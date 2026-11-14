@@ -18,19 +18,19 @@
     "notViable": "Не подходит"
   },
   "sites": {
-    "title": "Выбор площадки",
-    "search": "Поиск лунных площадок…",
+    "title": "Место посадки",
+    "search": "Поиск места посадки…",
     "groups": {
       "apollo": "Исторические (Apollo)",
-      "clps": "Кандидаты CLPS / Artemis",
-      "international": "Международные"
+      "clps": "Кандидаты CLPS / Artemis"
     },
     "custom": {
       "title": "Свои координаты",
       "lat": "Широта",
       "lon": "Долгота",
       "apply": "Применить"
-    }
+    },
+    "noResults": "Ничего не найдено"
   },
   "scenario": {
     "verdict": {

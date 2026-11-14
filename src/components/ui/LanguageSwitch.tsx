@@ -2,11 +2,16 @@ import { useTranslation } from 'react-i18next';
 import SegmentedControl from '@/components/ui/SegmentedControl';
 import { supportedLanguages } from '@/i18n/i18n';
 
-export default function LanguageSwitch() {
+interface LanguageSwitchProps {
+  className?: string;
+}
+
+export default function LanguageSwitch({ className }: LanguageSwitchProps) {
   const { t, i18n } = useTranslation();
 
   return (
     <SegmentedControl
+      className={className}
       label={t('common.language')}
       options={supportedLanguages.map((lng) => ({
         value: lng,

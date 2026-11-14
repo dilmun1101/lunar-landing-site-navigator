@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { NavLink, Outlet } from 'react-router';
 import LanguageSwitch from '@/components/ui/LanguageSwitch';
@@ -11,11 +12,20 @@ const tabs = [
   { to: '/planner', labelKey: 'nav.planner' },
 ];
 
-export default function AppShell() {
+interface AppShellProps {
+  className?: string;
+}
+
+export default function AppShell({ className }: AppShellProps) {
   const { t } = useTranslation();
 
   return (
-    <div className="grid min-h-screen grid-cols-[320px_1fr] grid-rows-[auto_1fr_auto] bg-space-900 text-slate-100">
+    <div
+      className={classNames(
+        'grid min-h-screen grid-cols-[320px_1fr] grid-rows-[auto_1fr_auto] bg-space-900 text-slate-100',
+        className
+      )}
+    >
       <header className="sticky top-0 z-10 col-span-2 flex h-14 items-center gap-8 border-b border-white/10 bg-space-900/90 px-4 backdrop-blur">
         <div className="flex items-center gap-3">
           <Logo />
@@ -30,11 +40,14 @@ export default function AppShell() {
               key={tab.to}
               to={tab.to}
               className={({ isActive }) =>
-                `flex h-full items-center border-b-2 text-sm font-medium transition-colors ${
-                  isActive
-                    ? 'border-accent text-accent'
-                    : 'border-transparent text-slate-400 hover:text-accent'
-                }`
+                classNames(
+                  'flex h-full items-center border-b-2 text-sm font-medium transition-colors',
+                  {
+                    'border-accent text-accent': isActive,
+                    'border-transparent text-slate-400 hover:text-accent':
+                      !isActive,
+                  }
+                )
               }
             >
               {t(tab.labelKey)}
@@ -48,7 +61,7 @@ export default function AppShell() {
         </div>
       </header>
 
-      <aside className="border-r border-white/10 p-4">
+      <aside className="sticky top-14 h-[calc(100vh-3.5rem)] overflow-y-auto border-r border-white/10 p-4">
         <SitePicker />
       </aside>
 

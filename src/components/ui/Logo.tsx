@@ -1,4 +1,10 @@
-export default function Logo() {
+import classNames from 'classnames';
+
+interface LogoProps {
+  className?: string;
+}
+
+export default function Logo({ className }: LogoProps) {
   return (
     <svg
       width="28"
@@ -6,6 +12,7 @@ export default function Logo() {
       viewBox="0 0 28 28"
       fill="none"
       aria-hidden="true"
+      className={classNames('shrink-0', className)}
     >
       <circle cx="13" cy="15" r="10" fill="#CBD5E1" />
       <circle cx="9.5" cy="12" r="2.2" fill="#94A3B8" />

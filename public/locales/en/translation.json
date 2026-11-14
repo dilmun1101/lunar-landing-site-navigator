@@ -18,19 +18,19 @@
     "notViable": "Not viable"
   },
   "sites": {
-    "title": "Site selection",
-    "search": "Search lunar sites…",
+    "title": "Landing site",
+    "search": "Search landing sites…",
     "groups": {
       "apollo": "Historical (Apollo)",
-      "clps": "CLPS / Artemis candidates",
-      "international": "International"
+      "clps": "CLPS / Artemis candidates"
     },
     "custom": {
       "title": "Custom coordinates",
       "lat": "Latitude",
       "lon": "Longitude",
       "apply": "Apply"
-    }
+    },
+    "noResults": "No sites found"
   },
   "scenario": {
     "verdict": {

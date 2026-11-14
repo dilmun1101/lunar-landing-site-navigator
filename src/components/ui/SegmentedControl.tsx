@@ -1,3 +1,5 @@
+import classNames from 'classnames';
+
 interface Option<T extends string> {
   value: T;
   label: string;
@@ -8,6 +10,7 @@ interface SegmentedControlProps<T extends string> {
   options: Option<T>[];
   value: T | undefined;
   onChange: (value: T) => void;
+  className?: string;
 }
 
 export default function SegmentedControl<T extends string>({
@@ -15,12 +18,16 @@ export default function SegmentedControl<T extends string>({
   options,
   value,
   onChange,
+  className,
 }: SegmentedControlProps<T>) {
   return (
     <div
       role="group"
       aria-label={label}
-      className="flex rounded-lg border border-white/10 bg-white/5 p-0.5 text-xs"
+      className={classNames(
+        'flex rounded-lg border border-white/10 bg-white/5 p-0.5 text-xs',
+        className
+      )}
     >
       {options.map((option) => (
         <button
