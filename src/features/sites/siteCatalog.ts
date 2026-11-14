@@ -4,7 +4,7 @@ import type { CatalogSite } from '@/features/sites/types';
 // check against the current list before the final version.
 //
 // Coordinates:
-//  • Apollo — landing sites (LROC), rounded to 0.01°.
+//  • Apollo — landing sites (LROC), rounded to 0.01°; landing — the time of touchdown (UTC, NASA mission reports).
 //  • Connecting Ridge, Nobile Rim 2 — points from scientific publications.
 //  • Other south polar regions (approximate: true) — the CENTER of the crater or region
 //    per Wikipedia/publications. A position on the crater rim differs by kilometers,
@@ -79,35 +79,41 @@ export const siteCatalog: CatalogSite[] = [
     name: 'Apollo 11 — Tranquility Base',
     group: 'apollo',
     coordinates: { lat: 0.67, lon: 23.47 },
+    landing: '1969-07-20T20:17:40Z',
   },
   {
     id: 'apollo-12',
     name: 'Apollo 12 — Ocean of Storms',
     group: 'apollo',
     coordinates: { lat: -3.01, lon: -23.42 },
+    landing: '1969-11-19T06:54:35Z',
   },
   {
     id: 'apollo-14',
     name: 'Apollo 14 — Fra Mauro',
     group: 'apollo',
     coordinates: { lat: -3.65, lon: -17.47 },
+    landing: '1971-02-05T09:18:11Z',
   },
   {
     id: 'apollo-15',
     name: 'Apollo 15 — Hadley–Apennine',
     group: 'apollo',
     coordinates: { lat: 26.13, lon: 3.63 },
+    landing: '1971-07-30T22:16:29Z',
   },
   {
     id: 'apollo-16',
     name: 'Apollo 16 — Descartes',
     group: 'apollo',
     coordinates: { lat: -8.97, lon: 15.5 },
+    landing: '1972-04-21T02:23:35Z',
   },
   {
     id: 'apollo-17',
     name: 'Apollo 17 — Taurus–Littrow',
     group: 'apollo',
     coordinates: { lat: 20.19, lon: 30.77 },
+    landing: '1972-12-11T19:54:57Z',
   },
 ];

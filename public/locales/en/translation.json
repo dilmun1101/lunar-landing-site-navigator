@@ -32,7 +32,13 @@
       "apply": "Apply",
       "invalid": "Latitude −90…90, longitude −180…180"
     },
-    "noResults": "No sites found"
+    "noResults": "No sites found",
+    "landing": {
+      "label": "Historical landing",
+      "set": "Set landing date",
+      "isSet": "The scenario time is the real landing time.",
+      "note": "The scenario time is not the landing time, so the Sun and the Earth are shown for another date."
+    }
   },
   "scenario": {
     "verdict": {

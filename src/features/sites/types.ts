@@ -16,4 +16,6 @@ export interface CatalogSite {
   group: SiteGroup;
   /** No coordinates — Horizons data cannot be requested for the site */
   coordinates?: SiteCoordinates;
+  /** Historical landing time, ISO 8601 UTC (Apollo only) */
+  landing?: string;
 }
