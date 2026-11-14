@@ -9,6 +9,8 @@ import {
   msToDuration,
   timeUntilSet,
 } from '@/domain/metrics/countdowns/countdowns';
+import { terrainElevationAt } from '@/domain/horizon/horizonProfile/horizonProfile';
+import { maskByTerrain } from '@/domain/horizon/visibility/visibility';
 import { verdictFor } from '@/domain/metrics/verdict/verdict';
 import {
   aboveHorizon,
@@ -28,14 +30,17 @@ export interface ScenarioInput {
   epoch: Date;
   durationDays: number;
   ephemeris: Ephemeris;
+  /** Terrain horizon (5° azimuth step); null or omitted — flat horizon */
+  horizon?: number[] | null;
 }
 
-/** Path of a body across the sky from fromMs onward while it is above the horizon. */
+/** Path of a body across the sky from fromMs onward while it is above the terrain horizon. */
 function buildTrack(
   series: BodySeries,
   ephemeris: Ephemeris,
   fromMs: number,
-  spanMs: number
+  spanMs: number,
+  horizon: number[]
 ): SkyPoint[] {
   const points: SkyPoint[] = [];
   for (let step = 0; step <= TRACK_POINTS; step++) {
@@ -44,7 +49,12 @@ function buildTrack(
       ephemeris,
       fromMs + (spanMs * step) / TRACK_POINTS
     );
-    if (!position || position.elevation < 0) break;
+    if (
+      !position ||
+      position.elevation < terrainElevationAt(horizon, position.azimuth)
+    ) {
+      break;
+    }
     points.push(position);
   }
   return points;
@@ -53,7 +63,7 @@ function buildTrack(
 /**
  * Builds everything the page shows from Horizons data.
  * Returns null if the mission does not fit into the range of the loaded data.
- * Terrain is not taken into account yet: the horizon is flat (0°).
+ * Visibility is checked against the terrain horizon (LOLA); without it the horizon is flat (0°).
  */
 export function buildScenarioView({
   id,
@@ -61,6 +71,7 @@ export function buildScenarioView({
   epoch,
   durationDays,
   ephemeris,
+  horizon: terrain,
 }: ScenarioInput): ScenarioView | null {
   const fromMs = epoch.getTime();
   const toMs = fromMs + durationDays * DAY_MS;
@@ -68,16 +79,26 @@ export function buildScenarioView({
     return null;
   }
 
-  const sunSegments = aboveHorizon(ephemeris.sun, ephemeris, fromMs, toMs);
-  const earthSegments = aboveHorizon(ephemeris.earth, ephemeris, fromMs, toMs);
+  const horizon = terrain ?? Array.from({ length: 72 }, () => 0);
+  // Elevation above the terrain: positive means the body is visible
+  const visible = terrain
+    ? {
+        ...ephemeris,
+        sun: maskByTerrain(ephemeris.sun, terrain),
+        earth: maskByTerrain(ephemeris.earth, terrain),
+      }
+    : ephemeris;
+
+  const sunSegments = aboveHorizon(visible.sun, visible, fromMs, toMs);
+  const earthSegments = aboveHorizon(visible.earth, visible, fromMs, toMs);
   const windowSegments = intersect(sunSegments, earthSegments);
 
   const percentOf = (segments: [number, number][]) =>
     Math.round((totalMs(segments) / (toMs - fromMs)) * 100);
   const windowPercent = percentOf(windowSegments);
 
-  const sunSet = timeUntilSet(ephemeris.sun, ephemeris, fromMs);
-  const earthSet = timeUntilSet(ephemeris.earth, ephemeris, fromMs);
+  const sunSet = timeUntilSet(visible.sun, visible, fromMs);
+  const earthSet = timeUntilSet(visible.earth, visible, fromMs);
   const trackSpan = (set: ReturnType<typeof timeUntilSet>) =>
     set
       ? set.days * DAY_MS + set.hours * 3_600_000
@@ -104,13 +125,21 @@ export function buildScenarioView({
     sunSegments: toDaySegments(sunSegments, fromMs),
     earthSegments: toDaySegments(earthSegments, fromMs),
     windowSegments: toDaySegments(windowSegments, fromMs),
-    sunTrack: buildTrack(ephemeris.sun, ephemeris, fromMs, trackSpan(sunSet)),
+    sunTrack: buildTrack(
+      ephemeris.sun,
+      ephemeris,
+      fromMs,
+      trackSpan(sunSet),
+      horizon
+    ),
     earthTrack: buildTrack(
       ephemeris.earth,
       ephemeris,
       fromMs,
-      trackSpan(earthSet)
+      trackSpan(earthSet),
+      horizon
     ),
-    horizon: Array.from({ length: 72 }, () => 0),
+    // The chart draws terrain above the geometric horizon only
+    horizon: horizon.map((elevation) => Math.max(0, elevation)),
   };
 }

@@ -89,7 +89,7 @@ export async function fetchEphemeris(
     throw new Error('Horizons: Sun and Earth tables do not match');
   }
   return {
-    startMs: sun.times[0],
+    startMs: sun.times[0] ?? startMs,
     stepMs: STEP_MINUTES * 60_000,
     sun: { az: sun.az, el: sun.el },
     earth: { az: earth.az, el: earth.el },

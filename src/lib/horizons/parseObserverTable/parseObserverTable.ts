@@ -42,13 +42,18 @@ export function parseObserverTable(text: string): ObserverTable {
     if (!match) throw new Error(`Horizons: could not parse the time: ${line}`);
     // Azimuth and elevation are the last two numeric fields
     const numbers = fields.slice(1).filter((field) => /^-?\d/.test(field));
-    const [azimuth, elevation] = numbers.slice(-2).map(Number);
+    const [azimuth = Number.NaN, elevation = Number.NaN] = numbers
+      .slice(-2)
+      .map(Number);
     if (!Number.isFinite(azimuth) || !Number.isFinite(elevation)) {
       throw new Error(`Horizons: could not parse the angles: ${line}`);
     }
-    table.times.push(
-      Date.UTC(+match[1], MONTHS[match[2]], +match[3], +match[4], +match[5])
-    );
+    const [, year = '', month = '', day = '', hour = '', minute = ''] = match;
+    const monthIndex = MONTHS[month];
+    if (monthIndex === undefined) {
+      throw new Error(`Horizons: could not parse the time: ${line}`);
+    }
+    table.times.push(Date.UTC(+year, monthIndex, +day, +hour, +minute));
     table.az.push(azimuth);
     table.el.push(elevation);
   }

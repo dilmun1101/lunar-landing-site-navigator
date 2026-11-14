@@ -7,6 +7,7 @@ import {
   type Segment,
 } from '@/features/scenario/demoScenario';
 import SkyPanel from '@/features/scenario/SkyPanel/SkyPanel';
+import { useHorizonProfile } from '@/features/scenario/useHorizonProfile/useHorizonProfile';
 import { useSiteEphemeris } from '@/features/scenario/useSiteEphemeris/useSiteEphemeris';
 import VerdictCard from '@/features/scenario/VerdictCard/VerdictCard';
 import ViabilityTimeline from '@/features/scenario/ViabilityTimeline/ViabilityTimeline';
@@ -34,15 +35,17 @@ export default function ScenarioPage() {
   const days = durationDays[duration];
   const coordinates = resolveCoordinates(siteId, customSite);
   const data = useSiteEphemeris(coordinates, epoch, days);
+  const terrain = useHorizonProfile(coordinates);
 
   const real =
-    data.status === 'ready'
+    data.status === 'ready' && terrain.status !== 'loading'
       ? buildScenarioView({
           id: siteId ?? 'custom',
           siteName,
           epoch,
           durationDays: days,
           ephemeris: data.ephemeris,
+          horizon: terrain.status === 'ready' ? terrain.profile : null,
         })
       : null;
 
@@ -60,9 +63,11 @@ export default function ScenarioPage() {
   let note: string;
   if (real) {
     note = t(
-      coordinates?.approximate ? 'scenario.dataNoteApprox' : 'scenario.dataNote'
+      `scenario.dataNote${terrain.status === 'ready' ? '' : 'Flat'}${
+        coordinates?.approximate ? 'Approx' : ''
+      }`
     );
-  } else if (data.status === 'loading') {
+  } else if (data.status === 'loading' || data.status === 'ready') {
     note = t('scenario.loading');
   } else if (data.status === 'idle') {
     note = t('scenario.noData');

@@ -40,7 +40,7 @@ export function positionAt(
   const upper = Math.min(lower + 1, sampleCount(series) - 1);
   const fraction = index - lower;
   return {
-    azimuth: lerpAngle(series.az[lower], series.az[upper], fraction),
-    elevation: lerp(series.el[lower], series.el[upper], fraction),
+    azimuth: lerpAngle(series.az[lower] ?? 0, series.az[upper] ?? 0, fraction),
+    elevation: lerp(series.el[lower] ?? 0, series.el[upper] ?? 0, fraction),
   };
 }

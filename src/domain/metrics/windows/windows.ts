@@ -24,19 +24,26 @@ export function aboveHorizon(
   const elevationAt = (ms: number) =>
     positionAt(series, timeline, ms)?.elevation ?? Number.NaN;
 
-  const points: [number, number][] = [[fromMs, elevationAt(fromMs)]];
+  const startElevation = elevationAt(fromMs);
+  const points: [number, number][] = [[fromMs, startElevation]];
   const first = Math.floor((fromMs - timeline.startMs) / timeline.stepMs) + 1;
   const last = Math.ceil((toMs - timeline.startMs) / timeline.stepMs) - 1;
   for (let index = first; index <= last; index++) {
-    points.push([timeline.startMs + index * timeline.stepMs, series.el[index]]);
+    points.push([
+      timeline.startMs + index * timeline.stepMs,
+      series.el[index] ?? Number.NaN,
+    ]);
   }
   points.push([toMs, elevationAt(toMs)]);
 
   const segments: MsSegment[] = [];
-  let open: number | null = points[0][1] > threshold ? fromMs : null;
+  let open: number | null = startElevation > threshold ? fromMs : null;
   for (let index = 1; index < points.length; index++) {
-    const [t0, e0] = points[index - 1];
-    const [t1, e1] = points[index];
+    const previous = points[index - 1];
+    const current = points[index];
+    if (!previous || !current) continue;
+    const [t0, e0] = previous;
+    const [t1, e1] = current;
     const wasAbove = e0 > threshold;
     const isAbove = e1 > threshold;
     if (wasAbove === isAbove) continue;
@@ -58,10 +65,13 @@ export function intersect(a: MsSegment[], b: MsSegment[]): MsSegment[] {
   let i = 0;
   let j = 0;
   while (i < a.length && j < b.length) {
-    const start = Math.max(a[i][0], b[j][0]);
-    const end = Math.min(a[i][1], b[j][1]);
+    const first = a[i];
+    const second = b[j];
+    if (!first || !second) break;
+    const start = Math.max(first[0], second[0]);
+    const end = Math.min(first[1], second[1]);
     if (start < end) result.push([start, end]);
-    if (a[i][1] < b[j][1]) i++;
+    if (first[1] < second[1]) i++;
     else j++;
   }
   return result;

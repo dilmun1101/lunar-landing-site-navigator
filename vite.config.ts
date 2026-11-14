@@ -16,6 +16,19 @@ const horizonsProxy = {
   },
 };
 
+// The USGS web map service (LOLA elevations) has no CORS headers either: same approach.
+const lolaProxy = {
+  '/usgs-wms': {
+    target: 'https://planetarymaps.usgs.gov',
+    changeOrigin: true,
+    rewrite: (path: string) =>
+      path.replace(
+        /^\/usgs-wms\??/,
+        '/cgi-bin/mapserv?map=/maps/earth/moon_simp_cyl_elev.map&'
+      ),
+  },
+};
+
 export default defineConfig({
   plugins: [react(), tailwindcss()],
 
@@ -27,8 +40,8 @@ export default defineConfig({
     },
   },
 
-  server: { proxy: horizonsProxy },
-  preview: { proxy: horizonsProxy },
+  server: { proxy: { ...horizonsProxy, ...lolaProxy } },
+  preview: { proxy: { ...horizonsProxy, ...lolaProxy } },
 
   test: {
     environment: 'node',

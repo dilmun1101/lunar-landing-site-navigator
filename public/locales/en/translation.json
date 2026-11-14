@@ -86,8 +86,10 @@
       "horizon": "Terrain horizon"
     },
     "demoNote": "Demo data — calculations are not connected yet",
-    "dataNote": "Data: JPL Horizons (DE441), airless, flat horizon — terrain (LOLA) is not included yet",
-    "dataNoteApprox": "Data: JPL Horizons (DE441), airless, flat horizon — site coordinates are the approximate region center; terrain (LOLA) is not included yet",
+    "dataNote": "Data: JPL Horizons (DE441), airless, terrain horizon from LOLA",
+    "dataNoteApprox": "Data: JPL Horizons (DE441), airless, terrain horizon from LOLA — site coordinates are the approximate region center",
+    "dataNoteFlat": "Data: JPL Horizons (DE441), airless, flat horizon — no LOLA terrain data for this site",
+    "dataNoteFlatApprox": "Data: JPL Horizons (DE441), airless, flat horizon — no LOLA terrain data for this site; coordinates are the approximate region center",
     "noData": "This site has no coordinates yet — showing demo values",
     "fetchError": "Could not load data from JPL Horizons — showing demo values",
     "loading": "Loading data from JPL Horizons…"

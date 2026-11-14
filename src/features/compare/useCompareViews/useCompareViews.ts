@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { buildScenarioView } from '@/features/scenario/buildScenarioView';
 import type { ScenarioView } from '@/features/scenario/demoScenario';
+import { fetchHorizonProfile } from '@/lib/horizon/horizonProfiles/horizonProfiles';
 import { fetchEphemeris } from '@/lib/horizons/horizonsClient/horizonsClient';
 import type { CompareItem } from '@/state/useCompareList/useCompareList';
 import { durationDays } from '@/state/useScenarioStore/useScenarioStore';
@@ -37,14 +38,19 @@ export function useCompareViews(
       set({ status: 'loading' });
       const days = durationDays[item.duration];
       const epoch = new Date(item.epoch);
-      fetchEphemeris(item.coordinates, epoch.getTime(), days, signal)
-        .then((ephemeris) => {
+      Promise.all([
+        fetchEphemeris(item.coordinates, epoch.getTime(), days, signal),
+        // Without terrain data the horizon stays flat
+        fetchHorizonProfile(item.coordinates).catch(() => null),
+      ])
+        .then(([ephemeris, profile]) => {
           const view = buildScenarioView({
             id: item.id,
             siteName: item.siteName,
             epoch,
             durationDays: days,
             ephemeris,
+            horizon: profile,
           });
           set(view ? { status: 'ready', view } : { status: 'error' });
         })
