@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router';
 import Button from '@/components/ui/Button/Button';
 import Panel from '@/components/ui/Panel/Panel';
 import SectionTitle from '@/components/ui/SectionTitle/SectionTitle';
@@ -7,7 +8,9 @@ import {
   plannerStarts,
   type PlannerMetric,
 } from '@/domain/planner/plannerValues/plannerValues';
-import BestWindowsList from '@/features/planner/BestWindowsList/BestWindowsList';
+import BestWindowsList, {
+  type BestWindow,
+} from '@/features/planner/BestWindowsList/BestWindowsList';
 import HeatmapTooltip from '@/features/planner/HeatmapTooltip/HeatmapTooltip';
 import MetricToggle from '@/features/planner/MetricToggle/MetricToggle';
 import { plannerSites } from '@/features/planner/plannerSites';
@@ -15,6 +18,7 @@ import { usePlannerData } from '@/features/planner/usePlannerData/usePlannerData
 import ViabilityHeatmap, {
   type HoveredCell,
 } from '@/features/planner/ViabilityHeatmap/ViabilityHeatmap';
+import { useCompareList } from '@/state/useCompareList/useCompareList';
 import { useCriteriaStore } from '@/state/useCriteriaStore/useCriteriaStore';
 import {
   durationDays,
@@ -28,6 +32,10 @@ export default function PlannerPage() {
   const epoch = useScenarioStore((state) => state.epoch);
   const duration = useScenarioStore((state) => state.duration);
   const criteria = useCriteriaStore((state) => state.criteria);
+  const selectSite = useScenarioStore((state) => state.selectSite);
+  const setEpoch = useScenarioStore((state) => state.setEpoch);
+  const addToCompare = useCompareList((state) => state.add);
+  const navigate = useNavigate();
   const [metric, setMetric] = useState<PlannerMetric>('window');
   const [hovered, setHovered] = useState<HoveredCell | null>(null);
 
@@ -35,12 +43,33 @@ export default function PlannerPage() {
   // Columns start at the beginning of the selected UTC day
   const startMs = Math.floor(epoch.getTime() / DAY_MS) * DAY_MS;
   const dates = plannerStarts(startMs).map((ms) => new Date(ms));
-  const { states, reload } = usePlannerData(startMs, days, criteria);
+  const { states, reload } = usePlannerData(startMs, days, criteria, metric);
 
   const values = plannerSites.map((site) => {
     const state = states[site.id];
     return state?.status === 'ready' ? state.values[metric] : null;
   });
+  const bestWindows = plannerSites.flatMap((site): BestWindow[] => {
+    const state = states[site.id];
+    return state?.status === 'ready' && state.best
+      ? [{ site, startMs: state.best.startMs, percent: state.best.percent }]
+      : [];
+  });
+
+  // Opens the window in the scenario: the same site and start time
+  const openWindow = (window: BestWindow) => {
+    selectSite(window.site.id);
+    setEpoch(new Date(window.startMs));
+    void navigate('/scenario');
+  };
+  const addWindow = (window: BestWindow) =>
+    addToCompare({
+      siteName: window.site.name,
+      epoch: new Date(window.startMs).toISOString(),
+      duration,
+      coordinates: window.site.coordinates,
+    });
+
   const hoveredValue = hovered ? values[hovered.row]?.[hovered.col] : undefined;
 
   const rows = plannerSites.map((site) => states[site.id]);
@@ -80,6 +109,16 @@ export default function PlannerPage() {
         </div>
       </div>
 
+      <Panel className="flex flex-col gap-3">
+        <SectionTitle>{t('planner.best.title')}</SectionTitle>
+        <BestWindowsList
+          windows={bestWindows}
+          criteria={criteria}
+          onOpen={openWindow}
+          onAdd={addWindow}
+        />
+      </Panel>
+
       <Panel className="flex flex-col gap-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <SectionTitle>{t('planner.heatmap.title')}</SectionTitle>
@@ -112,16 +151,6 @@ export default function PlannerPage() {
             {t('planner.legend.high')}
           </div>
         </div>
-      </Panel>
-
-      <Panel className="flex flex-col gap-3">
-        <SectionTitle>{t('planner.best.title')}</SectionTitle>
-        <BestWindowsList
-          sites={plannerSites}
-          dates={dates}
-          values={values}
-          criteria={criteria}
-        />
       </Panel>
     </div>
   );

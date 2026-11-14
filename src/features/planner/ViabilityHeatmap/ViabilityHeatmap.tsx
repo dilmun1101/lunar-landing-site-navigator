@@ -62,7 +62,11 @@ export default function ViabilityHeatmap({
           const rowValues = values[row];
           return (
             <div key={site.id} className="contents">
-              <span className="truncate pr-2 text-sm text-slate-300">
+              <span
+                className={classNames('truncate pr-2 text-sm text-slate-300', {
+                  'text-slate-500': !rowValues,
+                })}
+              >
                 {site.name}
               </span>
               {dates.map((date, col) => {
@@ -72,7 +76,7 @@ export default function ViabilityHeatmap({
                     <span
                       key={date.toISOString()}
                       aria-label={`${site.name}, ${dateFormat.format(date)}: ${t('planner.cellPending')}`}
-                      className="h-7 rounded-sm border border-white/5 bg-white/[0.03]"
+                      className="h-7 animate-pulse rounded-sm border border-white/5 bg-white/10"
                     />
                   );
                 }

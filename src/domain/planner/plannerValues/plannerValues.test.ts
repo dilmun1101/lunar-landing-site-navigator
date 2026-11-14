@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import type { Ephemeris } from '@/domain/ephemeris/sunEarthPosition/sunEarthPosition';
 import { defaultCriteria } from '@/domain/criteria/criteria';
-import { computePlannerValues } from '@/domain/planner/plannerValues/plannerValues';
+import {
+  computePlannerValues,
+  findBestStart,
+} from '@/domain/planner/plannerValues/plannerValues';
 
 const HOUR = 3_600_000;
 const DAY = 86_400_000;
@@ -82,5 +85,36 @@ describe('computePlannerValues', () => {
     expect(() =>
       computePlannerValues(makeEphemeris(5), null, [9 * DAY], 5)
     ).toThrow();
+  });
+
+  it('finds the earliest best start', () => {
+    const best = findBestStart(
+      makeEphemeris(5),
+      null,
+      'window',
+      2 * DAY,
+      8 * DAY,
+      2
+    );
+    expect(best).toEqual({ startMs: 2 * DAY, percent: 100 });
+  });
+
+  it('finds the start with the Sun when the range begins in the dark', () => {
+    // From day 5 on the Sun is below the horizon, so the best start does not exist
+    const best = findBestStart(
+      makeEphemeris(5),
+      null,
+      'sunlight',
+      6 * DAY,
+      8 * DAY,
+      2
+    );
+    expect(best?.percent).toBe(0);
+  });
+
+  it('returns null if the mission does not fit', () => {
+    expect(
+      findBestStart(makeEphemeris(5), null, 'window', 9 * DAY, 9 * DAY, 5)
+    ).toBe(null);
   });
 });
