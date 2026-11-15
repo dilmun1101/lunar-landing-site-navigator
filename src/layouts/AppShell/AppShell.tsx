@@ -5,6 +5,7 @@ import LanguageSwitch from '@/components/ui/LanguageSwitch/LanguageSwitch';
 import Logo from '@/components/ui/Logo/Logo';
 import ModeSwitch from '@/components/ui/ModeSwitch/ModeSwitch';
 import ComparePanel from '@/features/compare/ComparePanel/ComparePanel';
+import WelcomeCard from '@/features/welcome/WelcomeCard/WelcomeCard';
 import Sidebar from '@/layouts/Sidebar/Sidebar';
 
 const tabs = [
@@ -63,7 +64,8 @@ export default function AppShell({ className }: AppShellProps) {
 
       <Sidebar />
 
-      <main className="p-4">
+      <main className="flex flex-col gap-4 p-4">
+        <WelcomeCard />
         <Outlet />
       </main>
 

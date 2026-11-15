@@ -1,8 +1,6 @@
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import SegmentedControl from '@/components/ui/SegmentedControl/SegmentedControl';
-
-type Mode = 'beginner' | 'expert';
+import { useModeStore } from '@/hooks/useMode/useMode';
 
 interface ModeSwitchProps {
   className?: string;
@@ -10,8 +8,8 @@ interface ModeSwitchProps {
 
 export default function ModeSwitch({ className }: ModeSwitchProps) {
   const { t } = useTranslation();
-  // TODO: move to shared state (hooks/useMode.ts) once modes affect the interface
-  const [mode, setMode] = useState<Mode>('expert');
+  const mode = useModeStore((state) => state.mode);
+  const setMode = useModeStore((state) => state.setMode);
 
   return (
     <SegmentedControl

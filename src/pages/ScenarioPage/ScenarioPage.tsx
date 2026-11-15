@@ -10,6 +10,7 @@ import {
 import SkyPanel from '@/features/scenario/SkyPanel/SkyPanel';
 import { useHorizonProfile } from '@/features/scenario/useHorizonProfile/useHorizonProfile';
 import { useSiteEphemeris } from '@/features/scenario/useSiteEphemeris/useSiteEphemeris';
+import SourcesPanel from '@/features/scenario/SourcesPanel/SourcesPanel';
 import VerdictCard from '@/features/scenario/VerdictCard/VerdictCard';
 import ViabilityTimeline from '@/features/scenario/ViabilityTimeline/ViabilityTimeline';
 import { useCriteriaStore } from '@/state/useCriteriaStore/useCriteriaStore';
@@ -113,6 +114,11 @@ export default function ScenarioPage() {
         sunTrack={scenario.sunTrack}
         earthTrack={scenario.earthTrack}
         horizon={scenario.horizon}
+      />
+
+      <SourcesPanel
+        criteria={criteria}
+        hasTerrain={terrain.status === 'ready'}
       />
     </div>
   );

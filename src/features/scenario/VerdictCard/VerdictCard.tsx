@@ -2,12 +2,15 @@ import classNames from 'classnames';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import Badge from '@/components/ui/Badge/Badge';
+import Hint from '@/components/ui/Tooltip/Tooltip';
 import MetricTile from '@/components/ui/MetricTile/MetricTile';
 import Panel from '@/components/ui/Panel/Panel';
 import SectionTitle from '@/components/ui/SectionTitle/SectionTitle';
+import { verdictSentence } from '@/domain/metrics/verdictSentence/verdictSentence';
 import { addDays } from '@/domain/time/lunarDay/lunarDay';
 import type { ScenarioView } from '@/features/scenario/demoScenario';
-import { formatDuration } from '@/lib/formatDuration/formatDuration';
+import { useMode } from '@/hooks/useMode/useMode';
+import { formatDurationFor } from '@/lib/formatDuration/formatDuration';
 import { formatUtcDateTime } from '@/lib/format/format';
 
 interface VerdictCardProps {
@@ -23,11 +26,30 @@ export default function VerdictCard({
   className,
 }: VerdictCardProps) {
   const { t, i18n } = useTranslation();
-  const start = formatUtcDateTime(scenario.epoch, i18n.language);
-  const end = formatUtcDateTime(
-    addDays(scenario.epoch, scenario.durationDays),
-    i18n.language
-  );
+  const beginner = useMode() === 'beginner';
+  const endDate = addDays(scenario.epoch, scenario.durationDays);
+  // Beginners get calendar dates only: no hours, minutes or time zone
+  const dayFormat = new Intl.DateTimeFormat(i18n.language, {
+    timeZone: 'UTC',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+  const start = beginner
+    ? dayFormat.format(scenario.epoch)
+    : formatUtcDateTime(scenario.epoch, i18n.language);
+  const end = beginner
+    ? dayFormat.format(endDate)
+    : formatUtcDateTime(endDate, i18n.language);
+
+  const sentence = beginner
+    ? verdictSentence({
+        verdict: scenario.verdict,
+        sunlightPercent: scenario.sunlightPercent,
+        earthLinkPercent: scenario.earthLinkPercent,
+        blackoutExceeded: scenario.blackoutExceeded,
+      })
+    : null;
 
   return (
     <Panel className={classNames('flex flex-col gap-5', className)}>
@@ -43,9 +65,30 @@ export default function VerdictCard({
           <p className="text-sm text-slate-400">
             {t('scenario.verdict.missionWindow')}:{' '}
             <span className="font-mono">
-              {start} – {end} UTC
+              {start} – {end}
+              {beginner ? '' : ' UTC'}
             </span>
           </p>
+          {sentence && (
+            <p className="max-w-prose text-sm leading-relaxed text-slate-200">
+              <span className="font-semibold">
+                {t(
+                  `scenario.sentence.intro.${
+                    sentence.verdict === 'not-viable'
+                      ? 'notViable'
+                      : sentence.verdict
+                  }`
+                )}
+              </span>{' '}
+              {t('scenario.sentence.body', {
+                sun: t(`scenario.sentence.freq.${sentence.sun}`),
+                earth: t(`scenario.sentence.freq.${sentence.earth}`),
+              })}
+              {sentence.reason
+                ? ` ${t(`scenario.sentence.reason.${sentence.reason}`)}`
+                : null}
+            </p>
+          )}
         </div>
         {children}
       </div>
@@ -53,16 +96,23 @@ export default function VerdictCard({
       <div className="grid gap-3 sm:grid-cols-3">
         <MetricTile
           label={t('scenario.verdict.sunlight')}
+          hint={t('hints.sunlight')}
           percent={scenario.sunlightPercent}
           color="sun"
         />
         <MetricTile
-          label={t('scenario.verdict.earthLink')}
+          label={t(
+            beginner
+              ? 'scenario.verdict.earthLink'
+              : 'scenario.verdict.earthLinkExpert'
+          )}
+          hint={t('hints.earthLink')}
           percent={scenario.earthLinkPercent}
           color="earth"
         />
         <MetricTile
           label={t('scenario.verdict.window')}
+          hint={t('hints.window')}
           percent={scenario.windowPercent}
           color="emerald"
         />
@@ -77,11 +127,12 @@ export default function VerdictCard({
               : 'border-white/10 bg-white/5'
           )}
         >
-          <dt className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">
+          <dt className="flex items-center gap-1.5 text-[11px] font-semibold tracking-wider text-slate-500 uppercase">
             {t('scenario.verdict.longestDarkness')}
+            <Hint text={t('hints.longestDarkness')} />
           </dt>
           <dd className="font-mono text-sm text-slate-100">
-            {formatDuration(t, scenario.longestDarkness)}
+            {formatDurationFor(t, scenario.longestDarkness, beginner)}
           </dd>
           {scenario.blackoutExceeded && (
             <dd className="text-xs text-red-300">
@@ -90,11 +141,12 @@ export default function VerdictCard({
           )}
         </div>
         <div className="flex flex-col gap-0.5 rounded-lg border border-white/10 bg-white/5 px-3 py-2">
-          <dt className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">
+          <dt className="flex items-center gap-1.5 text-[11px] font-semibold tracking-wider text-slate-500 uppercase">
             {t('scenario.verdict.longestCommsGap')}
+            <Hint text={t('hints.longestCommsGap')} />
           </dt>
           <dd className="font-mono text-sm text-slate-100">
-            {formatDuration(t, scenario.longestCommsGap)}
+            {formatDurationFor(t, scenario.longestCommsGap, beginner)}
           </dd>
         </div>
       </dl>

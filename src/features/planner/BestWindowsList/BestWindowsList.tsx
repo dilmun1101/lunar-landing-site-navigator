@@ -4,6 +4,7 @@ import Badge from '@/components/ui/Badge/Badge';
 import type { Criteria } from '@/domain/criteria/criteria';
 import { verdictFor } from '@/domain/metrics/verdict/verdict';
 import type { PlannerSite } from '@/features/planner/plannerSites';
+import { useMode } from '@/hooks/useMode/useMode';
 
 export interface BestWindow {
   site: PlannerSite;
@@ -38,16 +39,22 @@ export default function BestWindowsList({
   className,
 }: BestWindowsListProps) {
   const { t, i18n } = useTranslation();
-  const dateFormat = new Intl.DateTimeFormat(i18n.language, {
-    timeZone: 'UTC',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-    timeZoneName: 'short',
-  });
+  const beginner = useMode() === 'beginner';
+  const dateFormat = new Intl.DateTimeFormat(
+    i18n.language,
+    beginner
+      ? { timeZone: 'UTC', day: 'numeric', month: 'long', year: 'numeric' }
+      : {
+          timeZone: 'UTC',
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false,
+          timeZoneName: 'short',
+        }
+  );
 
   // The best start of every site, then the best sites
   const top = [...windows]
@@ -64,7 +71,9 @@ export default function BestWindowsList({
 
   return (
     <div className={classNames('flex flex-col gap-2', className)}>
-      <p className="text-xs text-slate-500">{t('planner.best.hint')}</p>
+      <p className="text-xs text-slate-500">
+        {t(beginner ? 'planner.best.hintBeginner' : 'planner.best.hint')}
+      </p>
       <ol className="flex flex-col gap-2">
         {top.map((item, index) => (
           <li
@@ -87,9 +96,11 @@ export default function BestWindowsList({
                   {dateFormat.format(item.startMs)}
                 </span>
               </span>
-              <span className="font-mono text-sm text-slate-100">
-                {item.percent}%
-              </span>
+              {!beginner && (
+                <span className="font-mono text-sm text-slate-100">
+                  {item.percent}%
+                </span>
+              )}
               <Badge verdict={verdictFor(item.percent, criteria)} />
             </button>
             <button

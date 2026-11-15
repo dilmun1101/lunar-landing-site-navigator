@@ -2,8 +2,10 @@ import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import Badge from '@/components/ui/Badge/Badge';
 import Panel from '@/components/ui/Panel/Panel';
+import Hint from '@/components/ui/Tooltip/Tooltip';
 import type { ScenarioView } from '@/features/scenario/demoScenario';
-import { formatDuration } from '@/lib/formatDuration/formatDuration';
+import { useMode } from '@/hooks/useMode/useMode';
+import { formatDurationFor } from '@/lib/formatDuration/formatDuration';
 import { formatUtcDateTime } from '@/lib/format/format';
 
 interface ScenarioCardProps {
@@ -18,6 +20,7 @@ export default function ScenarioCard({
   className,
 }: ScenarioCardProps) {
   const { t, i18n } = useTranslation();
+  const beginner = useMode() === 'beginner';
   const elevation = new Intl.NumberFormat(i18n.language, {
     minimumFractionDigits: 1,
     maximumFractionDigits: 1,
@@ -33,15 +36,18 @@ export default function ScenarioCard({
   );
 
   const stats = [
-    { key: 'solarElevation', value: `${elevation}°`, dot: 'bg-sun' },
+    // The sun angle in degrees means little to a beginner
+    ...(beginner
+      ? []
+      : [{ key: 'solarElevation', value: `${elevation}°`, dot: 'bg-sun' }]),
     {
       key: 'sunlightDuration',
-      value: formatDuration(t, scenario.sunlightDuration),
+      value: formatDurationFor(t, scenario.sunlightDuration, beginner),
       dot: 'bg-sun',
     },
     {
       key: 'earthWindow',
-      value: formatDuration(t, scenario.earthWindowDuration),
+      value: formatDurationFor(t, scenario.earthWindowDuration, beginner),
       dot: 'bg-earth',
     },
   ];
@@ -52,13 +58,25 @@ export default function ScenarioCard({
         <div>
           <h3 className="font-semibold text-slate-100">{scenario.siteName}</h3>
           <p className="font-mono text-xs text-slate-500">
-            {formatUtcDateTime(scenario.epoch, i18n.language)} UTC
+            {beginner
+              ? new Intl.DateTimeFormat(i18n.language, {
+                  timeZone: 'UTC',
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                }).format(scenario.epoch)
+              : `${formatUtcDateTime(scenario.epoch, i18n.language)} UTC`}
           </p>
         </div>
         <Badge verdict={scenario.verdict} />
       </div>
 
-      <dl className="grid grid-cols-3 gap-2">
+      <dl
+        className={classNames('grid gap-2', {
+          'grid-cols-3': !beginner,
+          'grid-cols-2': beginner,
+        })}
+      >
         {stats.map((stat) => (
           <div
             key={stat.key}
@@ -72,6 +90,9 @@ export default function ScenarioCard({
                 )}
               />
               {t(`compare.card.${stat.key}`)}
+              {stat.key !== 'solarElevation' && (
+                <Hint text={t(`hints.${stat.key}`)} />
+              )}
             </dt>
             <dd className="mt-auto font-mono text-sm text-slate-100">
               {stat.value}
@@ -88,7 +109,7 @@ export default function ScenarioCard({
       >
         {t('compare.card.longestDarkness')}:{' '}
         <span className="font-mono text-slate-100">
-          {formatDuration(t, scenario.longestDarkness)}
+          {formatDurationFor(t, scenario.longestDarkness, beginner)}
         </span>
         {scenario.blackoutExceeded
           ? ` — ${t('scenario.verdict.blackoutExceeded')}`
@@ -137,17 +158,19 @@ export default function ScenarioCard({
         <p className="text-center text-[10px] text-slate-500">
           {t('scenario.timeline.axis')}
         </p>
-        <p className="text-xs text-slate-400">
-          {t('compare.card.windowDays')}:{' '}
-          <span className="font-mono text-slate-100">
-            {scenario.windowSegments
-              .map(
-                ([start, end]) =>
-                  `${dayFormat.format(start)}–${dayFormat.format(end)}`
-              )
-              .join(', ')}
-          </span>
-        </p>
+        {!beginner && (
+          <p className="text-xs text-slate-400">
+            {t('compare.card.windowDays')}:{' '}
+            <span className="font-mono text-slate-100">
+              {scenario.windowSegments
+                .map(
+                  ([start, end]) =>
+                    `${dayFormat.format(start)}–${dayFormat.format(end)}`
+                )
+                .join(', ')}
+            </span>
+          </p>
+        )}
       </div>
 
       <button
