@@ -79,7 +79,20 @@
       "trackNote": "Dashed lines: path until sunset and Earthset."
     },
     "panorama": {
-      "title": "360° horizon panorama"
+      "title": "360° horizon panorama",
+      "cardinal": {
+        "north": "N",
+        "east": "E",
+        "south": "S",
+        "west": "W"
+      },
+      "state": {
+        "visible": "visible",
+        "behindTerrain": "hidden by the terrain",
+        "belowHorizon": "below the horizon"
+      },
+      "hint": "The dark silhouette is the terrain on the horizon: mountains and crater rims. A body behind it is not visible.",
+      "flat": "No LOLA terrain data for this point: the horizon is drawn flat, so the real view may be worse."
     },
     "timeline": {
       "title": "Viability timeline",
