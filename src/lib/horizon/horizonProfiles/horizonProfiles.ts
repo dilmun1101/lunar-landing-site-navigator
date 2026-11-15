@@ -7,7 +7,8 @@ export interface HorizonSite {
   lon: number;
 }
 
-const RADIUS_KM = 120;
+/** How far the terrain horizon looks for mountains, km */
+export const HORIZON_RADIUS_KM = 120;
 const STORAGE_PREFIX = 'horizon-profile:v1:';
 
 const memory = new Map<string, number[]>();
@@ -58,13 +59,13 @@ export function fetchHorizonProfile(site: HorizonSite): Promise<number[]> {
   const key = horizonKey(site);
   let request = pending.get(key);
   if (!request) {
-    request = fetchElevationTiles(site.lat, site.lon, RADIUS_KM)
+    request = fetchElevationTiles(site.lat, site.lon, HORIZON_RADIUS_KM)
       .then((tiles) => {
         const profile = computeTerrainHorizon(
           createElevationModel(tiles),
           site,
           {
-            maxKm: RADIUS_KM,
+            maxKm: HORIZON_RADIUS_KM,
           }
         );
         if (!profile) throw new Error('LOLA: no elevation data at the point');

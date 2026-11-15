@@ -192,6 +192,30 @@
       "aria": "Terrain around the site: the red dot is the site, light and shadows depend on where the Sun is",
       "note": "A 40 by 40 km patch around the site, heights stretched twice. The yellow disc is the Sun, the blue one the Earth (both drawn larger than in real life); a pale disc is a body behind a mountain. The white arrow points north. Drag to rotate, scroll to zoom.",
       "retry": "Try again"
+    },
+    "neighbours": {
+      "title": "Nearby points",
+      "distance": "Distance to the points",
+      "km": "{{value}} km",
+      "intro": "The same scenario {{km}} km north, east, south and west of the site. Near the pole a nearby mountain or crater can hide the Sun or the Earth, so the result depends strongly on the exact landing point.",
+      "calculate": "Calculate",
+      "cost": "One LOLA terrain request and two Horizons requests per point.",
+      "waiting": "Wait for the site itself to be calculated first.",
+      "loading": "Calculating nearby points…",
+      "error": "Could not get data for the nearby points.",
+      "retry": "Try again",
+      "spread": "Sunlight ranges from {{sunMin}}% to {{sunMax}}%, the Earth link from {{earthMin}}% to {{earthMax}}%.",
+      "point": "Point",
+      "site": "Site",
+      "noData": "no data",
+      "direction": {
+        "n": "{{km}} km north",
+        "e": "{{km}} km east",
+        "s": "{{km}} km south",
+        "w": "{{km}} km west"
+      },
+      "open": "Open",
+      "openAria": "Open the point \"{{point}}\" as the site"
     }
   },
   "compare": {
@@ -387,7 +411,8 @@
     "temporal": "When the mission starts, in universal time (UTC). A lunar day lasts about 29.5 Earth days; the slider moves the date along the lunar cycle, the buttons move it by a day.",
     "bestWindows": "The best start day is found for every site: the better the result, the more of the mission has both light and a link to Earth. Click a row to open it in detail.",
     "skyGlobe": "This is a model of the Moon as it would look from space. The red dot is your site. The yellow arrow shows where the Sun is, the blue one where the Earth is. A grey arrow means that body is below the horizon right now and cannot be seen from the site. The bright part of the ball is day, the dark part is night. Drag the ball to turn it.",
-    "skyTerrain": "This is the ground around the site — a 40 by 40 kilometer patch from lunar orbiter laser data. The red dot is the site, the white arrow points north. The yellow disc is the Sun, the blue one the Earth; they are drawn larger than in real life, otherwise you could not see them. A pale disc means the body is behind a mountain right now. The lower the Sun, the longer the shadows; when it is below the horizon it is night. The relief is stretched twice in height. Drag to rotate, scroll to zoom."
+    "skyTerrain": "This is the ground around the site — a 40 by 40 kilometer patch from lunar orbiter laser data. The red dot is the site, the white arrow points north. The yellow disc is the Sun, the blue one the Earth; they are drawn larger than in real life, otherwise you could not see them. A pale disc means the body is behind a mountain right now. The lower the Sun, the longer the shadows; when it is below the horizon it is night. The relief is stretched twice in height. Drag to rotate, scroll to zoom.",
+    "neighbours": "How much the result depends on the exact spot. The table shows the same scenario a few kilometers from the site. The numbers next to the percentages are the difference from the site itself. \"Open\" makes the point the new site."
   },
   "sidebar": {
     "title": "Settings",

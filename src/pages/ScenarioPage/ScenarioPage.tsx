@@ -16,6 +16,7 @@ import {
 } from '@/features/scenario/demoScenario';
 import ExternalMapLinks from '@/features/scenario/ExternalMapLinks/ExternalMapLinks';
 import HorizonPanorama from '@/features/scenario/HorizonPanorama/HorizonPanorama';
+import NeighbourPanel from '@/features/scenario/NeighbourPanel/NeighbourPanel';
 import PlaybackControls from '@/features/scenario/PlaybackControls/PlaybackControls';
 import SkyPanel from '@/features/scenario/SkyPanel/SkyPanel';
 import { useHorizonProfile } from '@/features/scenario/useHorizonProfile/useHorizonProfile';
@@ -199,6 +200,16 @@ export default function ScenarioPage() {
         horizon={scenario.horizon}
         maxElevation={panoramaScale}
         hasTerrain={!real || terrain.status === 'ready'}
+      />
+
+      <NeighbourPanel
+        center={
+          coordinates ? { lat: coordinates.lat, lon: coordinates.lon } : null
+        }
+        epoch={epoch}
+        durationDays={days}
+        criteria={criteria}
+        siteView={real}
       />
 
       <SourcesPanel
