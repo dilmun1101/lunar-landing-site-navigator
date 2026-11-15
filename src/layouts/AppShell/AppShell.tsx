@@ -5,9 +5,10 @@ import { NavLink, Outlet } from 'react-router';
 import LanguageSwitch from '@/components/ui/LanguageSwitch/LanguageSwitch';
 import Logo from '@/components/ui/Logo/Logo';
 import ModeSwitch from '@/components/ui/ModeSwitch/ModeSwitch';
-import ComparePanel from '@/features/compare/ComparePanel/ComparePanel';
+import CompareDock from '@/features/compare/CompareDock/CompareDock';
 import ResourcesPanel from '@/features/resources/ResourcesPanel/ResourcesPanel';
 import WelcomeCard from '@/features/welcome/WelcomeCard/WelcomeCard';
+import { useCompareDock } from '@/hooks/useCompareDock/useCompareDock';
 import { useSidebarStore } from '@/hooks/useSidebar/useSidebar';
 import Sidebar from '@/layouts/Sidebar/Sidebar';
 
@@ -23,21 +24,23 @@ interface AppShellProps {
 export default function AppShell({ className }: AppShellProps) {
   const { t } = useTranslation();
   const collapsed = useSidebarStore((state) => state.collapsed);
+  const compareOpen = useCompareDock((state) => state.open);
 
   return (
     <div
       className={classNames(
-        'grid min-h-screen grid-cols-[var(--sidebar-width)_1fr] grid-rows-[auto_1fr_auto] bg-space-900 text-slate-100 transition-[grid-template-columns] duration-200',
+        'grid min-h-screen grid-cols-[var(--sidebar-width)_minmax(0,1fr)_var(--compare-width)] grid-rows-[auto_1fr_auto] bg-space-900 text-slate-100 transition-[grid-template-columns] duration-200',
         className
       )}
-      // Other parts (the full-size picture) read the width of the left panel from here
+      // Other parts (the full-size picture) read the widths of the side panels from here
       style={
         {
           '--sidebar-width': collapsed ? '3rem' : '20rem',
+          '--compare-width': compareOpen ? '24rem' : '3rem',
         } as CSSProperties
       }
     >
-      <header className="sticky top-0 z-10 col-span-2 flex h-14 items-center gap-8 border-b border-white/10 bg-space-900/90 px-4 backdrop-blur">
+      <header className="sticky top-0 z-10 col-span-3 flex h-14 items-center gap-8 border-b border-white/10 bg-space-900/90 px-4 backdrop-blur">
         <div className="flex items-center gap-3">
           <Logo />
           <span className="text-sm font-semibold tracking-[0.18em] uppercase">
@@ -74,14 +77,15 @@ export default function AppShell({ className }: AppShellProps) {
 
       <Sidebar />
 
-      <main className="flex flex-col gap-4 p-4">
+      <main className="col-start-2 flex min-w-0 flex-col gap-4 p-4">
         <WelcomeCard />
         <Outlet />
       </main>
 
-      <footer className="border-t border-white/10 p-4">
-        <ComparePanel />
-        <ResourcesPanel className="mt-4 border-t border-white/10 pt-4" />
+      <CompareDock />
+
+      <footer className="col-start-2 min-w-0 border-t border-white/10 p-4">
+        <ResourcesPanel />
       </footer>
     </div>
   );

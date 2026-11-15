@@ -202,6 +202,11 @@
     "best": {
       "title": "Best alternative",
       "text": "Shift launch by {{days}} days: +{{percent}}% sunlight"
+    },
+    "dock": {
+      "collapse": "Hide comparison",
+      "expand": "Show comparison",
+      "count": "Scenarios being compared: {{count}}"
     }
   },
   "planner": {
