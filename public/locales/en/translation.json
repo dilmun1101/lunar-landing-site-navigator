@@ -1,0 +1,351 @@
+{
+  "nav": {
+    "scenario": "Scenario",
+    "planner": "Planner"
+  },
+  "common": {
+    "language": "Language",
+    "addToComparison": "Add to comparison",
+    "refresh": "Refresh"
+  },
+  "mode": {
+    "label": "Mode",
+    "beginner": "Beginner",
+    "expert": "Expert"
+  },
+  "verdict": {
+    "viable": "Viable",
+    "marginal": "Marginal",
+    "notViable": "Not viable"
+  },
+  "sites": {
+    "title": "Landing site",
+    "search": "Search landing sites…",
+    "groups": {
+      "apollo": "Historical (Apollo)",
+      "clps": "CLPS / Artemis candidates"
+    },
+    "custom": {
+      "title": "Custom coordinates",
+      "lat": "Latitude",
+      "lon": "Longitude",
+      "apply": "Apply",
+      "invalid": "Latitude −90…90, longitude −180…180"
+    },
+    "noResults": "No sites found",
+    "landing": {
+      "label": "Historical landing",
+      "set": "Set landing date",
+      "isSet": "The scenario time is the real landing time.",
+      "note": "The scenario time is not the landing time, so the Sun and the Earth are shown for another date."
+    }
+  },
+  "scenario": {
+    "verdict": {
+      "title": "Verdict",
+      "sunlight": "Sunlight",
+      "earthLink": "Direct Earth link",
+      "earthLinkExpert": "Earth DTE",
+      "missionWindow": "Mission window",
+      "window": "Power + comms",
+      "longestDarkness": "Longest darkness",
+      "longestCommsGap": "Longest gap in Earth link",
+      "blackoutExceeded": "Longer than the battery limit"
+    },
+    "countdown": {
+      "sunset": "Sunset in {{time}}",
+      "earthset": "Earthset in {{time}}",
+      "sunBelow": "Sun is below the horizon",
+      "earthBelow": "Earth is below the horizon"
+    },
+    "sky": {
+      "title": "Sky view",
+      "polar": "Polar chart",
+      "panorama": "Horizon panorama",
+      "elevation": "Elevation",
+      "azimuth": "Azimuth",
+      "sunUp": "The Sun is above the horizon",
+      "sunDown": "The Sun is below the horizon",
+      "earthUp": "Earth is visible: radio contact is possible",
+      "earthDown": "Earth is hidden: no radio contact"
+    },
+    "polar": {
+      "title": "Polar sky chart",
+      "north": "N",
+      "east": "E",
+      "south": "S",
+      "west": "W",
+      "elevationNote": "Rings show elevation above the horizon (0–8°, zoomed in).",
+      "trackNote": "Dashed lines: path until sunset and Earthset."
+    },
+    "panorama": {
+      "title": "360° horizon panorama",
+      "cardinal": {
+        "north": "N",
+        "east": "E",
+        "south": "S",
+        "west": "W"
+      },
+      "state": {
+        "visible": "visible",
+        "behindTerrain": "hidden by the terrain",
+        "belowHorizon": "below the horizon"
+      },
+      "hint": "The dark silhouette is the terrain on the horizon: mountains and crater rims. A body behind it is not visible.",
+      "flat": "No LOLA terrain data for this point: the horizon is drawn flat, so the real view may be worse."
+    },
+    "timeline": {
+      "title": "Viability timeline",
+      "sunAbove": "Sun above horizon",
+      "earthAbove": "Earth above horizon",
+      "window": "Power + communication window",
+      "play": "Play",
+      "pause": "Pause",
+      "speed": "Speed",
+      "axis": "Days from start"
+    },
+    "playhead": {
+      "now": "Now"
+    },
+    "legend": {
+      "sun": "Sun",
+      "earth": "Earth",
+      "horizon": "Terrain horizon"
+    },
+    "demoNote": "Demo data — calculations are not connected yet",
+    "dataNote": "Data: JPL Horizons (DE441), airless, terrain horizon from LOLA",
+    "dataNoteApprox": "Data: JPL Horizons (DE441), airless, terrain horizon from LOLA — site coordinates are the approximate region center",
+    "dataNoteFlat": "Data: JPL Horizons (DE441), airless, flat horizon — no LOLA terrain data for this site",
+    "dataNoteFlatApprox": "Data: JPL Horizons (DE441), airless, flat horizon — no LOLA terrain data for this site; coordinates are the approximate region center",
+    "noData": "This site has no coordinates yet — showing demo values",
+    "fetchError": "Could not load data from JPL Horizons — showing demo values",
+    "loading": "Loading data from JPL Horizons…",
+    "sentence": {
+      "intro": {
+        "viable": "A good place to land.",
+        "marginal": "Workable, with caveats.",
+        "notViable": "Not suitable for this mission."
+      },
+      "body": "The Sun shines {{sun}}, and Earth is in view {{earth}}.",
+      "freq": {
+        "always": "almost all the time",
+        "mostly": "most of the time",
+        "sometimes": "only part of the time",
+        "rarely": "almost never"
+      },
+      "reason": {
+        "battery": "The night lasts longer than the battery can hold.",
+        "sun": "The main problem is too little sunlight.",
+        "earth": "The main problem is too little time in contact with Earth."
+      }
+    },
+    "playback": {
+      "title": "Time playback",
+      "toStart": "Back to the start",
+      "position": "Moment of the mission",
+      "loop": "Repeat",
+      "speeds": {
+        "hour": "1 h/s",
+        "sixHours": "6 h/s",
+        "day": "1 day/s",
+        "slow": "Slow",
+        "fast": "Fast",
+        "veryFast": "Very fast"
+      },
+      "shortcuts": "Space — play/pause, ← → — step by 1 hour, click on the timeline — jump."
+    },
+    "externalMaps": {
+      "title": "Open the place in NASA map tools",
+      "quickmap": "Open in Quickmap",
+      "moonTrek": "Open in Moon Trek",
+      "newTab": "(opens in a new tab)",
+      "copy": "Copy coordinates",
+      "copied": "Copied",
+      "hint": "These sites cannot be embedded, so they open in a new tab. Paste the coordinates into their search."
+    }
+  },
+  "compare": {
+    "title": "Compare scenarios",
+    "empty": {
+      "title": "No scenarios yet",
+      "hint": "Pick a site and a date, then add it to compare."
+    },
+    "card": {
+      "solarElevation": "Solar elevation",
+      "sunlightDuration": "Sunlight duration",
+      "earthWindow": "Earth visibility window",
+      "remove": "Remove",
+      "windowDays": "Window days",
+      "loading": "Loading…",
+      "longestDarkness": "Longest darkness"
+    },
+    "best": {
+      "title": "Best alternative",
+      "text": "Shift launch by {{days}} days: +{{percent}}% sunlight"
+    }
+  },
+  "planner": {
+    "metric": {
+      "window": "Power + comms",
+      "title": "Metric",
+      "sunlight": "% sunlight",
+      "comms": "Communication window"
+    },
+    "heatmap": {
+      "title": "Site × date viability",
+      "rows": "Sites",
+      "columns": "Dates"
+    },
+    "tooltip": {
+      "site": "Site",
+      "date": "Date",
+      "value": "Value",
+      "coordinates": "Coordinates",
+      "metrics": "Start date",
+      "best": "Best start of the site"
+    },
+    "hint": "Hover a cell to see details",
+    "legend": {
+      "low": "Low",
+      "high": "High"
+    },
+    "best": {
+      "title": "Best launch windows",
+      "empty": "Waiting for the first calculated site…",
+      "hint": "Click a window to open it in the scenario. The start time is searched every 12 hours.",
+      "added": "Added",
+      "compareFull": "List is full",
+      "compareFullHint": "The comparison holds up to 4 scenarios. Remove one in the panel at the bottom of the page.",
+      "hintBeginner": "Click a window to see the details of the mission."
+    },
+    "dataNote": "Data: JPL Horizons (DE441), airless, terrain horizon from LOLA. Each cell is the share of a {{days}}-day mission starting on that date.",
+    "progress": "Calculated {{done}} of {{total}} sites…",
+    "flatNote": "Flat horizon (no LOLA data): {{sites}}.",
+    "cellPending": "calculating",
+    "failed_one": "{{count}} site failed to load.",
+    "failed_other": "{{count}} sites failed to load.",
+    "dataNoteBeginner": "The greener the cell, the better the launch date for a {{days}}-day mission at that site. The Sun and Earth positions come from NASA data."
+  },
+  "time": {
+    "days_one": "{{count}} day",
+    "days_other": "{{count}} days",
+    "hours_one": "{{count}} hour",
+    "hours_other": "{{count}} hours"
+  },
+  "setup": {
+    "title": "Temporal setup",
+    "epoch": "Current time (UTC)",
+    "lunarDay": "Lunar day",
+    "phase": "Phase",
+    "prevDay": "−1 d",
+    "nextDay": "+1 d",
+    "reset": "Reset",
+    "duration": {
+      "label": "Duration of mission",
+      "cycle": "Full lunar cycle"
+    },
+    "epochHint": "Format: YYYY-MM-DD HH:mm, UTC"
+  },
+  "criteria": {
+    "title": "Suitability criteria",
+    "note": "Project assumptions, not NASA requirements. They apply to the scenario, the comparison and the planner.",
+    "reset": "Reset to defaults",
+    "minSunElevation": {
+      "label": "Min. Sun elevation, °",
+      "hint": "The Sun counts as lit only above this angle over the terrain horizon. Grazing light gives little power."
+    },
+    "minEarthElevation": {
+      "label": "Min. Earth elevation, °",
+      "hint": "The Earth counts as visible only above this angle over the terrain horizon."
+    },
+    "minWindowHours": {
+      "label": "Min. continuous window, h",
+      "hint": "Periods with both Sun and Earth that are shorter than this are not counted. 0 — count everything."
+    },
+    "maxBlackoutHours": {
+      "label": "Max. darkness, h (0 — no limit)",
+      "hint": "The longest period without the Sun that the lander survives on its battery. A mission with a longer darkness is not viable. Applies to the scenario and the comparison, not to the planner."
+    },
+    "viablePercent": {
+      "label": "“Viable” from, %",
+      "hint": "Share of the mission with power and communication from which the site is viable."
+    },
+    "marginalPercent": {
+      "label": "“Marginal” from, %",
+      "hint": "Share of the mission from which the site is marginal; below it the site is not viable."
+    }
+  },
+  "hints": {
+    "what": "What is this?",
+    "sunlight": "Share of the mission when the Sun is above the local horizon. No sunlight means solar panels produce nothing and the lander gets cold.",
+    "earthLink": "Share of the mission when Earth is visible from the site, so the lander can talk to Mission Control directly by radio.",
+    "window": "Share of the mission when there is both sunlight for power and a direct link to Earth. This is the best time to operate.",
+    "longestDarkness": "The longest continuous stretch without sunlight. The battery has to last that long.",
+    "longestCommsGap": "The longest continuous stretch when Earth is hidden and there is no direct radio contact.",
+    "sunlightDuration": "Total time the Sun is above the horizon during the mission.",
+    "earthWindow": "Total time Earth is visible and a direct radio link is possible.",
+    "heatmap": "Rows are landing sites, columns are launch dates. A greener cell means more sunlight and radio contact with Earth during the mission."
+  },
+  "welcome": {
+    "title": "Welcome to Lunar Landing Navigator",
+    "intro": "The app helps you pick a landing site and a date for a Moon mission: where the Sun gives power and Earth stays in radio view.",
+    "steps": {
+      "site": "Pick a landing site on the left.",
+      "date": "Choose the start date and how long the mission lasts.",
+      "verdict": "Read the verdict: is it a good place, and why."
+    },
+    "modeNote": "You are in Beginner mode: fewer numbers and hints marked \"?\". Switch to Expert at the top any time.",
+    "gotIt": "Got it",
+    "expert": "I'm an expert"
+  },
+  "sources": {
+    "title": "Sources and assumptions",
+    "hoursShort": "h",
+    "off": "off",
+    "ephemeris": "Sun and Earth",
+    "ephemerisText": "Positions of the Sun and Earth as seen from the site: azimuth and elevation, no atmosphere and no refraction, JPL DE441 ephemeris, 60-minute step. Source:",
+    "terrain": "Terrain horizon",
+    "terrainText": "Horizon profile of 72 points (every 5° of azimuth) built from LOLA (LRO) elevation data. Source:",
+    "terrainFlat": "LOLA data is not available for this point: a flat horizon is used, so the result is optimistic. Source:",
+    "validation": "Check",
+    "validationText": "At the six Apollo landing sites the Sun matches the NASA ALSJ values within 0.02° and Earth within 0.22°.",
+    "criteria": "Thresholds applied",
+    "assumption": "The viable and marginal shares are project assumptions, not NASA requirements."
+  },
+  "resources": {
+    "title": "Sources and resources",
+    "newTab": "(opens in a new tab)",
+    "items": {
+      "horizons": {
+        "name": "JPL Horizons",
+        "description": "Positions of the Sun and Earth as seen from a point on the Moon (the data behind every calculation)."
+      },
+      "usgs": {
+        "name": "USGS Astrogeology",
+        "description": "Web service with LRO LOLA elevation data, used to build the terrain horizon."
+      },
+      "quickmap": {
+        "name": "LROC Quickmap",
+        "description": "Interactive map of the Moon from LRO data; good for checking terrain and illumination."
+      },
+      "moonTrek": {
+        "name": "NASA Moon Trek",
+        "description": "NASA 3D lunar exploration portal; shows how terrain shapes the horizon."
+      },
+      "csa": {
+        "name": "CSA Moon Exploration",
+        "description": "Canadian Space Agency: past, current and future lunar missions."
+      }
+    },
+    "disclaimer": "Made for the NASA Space Apps Challenge 2026. Not an official NASA product; thresholds for a viable site are project assumptions."
+  },
+  "help": {
+    "verdict": "The result for the chosen site and dates: Viable, Marginal or Not viable. It depends on how much of the mission has both sunlight (for power) and a direct link to Earth at the same time.",
+    "sky": "The sky seen from above. The edge of the circle is the horizon, the center is a higher point (the scale is zoomed in: near the Moon's pole the Sun and Earth stay very low). North is at the top. The yellow dot is the Sun, the blue dot is Earth, the grey area is the mountains on the horizon: nothing behind them can be seen. The dashed line is the path until the body sets.",
+    "timeline": "Three bars over the days of the mission: when the Sun is above the horizon (yellow), when Earth is visible (blue), and when there is both light and a link (green, the best time to operate). The white \"Now\" mark is the current moment: click the scale to move it.",
+    "playback": "Press Play and the mission time moves forward: the Sun and Earth drift across the sky and the bars and labels update. The slider rewinds the time, the buttons change the speed.",
+    "panorama": "A 360° view all around you. North is at both edges, then east, south and west going around. The higher the dot, the higher the body is above the horizon. The dark shape is mountains and crater rims.",
+    "temporal": "When the mission starts, in universal time (UTC). A lunar day lasts about 29.5 Earth days; the slider moves the date along the lunar cycle, the buttons move it by a day.",
+    "bestWindows": "The best start day is found for every site: the better the result, the more of the mission has both light and a link to Earth. Click a row to open it in detail."
+  }
+}
