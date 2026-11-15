@@ -12,6 +12,8 @@ import { useScenarioStore } from '@/state/useScenarioStore/useScenarioStore';
 
 const groups: { id: SiteGroup; labelKey: string }[] = [
   { id: 'clps', labelKey: 'sites.groups.clps' },
+  { id: 'commercial', labelKey: 'sites.groups.commercial' },
+  { id: 'international', labelKey: 'sites.groups.international' },
   { id: 'apollo', labelKey: 'sites.groups.apollo' },
 ];
 

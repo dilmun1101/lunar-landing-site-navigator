@@ -22,8 +22,10 @@
     "title": "Landing site",
     "search": "Search landing sites…",
     "groups": {
-      "apollo": "Historical (Apollo)",
-      "clps": "CLPS / Artemis candidates"
+      "clps": "Artemis candidates",
+      "commercial": "Commercial landings (CLPS)",
+      "international": "Other countries",
+      "apollo": "Historical (Apollo)"
     },
     "custom": {
       "title": "Custom coordinates",

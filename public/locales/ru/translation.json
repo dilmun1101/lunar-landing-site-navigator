@@ -22,8 +22,10 @@
     "title": "Место посадки",
     "search": "Поиск места посадки…",
     "groups": {
-      "apollo": "Исторические (Apollo)",
-      "clps": "Кандидаты CLPS / Artemis"
+      "clps": "Кандидаты Artemis",
+      "commercial": "Коммерческие посадки (CLPS)",
+      "international": "Другие страны",
+      "apollo": "Исторические (Apollo)"
     },
     "custom": {
       "title": "Свои координаты",
