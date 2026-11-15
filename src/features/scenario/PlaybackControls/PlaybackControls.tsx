@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import type { KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import Button from '@/components/ui/Button/Button';
 import Panel from '@/components/ui/Panel/Panel';
@@ -48,8 +49,25 @@ export default function PlaybackControls({
 
   const speedKeys = beginner ? beginnerSpeedKeys : expertSpeedKeys;
 
+  // Space plays and pauses from the slider; buttons and the checkbox handle Space themselves
+  const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (disabled || event.key !== ' ') return;
+    const target = event.target;
+    if (
+      target instanceof HTMLButtonElement ||
+      (target instanceof HTMLInputElement && target.type !== 'range')
+    ) {
+      return;
+    }
+    event.preventDefault();
+    playback.toggle();
+  };
+
   return (
-    <Panel className={classNames('flex flex-col gap-3', className)}>
+    <Panel
+      className={classNames('flex flex-col gap-3', className)}
+      onKeyDown={onKeyDown}
+    >
       <div className="flex flex-wrap items-center justify-between gap-3">
         <SectionTitle>{t('scenario.playback.title')}</SectionTitle>
         <span
@@ -70,6 +88,7 @@ export default function PlaybackControls({
           variant="primary"
           className="min-w-24"
           disabled={disabled}
+          aria-pressed={playback.playing}
           onClick={playback.toggle}
         >
           {playback.playing
@@ -118,6 +137,9 @@ export default function PlaybackControls({
           {t('scenario.playback.loop')}
         </label>
       </div>
+      <p className="text-xs text-slate-500">
+        {t('scenario.playback.shortcuts')}
+      </p>
     </Panel>
   );
 }
