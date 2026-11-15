@@ -344,6 +344,8 @@
     "terrain": "Terrain horizon",
     "terrainText": "Horizon profile of 72 points (every 5° of azimuth) built from LOLA (LRO) elevation data. Source:",
     "terrainFlat": "LOLA data is not available for this point: a flat horizon is used, so the result is optimistic. Source:",
+    "libration": "Libration and curvature",
+    "librationText": "Libration (the Moon's wobble) is included: Horizons computes the direction from the site to the Earth with the Moon's actual orientation at every moment. So the Earth does not stand still in the sky but traces a loop: up to ~8° left or right and ~7° up or down from its mean position. Near the pole the Earth hangs low over the horizon, and this loop decides whether it clears the mountains. The Moon's curvature is included in the terrain horizon: distant mountains drop below the edge of the sphere.",
     "validation": "Check",
     "validationText": "At the six Apollo landing sites the Sun matches the NASA ALSJ values within 0.02° and Earth within 0.22°.",
     "criteria": "Thresholds applied",
