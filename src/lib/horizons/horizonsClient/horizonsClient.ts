@@ -11,6 +11,56 @@ const SUN = '10';
 const EARTH = '399';
 const DEFAULT_STEP_MINUTES = 60;
 const DAY_MS = 86_400_000;
+/** Horizons refuses bursts of requests, so only a few run at a time */
+const MAX_PARALLEL = 4;
+/** A request that hangs must end with an error instead of an endless "Loading" */
+const REQUEST_TIMEOUT_MS = 30_000;
+const RETRY_DELAY_MS = 1_000;
+/** Tables of this session: the same site and dates are not requested twice */
+const CACHE_LIMIT = 200;
+
+type ObserverTable = ReturnType<typeof parseObserverTable>;
+const cache = new Map<string, ObserverTable>();
+
+let running = 0;
+const waiting: (() => void)[] = [];
+
+/** Runs the task when one of the MAX_PARALLEL slots is free. */
+async function queued<T>(task: () => Promise<T>): Promise<T> {
+  if (running >= MAX_PARALLEL) {
+    await new Promise<void>((resolve) => waiting.push(resolve));
+  }
+  running++;
+  try {
+    return await task();
+  } finally {
+    running--;
+    waiting.shift()?.();
+  }
+}
+
+const isAbort = (error: unknown) =>
+  error instanceof Error &&
+  (error.name === 'AbortError' || error.name === 'TimeoutError');
+
+async function requestTable(
+  url: string,
+  signal: AbortSignal
+): Promise<ObserverTable> {
+  // The caller's cancel and the timeout both stop the request
+  const timeout = AbortSignal.timeout(REQUEST_TIMEOUT_MS);
+  const combined =
+    typeof AbortSignal.any === 'function'
+      ? AbortSignal.any([signal, timeout])
+      : signal;
+  const response = await fetch(url, { signal: combined });
+  if (!response.ok) throw new Error(`Horizons: HTTP ${response.status}`);
+  const json = (await response.json()) as { result?: string; error?: string };
+  if (json.error || !json.result) {
+    throw new Error(json.error ?? 'Horizons: empty response');
+  }
+  return parseObserverTable(json.result);
+}
 
 export interface SiteCoordinates {
   lat: number;
@@ -59,16 +109,23 @@ async function fetchBody(
   stepMinutes: number,
   signal: AbortSignal
 ) {
-  const response = await fetch(
-    buildUrl(target, coordinates, startMs, stopMs, stepMinutes),
-    { signal }
-  );
-  if (!response.ok) throw new Error(`Horizons: HTTP ${response.status}`);
-  const json = (await response.json()) as { result?: string; error?: string };
-  if (json.error || !json.result) {
-    throw new Error(json.error ?? 'Horizons: empty response');
-  }
-  return parseObserverTable(json.result);
+  const url = buildUrl(target, coordinates, startMs, stopMs, stepMinutes);
+  const cached = cache.get(url);
+  if (cached) return cached;
+
+  const table = await queued(async () => {
+    try {
+      return await requestTable(url, signal);
+    } catch (error) {
+      // A cancel or a timeout is final; any other failure gets one more try
+      if (isAbort(error) || signal.aborted) throw error;
+      await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY_MS));
+      return requestTable(url, signal);
+    }
+  });
+  if (cache.size >= CACHE_LIMIT) cache.clear();
+  cache.set(url, table);
+  return table;
 }
 
 /**

@@ -56,23 +56,37 @@ export default function ScenarioPage() {
   const data = useSiteEphemeris(coordinates, epoch, days);
   const terrain = useHorizonProfile(coordinates);
 
-  const real =
-    data.status === 'ready' && terrain.status !== 'loading'
-      ? buildScenarioView({
-          id: siteId ?? 'custom',
-          siteName,
-          epoch,
-          durationDays: days,
-          ephemeris: data.ephemeris,
-          horizon: terrain.status === 'ready' ? terrain.profile : null,
-          criteria,
-        })
-      : null;
-
-  // The sky at the current moment of the playback; the verdict stays for the whole mission
   const ephemeris = data.status === 'ready' ? data.ephemeris : null;
   const profile = terrain.status === 'ready' ? terrain.profile : null;
   const terrainLoading = terrain.status === 'loading';
+
+  // The verdict covers the whole mission, so it is not recalculated on every playback frame
+  const real = useMemo(
+    () =>
+      ephemeris && !terrainLoading
+        ? buildScenarioView({
+            id: siteId ?? 'custom',
+            siteName,
+            epoch,
+            durationDays: days,
+            ephemeris,
+            horizon: profile,
+            criteria,
+          })
+        : null,
+    [
+      ephemeris,
+      profile,
+      terrainLoading,
+      siteId,
+      siteName,
+      epoch,
+      days,
+      criteria,
+    ]
+  );
+
+  // The sky at the current moment of the playback
   const visible = useMemo(
     () =>
       ephemeris && !terrainLoading ? maskEphemeris(ephemeris, profile) : null,
