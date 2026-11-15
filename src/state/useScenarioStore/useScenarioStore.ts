@@ -51,7 +51,7 @@ export function getSiteName(
 
 /**
  * Coordinates of the selected site: custom or from the catalog.
- * null — the site has no coordinates (e.g. Leibnitz Beta Plateau).
+ * null — the site has no coordinates.
  * Returns the same object for the same arguments (safe for hook dependencies).
  */
 export function resolveCoordinates(
