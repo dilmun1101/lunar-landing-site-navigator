@@ -257,5 +257,19 @@
     "modeNote": "You are in Beginner mode: fewer numbers and hints marked \"?\". Switch to Expert at the top any time.",
     "gotIt": "Got it",
     "expert": "I'm an expert"
+  },
+  "sources": {
+    "title": "Sources and assumptions",
+    "hoursShort": "h",
+    "off": "off",
+    "ephemeris": "Sun and Earth",
+    "ephemerisText": "Positions of the Sun and Earth as seen from the site: azimuth and elevation, no atmosphere and no refraction, JPL DE441 ephemeris, 60-minute step. Source:",
+    "terrain": "Terrain horizon",
+    "terrainText": "Horizon profile of 72 points (every 5° of azimuth) built from LOLA (LRO) elevation data. Source:",
+    "terrainFlat": "LOLA data is not available for this point: a flat horizon is used, so the result is optimistic. Source:",
+    "validation": "Check",
+    "validationText": "At the six Apollo landing sites the Sun matches the NASA ALSJ values within 0.02° and Earth within 0.22°.",
+    "criteria": "Thresholds applied",
+    "assumption": "The viable and marginal shares are project assumptions, not NASA requirements."
   }
 }

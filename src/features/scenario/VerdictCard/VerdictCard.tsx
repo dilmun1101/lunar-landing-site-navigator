@@ -101,7 +101,11 @@ export default function VerdictCard({
           color="sun"
         />
         <MetricTile
-          label={t('scenario.verdict.earthLink')}
+          label={t(
+            beginner
+              ? 'scenario.verdict.earthLink'
+              : 'scenario.verdict.earthLinkExpert'
+          )}
           hint={t('hints.earthLink')}
           percent={scenario.earthLinkPercent}
           color="earth"
