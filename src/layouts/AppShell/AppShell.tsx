@@ -47,7 +47,7 @@ export default function AppShell({ className }: AppShellProps) {
         } as CSSProperties
       }
     >
-      <header className="sticky top-0 z-10 col-span-3 flex h-14 items-center gap-8 border-b border-white/10 bg-space-900/90 px-4 backdrop-blur">
+      <header className="sticky top-0 z-40 col-span-3 flex h-14 items-center gap-8 border-b border-white/10 bg-space-900/90 px-4 backdrop-blur">
         <div className="flex items-center gap-3">
           <Logo />
           <span className="text-sm font-semibold tracking-[0.18em] uppercase">
