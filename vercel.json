@@ -8,6 +8,10 @@
     {
       "source": "/usgs-wms",
       "destination": "https://planetarymaps.usgs.gov/cgi-bin/mapserv?map=/maps/earth/moon_simp_cyl_elev.map"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }

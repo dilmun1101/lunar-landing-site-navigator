@@ -32,7 +32,7 @@ const lolaProxy = {
 export default defineConfig({
   plugins: [react(), tailwindcss()],
 
-  base: './',
+  base: '/',
 
   resolve: {
     alias: {
