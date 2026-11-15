@@ -52,7 +52,11 @@
       "window": "Power + comms",
       "longestDarkness": "Longest darkness",
       "longestCommsGap": "Longest gap in Earth link",
-      "blackoutExceeded": "Longer than the battery limit"
+      "blackoutExceeded": "Longer than the battery limit",
+      "sunElevation": "Sun elevation",
+      "sunElevationMean": "≈ {{value}}° on average while lit",
+      "sunElevationMax": "{{value}}° at most during the mission",
+      "sunElevationNever": "The Sun does not rise during the mission"
     },
     "countdown": {
       "sunset": "Sunset in {{time}}",
@@ -316,7 +320,8 @@
     "longestCommsGap": "The longest continuous stretch when Earth is hidden and there is no direct radio contact.",
     "sunlightDuration": "Total time the Sun is above the horizon during the mission.",
     "earthWindow": "Total time Earth is visible and a direct radio link is possible.",
-    "heatmap": "Rows are landing sites, columns are launch dates. A greener cell means more sunlight and radio contact with Earth during the mission."
+    "heatmap": "Rows are landing sites, columns are launch dates. A greener cell means more sunlight and radio contact with Earth during the mission.",
+    "sunElevation": "How high the Sun stands above the horizon. The lower the Sun, the less power flat solar panels give, so near the pole they are mounted vertically. On Earth the noon Sun stands 30–80° high; at the Moon's south pole it barely clears the horizon, only a few degrees."
   },
   "welcome": {
     "title": "Welcome to Lunar Landing Navigator",

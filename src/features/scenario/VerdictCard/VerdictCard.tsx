@@ -42,6 +42,12 @@ export default function VerdictCard({
     ? dayFormat.format(endDate)
     : formatUtcDateTime(endDate, i18n.language);
 
+  const degrees = new Intl.NumberFormat(i18n.language, {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+  });
+  const sunElevation = scenario.sunElevation;
+
   const sentence = beginner
     ? verdictSentence({
         verdict: scenario.verdict,
@@ -120,7 +126,7 @@ export default function VerdictCard({
         />
       </div>
 
-      <dl className="grid gap-3 sm:grid-cols-2">
+      <dl className="grid gap-3 sm:grid-cols-3">
         <div
           className={classNames(
             'flex flex-col gap-0.5 rounded-lg border px-3 py-2',
@@ -150,6 +156,30 @@ export default function VerdictCard({
           <dd className="font-mono text-sm text-slate-100">
             {formatDurationFor(t, scenario.longestCommsGap, beginner)}
           </dd>
+        </div>
+        <div className="flex flex-col gap-0.5 rounded-lg border border-sun/30 bg-sun/5 px-3 py-2">
+          <dt className="flex items-center gap-1.5 text-[11px] font-semibold tracking-wider text-slate-500 uppercase">
+            {t('scenario.verdict.sunElevation')}
+            <Hint text={t('hints.sunElevation')} wide />
+          </dt>
+          {sunElevation?.meanLit != null ? (
+            <>
+              <dd className="font-mono text-sm text-slate-100">
+                {t('scenario.verdict.sunElevationMean', {
+                  value: degrees.format(sunElevation.meanLit),
+                })}
+              </dd>
+              <dd className="text-xs text-slate-400">
+                {t('scenario.verdict.sunElevationMax', {
+                  value: degrees.format(sunElevation.max),
+                })}
+              </dd>
+            </>
+          ) : (
+            <dd className="text-sm text-slate-300">
+              {t('scenario.verdict.sunElevationNever')}
+            </dd>
+          )}
         </div>
       </dl>
     </Panel>
