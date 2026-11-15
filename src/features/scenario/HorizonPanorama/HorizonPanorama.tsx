@@ -90,131 +90,134 @@ export default function HorizonPanorama({
     <Panel className={classNames('flex flex-col gap-3', className)}>
       <SectionTitle>{t('scenario.panorama.title')}</SectionTitle>
 
-      <svg
-        viewBox={`0 0 ${WIDTH} ${HEIGHT + LABELS_HEIGHT}`}
-        className="w-full overflow-hidden"
-        role="img"
-        aria-label={`${t('scenario.panorama.title')}. ${placed.map(describe).join('. ')}`}
-      >
-        <rect
-          width={WIDTH}
-          height={HEIGHT}
-          className="fill-white/[0.02] stroke-white/20"
-        />
-
-        {gridAzimuths.map((tick) => (
-          <line
-            key={`az-${tick.value}`}
-            x1={tick.position}
-            x2={tick.position}
-            y1={0}
-            y2={HEIGHT}
-            className="stroke-white/10"
+      {/* On a narrow screen the strip scrolls sideways instead of shrinking the text */}
+      <div className="overflow-x-auto">
+        <svg
+          viewBox={`0 0 ${WIDTH} ${HEIGHT + LABELS_HEIGHT}`}
+          className="w-full min-w-[40rem] overflow-hidden"
+          role="img"
+          aria-label={`${t('scenario.panorama.title')}. ${placed.map(describe).join('. ')}`}
+        >
+          <rect
+            width={WIDTH}
+            height={HEIGHT}
+            className="fill-white/[0.02] stroke-white/20"
           />
-        ))}
-        {gridElevations.map((tick) => (
-          <g key={`el-${tick.value}`}>
+
+          {gridAzimuths.map((tick) => (
             <line
-              x1={0}
-              x2={WIDTH}
-              y1={tick.position}
-              y2={tick.position}
+              key={`az-${tick.value}`}
+              x1={tick.position}
+              x2={tick.position}
+              y1={0}
+              y2={HEIGHT}
               className="stroke-white/10"
             />
-            {tick.value > 0 && (
-              <text
-                x={4}
-                y={tick.position - 3}
-                className="fill-slate-500 font-mono text-[10px]"
-              >
-                {tick.value}°
-              </text>
-            )}
-          </g>
-        ))}
-
-        <path
-          d={terrainPath(horizon, size, maxElevation)}
-          className={classNames('stroke-slate-400/70', {
-            'fill-slate-500/50': hasTerrain,
-            'fill-slate-500/20': !hasTerrain,
-          })}
-          strokeWidth={1}
-        />
-
-        {placed.map((item) => {
-          if (item.state === 'belowHorizon') return null;
-          const hidden = item.state === 'behindTerrain';
-          const style = bodyStyle[item.key];
-          // Near the edge the disc continues on the other side of the strip
-          const xs = [item.x];
-          if (item.x < BODY_RADIUS * 2) xs.push(item.x + WIDTH);
-          if (item.x > WIDTH - BODY_RADIUS * 2) xs.push(item.x - WIDTH);
-          return (
-            <g key={item.key} opacity={hidden ? 0.45 : 1}>
-              {xs.map((x) => (
-                <g key={x}>
-                  {!hidden && (
-                    <circle
-                      cx={x}
-                      cy={item.y}
-                      r={BODY_RADIUS * 2.3}
-                      className={style.glow}
-                    />
-                  )}
-                  <circle
-                    cx={x}
-                    cy={item.y}
-                    r={BODY_RADIUS}
-                    className={
-                      hidden ? `fill-none ${style.stroke}` : style.fill
-                    }
-                    strokeWidth={hidden ? 1.5 : 0}
-                    strokeDasharray={hidden ? '3 2' : undefined}
-                  />
-                </g>
-              ))}
-            </g>
-          );
-        })}
-
-        <g className="fill-slate-300 text-xs font-semibold">
-          {CARDINALS.map(({ azimuth, key }) => {
-            const x = azimuthTicks(90, WIDTH).find(
-              (tick) => tick.value === azimuth
-            )?.position;
-            return (
-              <text
-                key={key}
-                x={x}
-                y={HEIGHT + 18}
-                textAnchor={azimuth === 0 ? 'start' : 'middle'}
-              >
-                {t(`scenario.panorama.cardinal.${key}`)}
-              </text>
-            );
-          })}
-          <text x={WIDTH} y={HEIGHT + 18} textAnchor="end">
-            {t('scenario.panorama.cardinal.north')}
-          </text>
-        </g>
-        {expert && (
-          <g className="fill-slate-500 font-mono text-[10px]">
-            {gridAzimuths
-              .filter((tick) => tick.value % 90 !== 0)
-              .map((tick) => (
+          ))}
+          {gridElevations.map((tick) => (
+            <g key={`el-${tick.value}`}>
+              <line
+                x1={0}
+                x2={WIDTH}
+                y1={tick.position}
+                y2={tick.position}
+                className="stroke-white/10"
+              />
+              {tick.value > 0 && (
                 <text
-                  key={tick.value}
-                  x={tick.position}
-                  y={HEIGHT + 18}
-                  textAnchor="middle"
+                  x={4}
+                  y={tick.position - 3}
+                  className="fill-slate-500 font-mono text-[10px]"
                 >
                   {tick.value}°
                 </text>
-              ))}
+              )}
+            </g>
+          ))}
+
+          <path
+            d={terrainPath(horizon, size, maxElevation)}
+            className={classNames('stroke-slate-400/70', {
+              'fill-slate-500/50': hasTerrain,
+              'fill-slate-500/20': !hasTerrain,
+            })}
+            strokeWidth={1}
+          />
+
+          {placed.map((item) => {
+            if (item.state === 'belowHorizon') return null;
+            const hidden = item.state === 'behindTerrain';
+            const style = bodyStyle[item.key];
+            // Near the edge the disc continues on the other side of the strip
+            const xs = [item.x];
+            if (item.x < BODY_RADIUS * 2) xs.push(item.x + WIDTH);
+            if (item.x > WIDTH - BODY_RADIUS * 2) xs.push(item.x - WIDTH);
+            return (
+              <g key={item.key} opacity={hidden ? 0.45 : 1}>
+                {xs.map((x) => (
+                  <g key={x}>
+                    {!hidden && (
+                      <circle
+                        cx={x}
+                        cy={item.y}
+                        r={BODY_RADIUS * 2.3}
+                        className={style.glow}
+                      />
+                    )}
+                    <circle
+                      cx={x}
+                      cy={item.y}
+                      r={BODY_RADIUS}
+                      className={
+                        hidden ? `fill-none ${style.stroke}` : style.fill
+                      }
+                      strokeWidth={hidden ? 1.5 : 0}
+                      strokeDasharray={hidden ? '3 2' : undefined}
+                    />
+                  </g>
+                ))}
+              </g>
+            );
+          })}
+
+          <g className="fill-slate-300 text-xs font-semibold">
+            {CARDINALS.map(({ azimuth, key }) => {
+              const x = azimuthTicks(90, WIDTH).find(
+                (tick) => tick.value === azimuth
+              )?.position;
+              return (
+                <text
+                  key={key}
+                  x={x}
+                  y={HEIGHT + 18}
+                  textAnchor={azimuth === 0 ? 'start' : 'middle'}
+                >
+                  {t(`scenario.panorama.cardinal.${key}`)}
+                </text>
+              );
+            })}
+            <text x={WIDTH} y={HEIGHT + 18} textAnchor="end">
+              {t('scenario.panorama.cardinal.north')}
+            </text>
           </g>
-        )}
-      </svg>
+          {expert && (
+            <g className="fill-slate-500 font-mono text-[10px]">
+              {gridAzimuths
+                .filter((tick) => tick.value % 90 !== 0)
+                .map((tick) => (
+                  <text
+                    key={tick.value}
+                    x={tick.position}
+                    y={HEIGHT + 18}
+                    textAnchor="middle"
+                  >
+                    {tick.value}°
+                  </text>
+                ))}
+            </g>
+          )}
+        </svg>
+      </div>
 
       <ul className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-slate-200">
         {placed.map((item) => (
