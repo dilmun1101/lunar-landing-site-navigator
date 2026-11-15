@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import Panel from '@/components/ui/Panel/Panel';
 import SectionTitle from '@/components/ui/SectionTitle/SectionTitle';
@@ -12,6 +13,8 @@ interface ViabilityTimelineProps {
   windowSegments: Segment[];
   /** Current moment on the scale, in days from the start */
   nowDay?: number;
+  /** Click or drag on the scale moves the current moment (days from the start) */
+  onSeek?: (day: number) => void;
   className?: string;
 }
 
@@ -21,9 +24,18 @@ export default function ViabilityTimeline({
   earthSegments,
   windowSegments,
   nowDay = 0,
+  onSeek,
   className,
 }: ViabilityTimelineProps) {
   const { t } = useTranslation();
+  const scaleRef = useRef<HTMLDivElement>(null);
+
+  const seekFromPointer = (clientX: number) => {
+    const box = scaleRef.current?.getBoundingClientRect();
+    if (!onSeek || !box || box.width === 0) return;
+    const fraction = Math.min(Math.max((clientX - box.left) / box.width, 0), 1);
+    onSeek(fraction * durationDays);
+  };
 
   const percent = (day: number) => (day / durationDays) * 100;
   const ticks = Array.from(
@@ -69,7 +81,7 @@ export default function ViabilityTimeline({
         </div>
 
         <div className="flex flex-col">
-          <div className="relative flex flex-col gap-3">
+          <div ref={scaleRef} className="relative flex flex-col gap-3">
             {rows.map((row) => (
               <div
                 key={row.key}
@@ -93,6 +105,22 @@ export default function ViabilityTimeline({
               </div>
             ))}
             <Playhead leftPercent={percent(nowDay)} />
+            {onSeek && (
+              // Pointer shortcut; the slider in the playback panel is the accessible control
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 z-20 cursor-pointer touch-none"
+                onPointerDown={(event) => {
+                  event.currentTarget.setPointerCapture(event.pointerId);
+                  seekFromPointer(event.clientX);
+                }}
+                onPointerMove={(event) => {
+                  if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+                    seekFromPointer(event.clientX);
+                  }
+                }}
+              />
+            )}
           </div>
 
           <div className="relative mt-2 h-4">

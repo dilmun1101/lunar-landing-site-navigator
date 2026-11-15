@@ -1,5 +1,8 @@
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import Button from '@/components/ui/Button/Button';
+import { maskEphemeris } from '@/domain/criteria/missionSegments';
+import { skySnapshot } from '@/domain/ephemeris/skySnapshot/skySnapshot';
 import { buildScenarioView } from '@/features/scenario/buildScenarioView';
 import CountdownChips from '@/features/scenario/CountdownChips/CountdownChips';
 import {
@@ -7,8 +10,10 @@ import {
   type ScenarioView,
   type Segment,
 } from '@/features/scenario/demoScenario';
+import PlaybackControls from '@/features/scenario/PlaybackControls/PlaybackControls';
 import SkyPanel from '@/features/scenario/SkyPanel/SkyPanel';
 import { useHorizonProfile } from '@/features/scenario/useHorizonProfile/useHorizonProfile';
+import { usePlayback } from '@/features/scenario/usePlayback/usePlayback';
 import { useSiteEphemeris } from '@/features/scenario/useSiteEphemeris/useSiteEphemeris';
 import SourcesPanel from '@/features/scenario/SourcesPanel/SourcesPanel';
 import VerdictCard from '@/features/scenario/VerdictCard/VerdictCard';
@@ -20,6 +25,9 @@ import {
   resolveCoordinates,
   useScenarioStore,
 } from '@/state/useScenarioStore/useScenarioStore';
+
+const DAY_MS = 86_400_000;
+const FLAT_HORIZON = Array.from({ length: 72 }, () => 0);
 
 /** Clips demo segments to the mission duration. */
 const clipSegments = (segments: Segment[], limit: number): Segment[] =>
@@ -54,6 +62,32 @@ export default function ScenarioPage() {
         })
       : null;
 
+  // The sky at the current moment of the playback; the verdict stays for the whole mission
+  const ephemeris = data.status === 'ready' ? data.ephemeris : null;
+  const profile = terrain.status === 'ready' ? terrain.profile : null;
+  const terrainLoading = terrain.status === 'loading';
+  const visible = useMemo(
+    () =>
+      ephemeris && !terrainLoading ? maskEphemeris(ephemeris, profile) : null,
+    [ephemeris, profile, terrainLoading]
+  );
+  const missionMs = days * DAY_MS;
+  const playback = usePlayback(
+    real ? missionMs : 0,
+    `${coordinates?.lat}|${coordinates?.lon}|${epoch.getTime()}|${days}`
+  );
+  const startMs = epoch.getTime();
+  const sky =
+    real && ephemeris && visible
+      ? skySnapshot(
+          ephemeris,
+          visible,
+          profile ?? FLAT_HORIZON,
+          startMs + playback.offsetMs,
+          startMs + missionMs
+        )
+      : null;
+
   // While there is no data, show demo values and explain why
   const scenario: ScenarioView = real ?? {
     ...demoScenario,
@@ -64,6 +98,8 @@ export default function ScenarioPage() {
     earthSegments: clipSegments(demoScenario.earthSegments, days),
     windowSegments: clipSegments(demoScenario.windowSegments, days),
   };
+
+  const shown: ScenarioView = sky ? { ...scenario, ...sky } : scenario;
 
   let note: string;
   if (real) {
@@ -98,7 +134,7 @@ export default function ScenarioPage() {
       </div>
 
       <VerdictCard scenario={scenario}>
-        <CountdownChips sunset={scenario.sunset} earthset={scenario.earthset} />
+        <CountdownChips sunset={shown.sunset} earthset={shown.earthset} />
       </VerdictCard>
 
       <ViabilityTimeline
@@ -106,13 +142,22 @@ export default function ScenarioPage() {
         sunSegments={scenario.sunSegments}
         earthSegments={scenario.earthSegments}
         windowSegments={scenario.windowSegments}
+        nowDay={playback.offsetMs / DAY_MS}
+        onSeek={real ? (day) => playback.seek(day * DAY_MS) : undefined}
+      />
+
+      <PlaybackControls
+        playback={playback}
+        epoch={epoch}
+        durationMs={missionMs}
+        disabled={!real}
       />
 
       <SkyPanel
-        sun={scenario.sun}
-        earth={scenario.earth}
-        sunTrack={scenario.sunTrack}
-        earthTrack={scenario.earthTrack}
+        sun={shown.sun}
+        earth={shown.earth}
+        sunTrack={shown.sunTrack}
+        earthTrack={shown.earthTrack}
         horizon={scenario.horizon}
       />
 
