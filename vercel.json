@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    {
+      "source": "/horizons-api",
+      "destination": "https://ssd.jpl.nasa.gov/api/horizons.api"
+    },
+    {
+      "source": "/usgs-wms",
+      "destination": "https://planetarymaps.usgs.gov/cgi-bin/mapserv?map=/maps/earth/moon_simp_cyl_elev.map"
+    }
+  ]
+}
