@@ -1,9 +1,9 @@
-import { createHashRouter, Navigate } from 'react-router';
+import { createBrowserRouter, Navigate } from 'react-router';
 import AppShell from '@/layouts/AppShell/AppShell';
 
-// Hash router: works on any static hosting (GitHub Pages, etc.)
-// and does not break the relative base in vite.config.ts.
-export const router = createHashRouter([
+// Browser router: clean URLs. The host must serve index.html for unknown paths
+// (see the catch-all rewrite in vercel.json).
+export const router = createBrowserRouter([
   {
     path: '/',
     element: <AppShell />,

@@ -1,0 +1,21 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# Proxies: the browser calls its own origin, Netlify forwards to NASA/USGS
+# (these services send no CORS headers). Rules are matched top to bottom.
+[[redirects]]
+  from = "/horizons-api"
+  to = "https://ssd.jpl.nasa.gov/api/horizons.api"
+  status = 200
+
+[[redirects]]
+  from = "/usgs-wms"
+  to = "https://planetarymaps.usgs.gov/cgi-bin/mapserv?map=/maps/earth/moon_simp_cyl_elev.map"
+  status = 200
+
+# Browser router: any other path serves the app (real files are served first).
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
