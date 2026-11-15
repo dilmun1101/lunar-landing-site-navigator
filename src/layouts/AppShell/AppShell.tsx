@@ -5,6 +5,7 @@ import LanguageSwitch from '@/components/ui/LanguageSwitch/LanguageSwitch';
 import Logo from '@/components/ui/Logo/Logo';
 import ModeSwitch from '@/components/ui/ModeSwitch/ModeSwitch';
 import ComparePanel from '@/features/compare/ComparePanel/ComparePanel';
+import ResourcesPanel from '@/features/resources/ResourcesPanel/ResourcesPanel';
 import WelcomeCard from '@/features/welcome/WelcomeCard/WelcomeCard';
 import Sidebar from '@/layouts/Sidebar/Sidebar';
 
@@ -71,6 +72,7 @@ export default function AppShell({ className }: AppShellProps) {
 
       <footer className="border-t border-white/10 p-4">
         <ComparePanel />
+        <ResourcesPanel className="mt-4 border-t border-white/10 pt-4" />
       </footer>
     </div>
   );

@@ -79,7 +79,20 @@
       "trackNote": "Dashed lines: path until sunset and Earthset."
     },
     "panorama": {
-      "title": "360° horizon panorama"
+      "title": "360° horizon panorama",
+      "cardinal": {
+        "north": "N",
+        "east": "E",
+        "south": "S",
+        "west": "W"
+      },
+      "state": {
+        "visible": "visible",
+        "behindTerrain": "hidden by the terrain",
+        "belowHorizon": "below the horizon"
+      },
+      "hint": "The dark silhouette is the terrain on the horizon: mountains and crater rims. A body behind it is not visible.",
+      "flat": "No LOLA terrain data for this point: the horizon is drawn flat, so the real view may be worse."
     },
     "timeline": {
       "title": "Viability timeline",
@@ -140,6 +153,15 @@
         "veryFast": "Very fast"
       },
       "shortcuts": "Space — play/pause, ← → — step by 1 hour, click on the timeline — jump."
+    },
+    "externalMaps": {
+      "title": "Open the place in NASA map tools",
+      "quickmap": "Open in Quickmap",
+      "moonTrek": "Open in Moon Trek",
+      "newTab": "(opens in a new tab)",
+      "copy": "Copy coordinates",
+      "copied": "Copied",
+      "hint": "These sites cannot be embedded, so they open in a new tab. Paste the coordinates into their search."
     }
   },
   "compare": {
@@ -289,5 +311,41 @@
     "validationText": "At the six Apollo landing sites the Sun matches the NASA ALSJ values within 0.02° and Earth within 0.22°.",
     "criteria": "Thresholds applied",
     "assumption": "The viable and marginal shares are project assumptions, not NASA requirements."
+  },
+  "resources": {
+    "title": "Sources and resources",
+    "newTab": "(opens in a new tab)",
+    "items": {
+      "horizons": {
+        "name": "JPL Horizons",
+        "description": "Positions of the Sun and Earth as seen from a point on the Moon (the data behind every calculation)."
+      },
+      "usgs": {
+        "name": "USGS Astrogeology",
+        "description": "Web service with LRO LOLA elevation data, used to build the terrain horizon."
+      },
+      "quickmap": {
+        "name": "LROC Quickmap",
+        "description": "Interactive map of the Moon from LRO data; good for checking terrain and illumination."
+      },
+      "moonTrek": {
+        "name": "NASA Moon Trek",
+        "description": "NASA 3D lunar exploration portal; shows how terrain shapes the horizon."
+      },
+      "csa": {
+        "name": "CSA Moon Exploration",
+        "description": "Canadian Space Agency: past, current and future lunar missions."
+      }
+    },
+    "disclaimer": "Made for the NASA Space Apps Challenge 2026. Not an official NASA product; thresholds for a viable site are project assumptions."
+  },
+  "help": {
+    "verdict": "The result for the chosen site and dates: Viable, Marginal or Not viable. It depends on how much of the mission has both sunlight (for power) and a direct link to Earth at the same time.",
+    "sky": "The sky seen from above. The edge of the circle is the horizon, the center is a higher point (the scale is zoomed in: near the Moon's pole the Sun and Earth stay very low). North is at the top. The yellow dot is the Sun, the blue dot is Earth, the grey area is the mountains on the horizon: nothing behind them can be seen. The dashed line is the path until the body sets.",
+    "timeline": "Three bars over the days of the mission: when the Sun is above the horizon (yellow), when Earth is visible (blue), and when there is both light and a link (green, the best time to operate). The white \"Now\" mark is the current moment: click the scale to move it.",
+    "playback": "Press Play and the mission time moves forward: the Sun and Earth drift across the sky and the bars and labels update. The slider rewinds the time, the buttons change the speed.",
+    "panorama": "A 360° view all around you. North is at both edges, then east, south and west going around. The higher the dot, the higher the body is above the horizon. The dark shape is mountains and crater rims.",
+    "temporal": "When the mission starts, in universal time (UTC). A lunar day lasts about 29.5 Earth days; the slider moves the date along the lunar cycle, the buttons move it by a day.",
+    "bestWindows": "The best start day is found for every site: the better the result, the more of the mission has both light and a link to Earth. Click a row to open it in detail."
   }
 }

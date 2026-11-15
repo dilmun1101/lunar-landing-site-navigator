@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import Panel from '@/components/ui/Panel/Panel';
-import SectionTitle from '@/components/ui/SectionTitle/SectionTitle';
+import TitleWithHint from '@/components/ui/TitleWithHint/TitleWithHint';
 import type { Segment } from '@/features/scenario/demoScenario';
 import Playhead from '@/features/scenario/Playhead/Playhead';
 
@@ -66,7 +66,9 @@ export default function ViabilityTimeline({
 
   return (
     <Panel className={classNames('flex flex-col gap-6', className)}>
-      <SectionTitle>{t('scenario.timeline.title')}</SectionTitle>
+      <TitleWithHint hint={t('help.timeline')}>
+        {t('scenario.timeline.title')}
+      </TitleWithHint>
 
       <div className="grid grid-cols-[minmax(7rem,11rem)_1fr] gap-x-3">
         <div className="flex flex-col gap-3">

@@ -3,7 +3,7 @@ import type { KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import Button from '@/components/ui/Button/Button';
 import Panel from '@/components/ui/Panel/Panel';
-import SectionTitle from '@/components/ui/SectionTitle/SectionTitle';
+import TitleWithHint from '@/components/ui/TitleWithHint/TitleWithHint';
 import SegmentedControl from '@/components/ui/SegmentedControl/SegmentedControl';
 import { PLAYBACK_SPEEDS } from '@/domain/playback/playback';
 import type { Playback } from '@/features/scenario/usePlayback/usePlayback';
@@ -69,7 +69,9 @@ export default function PlaybackControls({
       onKeyDown={onKeyDown}
     >
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <SectionTitle>{t('scenario.playback.title')}</SectionTitle>
+        <TitleWithHint hint={t('help.playback')}>
+          {t('scenario.playback.title')}
+        </TitleWithHint>
         <span
           className="font-mono text-sm text-slate-100"
           aria-live="off"

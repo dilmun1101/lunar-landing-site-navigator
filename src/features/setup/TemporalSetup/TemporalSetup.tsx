@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Button from '@/components/ui/Button/Button';
-import SectionTitle from '@/components/ui/SectionTitle/SectionTitle';
+import TitleWithHint from '@/components/ui/TitleWithHint/TitleWithHint';
 import TextInput from '@/components/ui/TextInput/TextInput';
 import {
   addDays,
@@ -39,7 +39,9 @@ export default function TemporalSetup({ className }: TemporalSetupProps) {
 
   return (
     <section className={classNames('flex flex-col gap-4', className)}>
-      <SectionTitle>{t('setup.title')}</SectionTitle>
+      <TitleWithHint hint={t('help.temporal')}>
+        {t('setup.title')}
+      </TitleWithHint>
 
       <div className="flex flex-col gap-1.5">
         <label
