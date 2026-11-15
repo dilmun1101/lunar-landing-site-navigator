@@ -17,7 +17,7 @@ export default function SiteFooter({ className }: SiteFooterProps) {
   return (
     <footer
       className={classNames(
-        'col-start-2 flex min-w-0 flex-col gap-3 border-t border-white/10 p-4',
+        'flex min-w-0 flex-col gap-3 border-t border-white/10 p-3 sm:p-4 lg:col-start-2',
         className
       )}
     >

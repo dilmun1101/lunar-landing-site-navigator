@@ -241,7 +241,8 @@
       "collapse": "Hide comparison",
       "expand": "Show comparison",
       "count": "Scenarios being compared: {{count}}",
-      "resize": "Resize the comparison panel"
+      "resize": "Resize the comparison panel",
+      "close": "Close comparison"
     }
   },
   "planner": {
@@ -417,7 +418,9 @@
   "sidebar": {
     "title": "Settings",
     "collapse": "Hide panel",
-    "expand": "Show panel"
+    "expand": "Show panel",
+    "open": "Open parameters",
+    "close": "Close parameters"
   },
   "footer": {
     "team": "Team",
