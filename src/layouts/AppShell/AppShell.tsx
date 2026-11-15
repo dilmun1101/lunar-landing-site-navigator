@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import type { CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink, Outlet } from 'react-router';
 import LanguageSwitch from '@/components/ui/LanguageSwitch/LanguageSwitch';
@@ -7,6 +8,7 @@ import ModeSwitch from '@/components/ui/ModeSwitch/ModeSwitch';
 import ComparePanel from '@/features/compare/ComparePanel/ComparePanel';
 import ResourcesPanel from '@/features/resources/ResourcesPanel/ResourcesPanel';
 import WelcomeCard from '@/features/welcome/WelcomeCard/WelcomeCard';
+import { useSidebarStore } from '@/hooks/useSidebar/useSidebar';
 import Sidebar from '@/layouts/Sidebar/Sidebar';
 
 const tabs = [
@@ -20,13 +22,20 @@ interface AppShellProps {
 
 export default function AppShell({ className }: AppShellProps) {
   const { t } = useTranslation();
+  const collapsed = useSidebarStore((state) => state.collapsed);
 
   return (
     <div
       className={classNames(
-        'grid min-h-screen grid-cols-[320px_1fr] grid-rows-[auto_1fr_auto] bg-space-900 text-slate-100',
+        'grid min-h-screen grid-cols-[var(--sidebar-width)_1fr] grid-rows-[auto_1fr_auto] bg-space-900 text-slate-100 transition-[grid-template-columns] duration-200',
         className
       )}
+      // Other parts (the full-size picture) read the width of the left panel from here
+      style={
+        {
+          '--sidebar-width': collapsed ? '3rem' : '20rem',
+        } as CSSProperties
+      }
     >
       <header className="sticky top-0 z-10 col-span-2 flex h-14 items-center gap-8 border-b border-white/10 bg-space-900/90 px-4 backdrop-blur">
         <div className="flex items-center gap-3">

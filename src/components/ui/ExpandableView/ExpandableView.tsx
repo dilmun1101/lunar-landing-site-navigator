@@ -99,8 +99,8 @@ export default function ExpandableView({
       <div
         className={
           expanded
-            ? // 20rem is the width of the sidebar column in AppShell; 3.5rem is the header
-              'fixed top-14 right-0 bottom-0 left-80 z-20 flex flex-col gap-3 overflow-y-auto bg-space-900 p-4'
+            ? // AppShell sets --sidebar-width; 3.5rem (top-14) is the header
+              'fixed top-14 right-0 bottom-0 left-[var(--sidebar-width,20rem)] z-20 flex flex-col gap-3 overflow-y-auto bg-space-900 p-4'
             : 'size-full'
         }
       >

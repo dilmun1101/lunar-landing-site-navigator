@@ -369,5 +369,10 @@
     "bestWindows": "The best start day is found for every site: the better the result, the more of the mission has both light and a link to Earth. Click a row to open it in detail.",
     "skyGlobe": "This is a model of the Moon as it would look from space. The red dot is your site. The yellow arrow shows where the Sun is, the blue one where the Earth is. A grey arrow means that body is below the horizon right now and cannot be seen from the site. The bright part of the ball is day, the dark part is night. Drag the ball to turn it.",
     "skyTerrain": "This is the ground around the site — a 40 by 40 kilometer patch from lunar orbiter laser data. The red dot is the site, the white arrow points north. The yellow disc is the Sun, the blue one the Earth; they are drawn larger than in real life, otherwise you could not see them. A pale disc means the body is behind a mountain right now. The lower the Sun, the longer the shadows; when it is below the horizon it is night. The relief is stretched twice in height. Drag to rotate, scroll to zoom."
+  },
+  "sidebar": {
+    "title": "Settings",
+    "collapse": "Hide panel",
+    "expand": "Show panel"
   }
 }
