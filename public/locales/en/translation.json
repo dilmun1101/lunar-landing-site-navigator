@@ -67,7 +67,15 @@
       "sunUp": "The Sun is above the horizon",
       "sunDown": "The Sun is below the horizon",
       "earthUp": "Earth is visible: radio contact is possible",
-      "earthDown": "Earth is hidden: no radio contact"
+      "earthDown": "Earth is hidden: no radio contact",
+      "view": {
+        "label": "Map view",
+        "flat": "2D",
+        "globe": "3D",
+        "terrain": "Terrain"
+      },
+      "expand": "Expand",
+      "collapse": "Collapse"
     },
     "polar": {
       "title": "Polar sky chart",
@@ -162,6 +170,18 @@
       "copy": "Copy coordinates",
       "copied": "Copied",
       "hint": "These sites cannot be embedded, so they open in a new tab. Paste the coordinates into their search."
+    },
+    "globe": {
+      "aria": "The Moon: the red dot is the site, the yellow arrow points to the Sun, the blue one to the Earth",
+      "loading": "Loading 3D…",
+      "error": "Could not show the 3D view. Switch back to 2D.",
+      "note": "Drag to rotate the globe, scroll to zoom. Arrows go from the site to the Sun (yellow) and the Earth (blue); a grey arrow means the body is below the horizon."
+    },
+    "terrain": {
+      "loading": "Loading the terrain around the site…",
+      "error": "Could not load the terrain. Try again later or pick another view.",
+      "aria": "Terrain around the site: the red dot is the site, light and shadows depend on where the Sun is",
+      "note": "A 40 by 40 km patch around the site, heights stretched twice. The yellow disc is the Sun, the blue one the Earth (both drawn larger than in real life); a pale disc is a body behind a mountain. The white arrow points north. Drag to rotate, scroll to zoom."
     }
   },
   "compare": {
@@ -346,6 +366,8 @@
     "playback": "Press Play and the mission time moves forward: the Sun and Earth drift across the sky and the bars and labels update. The slider rewinds the time, the buttons change the speed.",
     "panorama": "A 360° view all around you. North is at both edges, then east, south and west going around. The higher the dot, the higher the body is above the horizon. The dark shape is mountains and crater rims.",
     "temporal": "When the mission starts, in universal time (UTC). A lunar day lasts about 29.5 Earth days; the slider moves the date along the lunar cycle, the buttons move it by a day.",
-    "bestWindows": "The best start day is found for every site: the better the result, the more of the mission has both light and a link to Earth. Click a row to open it in detail."
+    "bestWindows": "The best start day is found for every site: the better the result, the more of the mission has both light and a link to Earth. Click a row to open it in detail.",
+    "skyGlobe": "This is a model of the Moon as it would look from space. The red dot is your site. The yellow arrow shows where the Sun is, the blue one where the Earth is. A grey arrow means that body is below the horizon right now and cannot be seen from the site. The bright part of the ball is day, the dark part is night. Drag the ball to turn it.",
+    "skyTerrain": "This is the ground around the site — a 40 by 40 kilometer patch from lunar orbiter laser data. The red dot is the site, the white arrow points north. The yellow disc is the Sun, the blue one the Earth; they are drawn larger than in real life, otherwise you could not see them. A pale disc means the body is behind a mountain right now. The lower the Sun, the longer the shadows; when it is below the horizon it is night. The relief is stretched twice in height. Drag to rotate, scroll to zoom."
   }
 }

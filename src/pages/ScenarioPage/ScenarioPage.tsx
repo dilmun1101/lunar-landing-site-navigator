@@ -132,6 +132,16 @@ export default function ScenarioPage() {
     note = t('scenario.fetchError');
   }
 
+  // The same controls sit under the timeline and above the full-size sky view
+  const playbackControls = (
+    <PlaybackControls
+      playback={playback}
+      epoch={epoch}
+      durationMs={missionMs}
+      disabled={!real}
+    />
+  );
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between gap-3">
@@ -162,12 +172,7 @@ export default function ScenarioPage() {
         onSeek={real ? (day) => playback.seek(day * DAY_MS) : undefined}
       />
 
-      <PlaybackControls
-        playback={playback}
-        epoch={epoch}
-        durationMs={missionMs}
-        disabled={!real}
-      />
+      {playbackControls}
 
       <SkyPanel
         sun={shown.sun}
@@ -175,6 +180,12 @@ export default function ScenarioPage() {
         sunTrack={shown.sunTrack}
         earthTrack={shown.earthTrack}
         horizon={scenario.horizon}
+        expandedHeader={playbackControls}
+        site={
+          coordinates
+            ? { lat: coordinates.lat, lon: coordinates.lon }
+            : undefined
+        }
         footer={
           coordinates ? (
             <ExternalMapLinks coordinates={coordinates} />
