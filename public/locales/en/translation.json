@@ -140,6 +140,15 @@
         "veryFast": "Very fast"
       },
       "shortcuts": "Space — play/pause, ← → — step by 1 hour, click on the timeline — jump."
+    },
+    "externalMaps": {
+      "title": "Open the place in NASA map tools",
+      "quickmap": "Open in Quickmap",
+      "moonTrek": "Open in Moon Trek",
+      "newTab": "(opens in a new tab)",
+      "copy": "Copy coordinates",
+      "copied": "Copied",
+      "hint": "These sites cannot be embedded, so they open in a new tab. Paste the coordinates into their search."
     }
   },
   "compare": {
