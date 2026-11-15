@@ -3,26 +3,18 @@ import {
   maskEphemeris,
   missionSegments,
 } from '@/domain/criteria/missionSegments';
+import { skySnapshot } from '@/domain/ephemeris/skySnapshot/skySnapshot';
 import {
-  type BodySeries,
   endMs,
   type Ephemeris,
-  positionAt,
-  type SkyPosition,
 } from '@/domain/ephemeris/sunEarthPosition/sunEarthPosition';
-import {
-  msToDuration,
-  timeUntilSet,
-} from '@/domain/metrics/countdowns/countdowns';
-import { terrainElevationAt } from '@/domain/horizon/horizonProfile/horizonProfile';
+import { msToDuration } from '@/domain/metrics/countdowns/countdowns';
 import { longestGapMs } from '@/domain/metrics/gaps/gaps';
 import { verdictFor } from '@/domain/metrics/verdict/verdict';
 import { toDaySegments, totalMs } from '@/domain/metrics/windows/windows';
-import type { ScenarioView, SkyPoint } from '@/features/scenario/demoScenario';
+import type { ScenarioView } from '@/features/scenario/demoScenario';
 
 const DAY_MS = 86_400_000;
-const TRACK_POINTS = 12;
-const TRACK_MAX_DAYS = 7;
 
 export interface ScenarioInput {
   id: string;
@@ -34,32 +26,6 @@ export interface ScenarioInput {
   horizon?: number[] | null;
   /** Suitability criteria; the defaults are used if omitted */
   criteria?: Criteria;
-}
-
-/** Path of a body across the sky from fromMs onward while it is above the terrain horizon. */
-function buildTrack(
-  series: BodySeries,
-  ephemeris: Ephemeris,
-  fromMs: number,
-  spanMs: number,
-  horizon: number[]
-): SkyPoint[] {
-  const points: SkyPoint[] = [];
-  for (let step = 0; step <= TRACK_POINTS; step++) {
-    const position = positionAt(
-      series,
-      ephemeris,
-      fromMs + (spanMs * step) / TRACK_POINTS
-    );
-    if (
-      !position ||
-      position.elevation < terrainElevationAt(horizon, position.azimuth)
-    ) {
-      break;
-    }
-    points.push(position);
-  }
-  return points;
 }
 
 /**
@@ -99,15 +65,8 @@ export function buildScenarioView({
     criteria.maxBlackoutHours > 0 &&
     darknessMs > criteria.maxBlackoutHours * 3_600_000;
 
-  const sunSet = timeUntilSet(visible.sun, visible, fromMs);
-  const earthSet = timeUntilSet(visible.earth, visible, fromMs);
-  const trackSpan = (set: ReturnType<typeof timeUntilSet>) =>
-    set
-      ? set.days * DAY_MS + set.hours * 3_600_000
-      : Math.min(TRACK_MAX_DAYS * DAY_MS, toMs - fromMs);
-
-  const sun: SkyPosition = positionAt(ephemeris.sun, ephemeris, fromMs)!;
-  const earth: SkyPosition = positionAt(ephemeris.earth, ephemeris, fromMs)!;
+  const sky = skySnapshot(ephemeris, visible, horizon, fromMs, toMs);
+  if (!sky) return null;
 
   return {
     id,
@@ -126,27 +85,15 @@ export function buildScenarioView({
     longestDarkness: msToDuration(darknessMs),
     longestCommsGap: msToDuration(longestGapMs(earthSegments, fromMs, toMs)),
     blackoutExceeded,
-    sunset: sunSet,
-    earthset: earthSet,
-    sun,
-    earth,
+    sunset: sky.sunset,
+    earthset: sky.earthset,
+    sun: sky.sun,
+    earth: sky.earth,
     sunSegments: toDaySegments(sunSegments, fromMs),
     earthSegments: toDaySegments(earthSegments, fromMs),
     windowSegments: toDaySegments(windowSegments, fromMs),
-    sunTrack: buildTrack(
-      ephemeris.sun,
-      ephemeris,
-      fromMs,
-      trackSpan(sunSet),
-      horizon
-    ),
-    earthTrack: buildTrack(
-      ephemeris.earth,
-      ephemeris,
-      fromMs,
-      trackSpan(earthSet),
-      horizon
-    ),
+    sunTrack: sky.sunTrack,
+    earthTrack: sky.earthTrack,
     // The chart draws terrain above the geometric horizon only
     horizon: horizon.map((elevation) => Math.max(0, elevation)),
   };

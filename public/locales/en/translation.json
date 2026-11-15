@@ -125,6 +125,21 @@
         "sun": "The main problem is too little sunlight.",
         "earth": "The main problem is too little time in contact with Earth."
       }
+    },
+    "playback": {
+      "title": "Time playback",
+      "toStart": "Back to the start",
+      "position": "Moment of the mission",
+      "loop": "Repeat",
+      "speeds": {
+        "hour": "1 h/s",
+        "sixHours": "6 h/s",
+        "day": "1 day/s",
+        "slow": "Slow",
+        "fast": "Fast",
+        "veryFast": "Very fast"
+      },
+      "shortcuts": "Space — play/pause, ← → — step by 1 hour, click on the timeline — jump."
     }
   },
   "compare": {
