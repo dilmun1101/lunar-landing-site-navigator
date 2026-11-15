@@ -3,6 +3,10 @@ import { useTranslation } from 'react-i18next';
 import Button from '@/components/ui/Button/Button';
 import { maskEphemeris } from '@/domain/criteria/missionSegments';
 import { skySnapshot } from '@/domain/ephemeris/skySnapshot/skySnapshot';
+import {
+  highestElevationBetween,
+  panoramaMaxElevation,
+} from '@/domain/horizon/panorama/panorama';
 import { buildScenarioView } from '@/features/scenario/buildScenarioView';
 import CountdownChips from '@/features/scenario/CountdownChips/CountdownChips';
 import {
@@ -11,6 +15,7 @@ import {
   type Segment,
 } from '@/features/scenario/demoScenario';
 import ExternalMapLinks from '@/features/scenario/ExternalMapLinks/ExternalMapLinks';
+import HorizonPanorama from '@/features/scenario/HorizonPanorama/HorizonPanorama';
 import PlaybackControls from '@/features/scenario/PlaybackControls/PlaybackControls';
 import SkyPanel from '@/features/scenario/SkyPanel/SkyPanel';
 import { useHorizonProfile } from '@/features/scenario/useHorizonProfile/useHorizonProfile';
@@ -102,6 +107,16 @@ export default function ScenarioPage() {
 
   const shown: ScenarioView = sky ? { ...scenario, ...sky } : scenario;
 
+  // The vertical scale of the panorama is fixed for the whole mission, so it does not jump
+  const highestBody = useMemo(
+    () =>
+      ephemeris
+        ? highestElevationBetween(ephemeris, startMs, startMs + missionMs)
+        : Math.max(demoScenario.sun.elevation, demoScenario.earth.elevation, 0),
+    [ephemeris, startMs, missionMs]
+  );
+  const panoramaScale = panoramaMaxElevation(scenario.horizon, highestBody);
+
   let note: string;
   if (real) {
     note = t(
@@ -165,6 +180,14 @@ export default function ScenarioPage() {
             <ExternalMapLinks coordinates={coordinates} />
           ) : undefined
         }
+      />
+
+      <HorizonPanorama
+        sun={shown.sun}
+        earth={shown.earth}
+        horizon={scenario.horizon}
+        maxElevation={panoramaScale}
+        hasTerrain={!real || terrain.status === 'ready'}
       />
 
       <SourcesPanel
