@@ -380,5 +380,10 @@
     "title": "Settings",
     "collapse": "Hide panel",
     "expand": "Show panel"
+  },
+  "footer": {
+    "team": "Team",
+    "event": "NASA Space Apps Challenge 2026",
+    "author": "Author"
   }
 }

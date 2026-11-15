@@ -386,5 +386,10 @@
     "title": "Параметры",
     "collapse": "Скрыть панель",
     "expand": "Показать панель"
+  },
+  "footer": {
+    "team": "Команда",
+    "event": "NASA Space Apps Challenge 2026",
+    "author": "Автор"
   }
 }

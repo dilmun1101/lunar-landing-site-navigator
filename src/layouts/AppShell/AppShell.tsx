@@ -6,11 +6,11 @@ import LanguageSwitch from '@/components/ui/LanguageSwitch/LanguageSwitch';
 import Logo from '@/components/ui/Logo/Logo';
 import ModeSwitch from '@/components/ui/ModeSwitch/ModeSwitch';
 import CompareDock from '@/features/compare/CompareDock/CompareDock';
-import ResourcesPanel from '@/features/resources/ResourcesPanel/ResourcesPanel';
 import WelcomeCard from '@/features/welcome/WelcomeCard/WelcomeCard';
 import { useCompareDock } from '@/hooks/useCompareDock/useCompareDock';
 import { useSidebarStore } from '@/hooks/useSidebar/useSidebar';
 import Sidebar from '@/layouts/Sidebar/Sidebar';
+import SiteFooter from '@/layouts/SiteFooter/SiteFooter';
 
 const tabs = [
   { to: '/scenario', labelKey: 'nav.scenario' },
@@ -91,9 +91,7 @@ export default function AppShell({ className }: AppShellProps) {
 
       <CompareDock />
 
-      <footer className="col-start-2 min-w-0 border-t border-white/10 p-4">
-        <ResourcesPanel />
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
