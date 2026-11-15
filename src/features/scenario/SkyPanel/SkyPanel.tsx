@@ -7,6 +7,7 @@ import TitleWithHint from '@/components/ui/TitleWithHint/TitleWithHint';
 import type { SkyPoint } from '@/features/scenario/demoScenario';
 import { useMode } from '@/hooks/useMode/useMode';
 import Legend from '@/features/scenario/Legend/Legend';
+import ExpandableView from '@/components/ui/ExpandableView/ExpandableView';
 import GlobeBoundary from '@/features/scenario/MoonGlobe/GlobeBoundary';
 import PolarSkyChart from '@/features/scenario/PolarSkyChart/PolarSkyChart';
 import { webglAvailable } from '@/lib/webgl/webglAvailable';
@@ -27,6 +28,8 @@ interface SkyPanelProps {
   horizon: number[];
   /** Site coordinates: with them the 2D / 3D switch appears */
   site?: { lat: number; lon: number };
+  /** Shown above the picture while it is open full size (e.g. the time playback) */
+  expandedHeader?: ReactNode;
   /** E.g. links to external maps — shown under the chart */
   footer?: ReactNode;
   className?: string;
@@ -39,6 +42,7 @@ export default function SkyPanel({
   earthTrack,
   horizon,
   site,
+  expandedHeader,
   footer,
   className,
 }: SkyPanelProps) {
@@ -92,51 +96,54 @@ export default function SkyPanel({
 
       <div className="grid items-center gap-6 md:grid-cols-[minmax(0,22rem)_1fr]">
         <div className="flex flex-col gap-2">
-          {threeD && site ? (
-            <GlobeBoundary
-              fallback={
-                <p className="text-sm text-slate-400">
-                  {t('scenario.globe.error')}
-                </p>
-              }
-            >
-              <Suspense
+          <ExpandableView header={expandedHeader}>
+            {threeD && site ? (
+              <GlobeBoundary
                 fallback={
                   <p className="text-sm text-slate-400">
-                    {t('scenario.globe.loading')}
+                    {t('scenario.globe.error')}
                   </p>
                 }
               >
-                {view === 'terrain' ? (
-                  <SiteTerrainView
-                    lat={site.lat}
-                    lon={site.lon}
-                    sun={sun}
-                    earth={earth}
-                    horizon={horizon}
-                    className="aspect-square w-full"
-                  />
-                ) : (
-                  <MoonGlobe
-                    lat={site.lat}
-                    lon={site.lon}
-                    sun={sun}
-                    earth={earth}
-                    ariaLabel={t('scenario.globe.aria')}
-                    className="aspect-square w-full"
-                  />
-                )}
-              </Suspense>
-            </GlobeBoundary>
-          ) : (
-            <PolarSkyChart
-              sun={sun}
-              earth={earth}
-              sunTrack={sunTrack}
-              earthTrack={earthTrack}
-              horizon={horizon}
-            />
-          )}
+                <Suspense
+                  fallback={
+                    <p className="text-sm text-slate-400">
+                      {t('scenario.globe.loading')}
+                    </p>
+                  }
+                >
+                  {view === 'terrain' ? (
+                    <SiteTerrainView
+                      lat={site.lat}
+                      lon={site.lon}
+                      sun={sun}
+                      earth={earth}
+                      horizon={horizon}
+                      className="size-full"
+                    />
+                  ) : (
+                    <MoonGlobe
+                      lat={site.lat}
+                      lon={site.lon}
+                      sun={sun}
+                      earth={earth}
+                      ariaLabel={t('scenario.globe.aria')}
+                      className="size-full"
+                    />
+                  )}
+                </Suspense>
+              </GlobeBoundary>
+            ) : (
+              <PolarSkyChart
+                className="size-full"
+                sun={sun}
+                earth={earth}
+                sunTrack={sunTrack}
+                earthTrack={earthTrack}
+                horizon={horizon}
+              />
+            )}
+          </ExpandableView>
           {threeD ? (
             <p className="text-xs text-slate-500">
               {t(

@@ -73,7 +73,9 @@
         "flat": "2D",
         "globe": "3D",
         "terrain": "Terrain"
-      }
+      },
+      "expand": "Expand",
+      "collapse": "Collapse"
     },
     "polar": {
       "title": "Polar sky chart",
