@@ -245,5 +245,17 @@
     "sunlightDuration": "Total time the Sun is above the horizon during the mission.",
     "earthWindow": "Total time Earth is visible and a direct radio link is possible.",
     "heatmap": "Rows are landing sites, columns are launch dates. A greener cell means more sunlight and radio contact with Earth during the mission."
+  },
+  "welcome": {
+    "title": "Welcome to Lunar Landing Navigator",
+    "intro": "The app helps you pick a landing site and a date for a Moon mission: where the Sun gives power and Earth stays in radio view.",
+    "steps": {
+      "site": "Pick a landing site on the left.",
+      "date": "Choose the start date and how long the mission lasts.",
+      "verdict": "Read the verdict: is it a good place, and why."
+    },
+    "modeNote": "You are in Beginner mode: fewer numbers and hints marked \"?\". Switch to Expert at the top any time.",
+    "gotIt": "Got it",
+    "expert": "I'm an expert"
   }
 }

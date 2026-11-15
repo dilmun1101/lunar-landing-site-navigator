@@ -5,14 +5,20 @@ export type Mode = 'beginner' | 'expert';
 
 interface ModeState {
   mode: Mode;
+  /** The welcome card was closed */
+  welcomed: boolean;
   setMode: (mode: Mode) => void;
+  dismissWelcome: () => void;
 }
 
 export const useModeStore = create<ModeState>()(
   persist(
     (set) => ({
-      mode: 'expert',
+      // First-time visitors start in the simple mode
+      mode: 'beginner',
+      welcomed: false,
       setMode: (mode) => set({ mode }),
+      dismissWelcome: () => set({ welcomed: true }),
     }),
     { name: 'mode:v1' }
   )
