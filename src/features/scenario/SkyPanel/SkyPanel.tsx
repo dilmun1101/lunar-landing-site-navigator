@@ -1,12 +1,20 @@
 import classNames from 'classnames';
-import type { ReactNode } from 'react';
+import { lazy, Suspense, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import Panel from '@/components/ui/Panel/Panel';
+import SegmentedControl from '@/components/ui/SegmentedControl/SegmentedControl';
 import TitleWithHint from '@/components/ui/TitleWithHint/TitleWithHint';
 import type { SkyPoint } from '@/features/scenario/demoScenario';
 import { useMode } from '@/hooks/useMode/useMode';
 import Legend from '@/features/scenario/Legend/Legend';
+import GlobeBoundary from '@/features/scenario/MoonGlobe/GlobeBoundary';
 import PolarSkyChart from '@/features/scenario/PolarSkyChart/PolarSkyChart';
+import { webglAvailable } from '@/lib/webgl/webglAvailable';
+
+// three.js is heavy: the globe is loaded only when someone switches to 3D.
+const MoonGlobe = lazy(() => import('@/features/scenario/MoonGlobe/MoonGlobe'));
+
+type SkyView = 'flat' | 'globe';
 
 interface SkyPanelProps {
   sun: SkyPoint;
@@ -14,6 +22,8 @@ interface SkyPanelProps {
   sunTrack: SkyPoint[];
   earthTrack: SkyPoint[];
   horizon: number[];
+  /** Site coordinates: with them the 2D / 3D switch appears */
+  site?: { lat: number; lon: number };
   /** E.g. links to external maps — shown under the chart */
   footer?: ReactNode;
   className?: string;
@@ -25,11 +35,15 @@ export default function SkyPanel({
   sunTrack,
   earthTrack,
   horizon,
+  site,
   footer,
   className,
 }: SkyPanelProps) {
   const { t, i18n } = useTranslation();
   const beginner = useMode() === 'beginner';
+  const [view, setView] = useState<SkyView>('flat');
+  const canShowGlobe = site !== undefined && webglAvailable();
+  const globe = canShowGlobe && view === 'globe';
 
   const elevationFormat = new Intl.NumberFormat(i18n.language, {
     minimumFractionDigits: 1,
@@ -47,23 +61,67 @@ export default function SkyPanel({
 
   return (
     <Panel className={classNames('flex flex-col gap-4', className)}>
-      <TitleWithHint hint={t('help.sky')}>
-        {t('scenario.sky.title')}
-      </TitleWithHint>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <TitleWithHint hint={t('help.sky')}>
+          {t('scenario.sky.title')}
+        </TitleWithHint>
+        {canShowGlobe && (
+          <SegmentedControl<SkyView>
+            label={t('scenario.sky.view.label')}
+            value={view}
+            onChange={setView}
+            options={[
+              { value: 'flat', label: t('scenario.sky.view.flat') },
+              { value: 'globe', label: t('scenario.sky.view.globe') },
+            ]}
+          />
+        )}
+      </div>
 
       <div className="grid items-center gap-6 md:grid-cols-[minmax(0,22rem)_1fr]">
         <div className="flex flex-col gap-2">
-          <PolarSkyChart
-            sun={sun}
-            earth={earth}
-            sunTrack={sunTrack}
-            earthTrack={earthTrack}
-            horizon={horizon}
-          />
-          {!beginner && (
-            <p className="text-xs text-slate-500">
-              {t('scenario.polar.elevationNote')}
-            </p>
+          {globe && site ? (
+            <GlobeBoundary
+              fallback={
+                <p className="text-sm text-slate-400">
+                  {t('scenario.globe.error')}
+                </p>
+              }
+            >
+              <Suspense
+                fallback={
+                  <p className="text-sm text-slate-400">
+                    {t('scenario.globe.loading')}
+                  </p>
+                }
+              >
+                <MoonGlobe
+                  lat={site.lat}
+                  lon={site.lon}
+                  sun={sun}
+                  earth={earth}
+                  ariaLabel={t('scenario.globe.aria')}
+                  className="aspect-square w-full"
+                />
+              </Suspense>
+            </GlobeBoundary>
+          ) : (
+            <PolarSkyChart
+              sun={sun}
+              earth={earth}
+              sunTrack={sunTrack}
+              earthTrack={earthTrack}
+              horizon={horizon}
+            />
+          )}
+          {globe ? (
+            <p className="text-xs text-slate-500">{t('scenario.globe.note')}</p>
+          ) : (
+            !beginner && (
+              <p className="text-xs text-slate-500">
+                {t('scenario.polar.elevationNote')}
+              </p>
+            )
           )}
         </div>
 
@@ -126,9 +184,11 @@ export default function SkyPanel({
           )}
 
           <Legend />
-          <p className="text-xs text-slate-500">
-            {t('scenario.polar.trackNote')}
-          </p>
+          {!globe && (
+            <p className="text-xs text-slate-500">
+              {t('scenario.polar.trackNote')}
+            </p>
+          )}
         </div>
       </div>
 

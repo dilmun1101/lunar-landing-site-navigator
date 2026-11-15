@@ -67,7 +67,12 @@
       "sunUp": "The Sun is above the horizon",
       "sunDown": "The Sun is below the horizon",
       "earthUp": "Earth is visible: radio contact is possible",
-      "earthDown": "Earth is hidden: no radio contact"
+      "earthDown": "Earth is hidden: no radio contact",
+      "view": {
+        "label": "Map view",
+        "flat": "2D",
+        "globe": "3D"
+      }
     },
     "polar": {
       "title": "Polar sky chart",
@@ -162,6 +167,12 @@
       "copy": "Copy coordinates",
       "copied": "Copied",
       "hint": "These sites cannot be embedded, so they open in a new tab. Paste the coordinates into their search."
+    },
+    "globe": {
+      "aria": "The Moon: the red dot is the site, the yellow arrow points to the Sun, the blue one to the Earth",
+      "loading": "Loading 3D…",
+      "error": "Could not show the 3D view. Switch back to 2D.",
+      "note": "Drag to rotate the globe, scroll to zoom. Arrows go from the site to the Sun (yellow) and the Earth (blue); a grey arrow means the body is below the horizon."
     }
   },
   "compare": {

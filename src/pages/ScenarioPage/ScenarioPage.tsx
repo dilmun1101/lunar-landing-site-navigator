@@ -175,6 +175,11 @@ export default function ScenarioPage() {
         sunTrack={shown.sunTrack}
         earthTrack={shown.earthTrack}
         horizon={scenario.horizon}
+        site={
+          coordinates
+            ? { lat: coordinates.lat, lon: coordinates.lon }
+            : undefined
+        }
         footer={
           coordinates ? (
             <ExternalMapLinks coordinates={coordinates} />
