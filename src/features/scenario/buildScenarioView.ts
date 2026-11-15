@@ -10,6 +10,7 @@ import {
 } from '@/domain/ephemeris/sunEarthPosition/sunEarthPosition';
 import { msToDuration } from '@/domain/metrics/countdowns/countdowns';
 import { longestGapMs } from '@/domain/metrics/gaps/gaps';
+import { sunElevationStats } from '@/domain/metrics/sunElevation/sunElevation';
 import { verdictFor } from '@/domain/metrics/verdict/verdict';
 import { toDaySegments, totalMs } from '@/domain/metrics/windows/windows';
 import type { ScenarioView } from '@/features/scenario/demoScenario';
@@ -85,6 +86,13 @@ export function buildScenarioView({
     longestDarkness: msToDuration(darknessMs),
     longestCommsGap: msToDuration(longestGapMs(earthSegments, fromMs, toMs)),
     blackoutExceeded,
+    sunElevation: sunElevationStats(
+      ephemeris,
+      visible,
+      fromMs,
+      toMs,
+      criteria.minSunElevation
+    ),
     sunset: sky.sunset,
     earthset: sky.earthset,
     sun: sky.sun,

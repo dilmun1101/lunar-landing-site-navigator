@@ -1,12 +1,26 @@
 import classNames from 'classnames';
-import type { ReactNode } from 'react';
+import { lazy, Suspense, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import Panel from '@/components/ui/Panel/Panel';
+import SegmentedControl from '@/components/ui/SegmentedControl/SegmentedControl';
 import TitleWithHint from '@/components/ui/TitleWithHint/TitleWithHint';
 import type { SkyPoint } from '@/features/scenario/demoScenario';
 import { useMode } from '@/hooks/useMode/useMode';
 import Legend from '@/features/scenario/Legend/Legend';
+import ExpandableView from '@/components/ui/ExpandableView/ExpandableView';
+import { forgetGlobalRelief } from '@/features/scenario/MoonGlobe/useGlobalRelief';
+import { forgetSiteTerrain } from '@/lib/terrain/siteTerrain/siteTerrain';
+import GlobeBoundary from '@/features/scenario/MoonGlobe/GlobeBoundary';
 import PolarSkyChart from '@/features/scenario/PolarSkyChart/PolarSkyChart';
+import { webglAvailable } from '@/lib/webgl/webglAvailable';
+
+// three.js is heavy: the globe is loaded only when someone switches to 3D.
+const MoonGlobe = lazy(() => import('@/features/scenario/MoonGlobe/MoonGlobe'));
+const SiteTerrainView = lazy(
+  () => import('@/features/scenario/SiteTerrainView/SiteTerrainView')
+);
+
+type SkyView = 'flat' | 'globe' | 'terrain';
 
 interface SkyPanelProps {
   sun: SkyPoint;
@@ -14,6 +28,10 @@ interface SkyPanelProps {
   sunTrack: SkyPoint[];
   earthTrack: SkyPoint[];
   horizon: number[];
+  /** Site coordinates: with them the 2D / 3D switch appears */
+  site?: { lat: number; lon: number };
+  /** Shown above the picture while it is open full size (e.g. the time playback) */
+  expandedHeader?: ReactNode;
   /** E.g. links to external maps — shown under the chart */
   footer?: ReactNode;
   className?: string;
@@ -25,11 +43,23 @@ export default function SkyPanel({
   sunTrack,
   earthTrack,
   horizon,
+  site,
+  expandedHeader,
   footer,
   className,
 }: SkyPanelProps) {
   const { t, i18n } = useTranslation();
   const beginner = useMode() === 'beginner';
+  const [view, setView] = useState<SkyView>('flat');
+  const canShowGlobe = site !== undefined && webglAvailable();
+  const threeD = canShowGlobe && view !== 'flat';
+  // A new key rebuilds the 3D view, which then downloads the map again
+  const [reloads, setReloads] = useState(0);
+  const reloadMap = () => {
+    if (site && view === 'terrain') forgetSiteTerrain(site);
+    else forgetGlobalRelief();
+    setReloads((count) => count + 1);
+  };
 
   const elevationFormat = new Intl.NumberFormat(i18n.language, {
     minimumFractionDigits: 1,
@@ -47,23 +77,112 @@ export default function SkyPanel({
 
   return (
     <Panel className={classNames('flex flex-col gap-4', className)}>
-      <TitleWithHint hint={t('help.sky')}>
-        {t('scenario.sky.title')}
-      </TitleWithHint>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <TitleWithHint
+          hint={t(
+            threeD && view === 'terrain'
+              ? 'help.skyTerrain'
+              : threeD
+                ? 'help.skyGlobe'
+                : 'help.sky'
+          )}
+        >
+          {t('scenario.sky.title')}
+        </TitleWithHint>
+        {canShowGlobe && (
+          <SegmentedControl<SkyView>
+            label={t('scenario.sky.view.label')}
+            value={view}
+            onChange={setView}
+            options={[
+              { value: 'flat', label: t('scenario.sky.view.flat') },
+              { value: 'globe', label: t('scenario.sky.view.globe') },
+              { value: 'terrain', label: t('scenario.sky.view.terrain') },
+            ]}
+          />
+        )}
+      </div>
 
       <div className="grid items-center gap-6 md:grid-cols-[minmax(0,22rem)_1fr]">
         <div className="flex flex-col gap-2">
-          <PolarSkyChart
-            sun={sun}
-            earth={earth}
-            sunTrack={sunTrack}
-            earthTrack={earthTrack}
-            horizon={horizon}
-          />
-          {!beginner && (
+          <ExpandableView header={expandedHeader}>
+            {threeD && site ? (
+              <>
+                <GlobeBoundary
+                  fallback={
+                    <p className="text-sm text-slate-400">
+                      {t('scenario.globe.error')}
+                    </p>
+                  }
+                >
+                  <Suspense
+                    fallback={
+                      <p className="text-sm text-slate-400">
+                        {t('scenario.globe.loading')}
+                      </p>
+                    }
+                  >
+                    {view === 'terrain' ? (
+                      <SiteTerrainView
+                        key={reloads}
+                        lat={site.lat}
+                        lon={site.lon}
+                        sun={sun}
+                        earth={earth}
+                        horizon={horizon}
+                        className="size-full"
+                      />
+                    ) : (
+                      <MoonGlobe
+                        key={reloads}
+                        lat={site.lat}
+                        lon={site.lon}
+                        sun={sun}
+                        earth={earth}
+                        ariaLabel={t('scenario.globe.aria')}
+                        className="size-full"
+                      />
+                    )}
+                  </Suspense>
+                </GlobeBoundary>
+                <button
+                  type="button"
+                  onClick={reloadMap}
+                  // Not a click on the picture: it must not open the full-size view
+                  onPointerDown={(event) => event.stopPropagation()}
+                  onPointerUp={(event) => event.stopPropagation()}
+                  title={t('scenario.sky.reload')}
+                  aria-label={t('scenario.sky.reload')}
+                  className="absolute top-2 left-2 z-10 flex size-8 items-center justify-center rounded-lg border border-white/15 bg-space-900/80 text-lg leading-none text-slate-300 backdrop-blur transition-colors hover:text-accent focus-visible:outline-2 focus-visible:outline-earth"
+                >
+                  <span aria-hidden="true">↻</span>
+                </button>
+              </>
+            ) : (
+              <PolarSkyChart
+                className="size-full"
+                sun={sun}
+                earth={earth}
+                sunTrack={sunTrack}
+                earthTrack={earthTrack}
+                horizon={horizon}
+              />
+            )}
+          </ExpandableView>
+          {threeD ? (
             <p className="text-xs text-slate-500">
-              {t('scenario.polar.elevationNote')}
+              {t(
+                view === 'terrain'
+                  ? 'scenario.terrain.note'
+                  : 'scenario.globe.note'
+              )}
             </p>
+          ) : (
+            !beginner && (
+              <p className="text-xs text-slate-500">
+                {t('scenario.polar.elevationNote')}
+              </p>
+            )
           )}
         </div>
 
@@ -126,9 +245,11 @@ export default function SkyPanel({
           )}
 
           <Legend />
-          <p className="text-xs text-slate-500">
-            {t('scenario.polar.trackNote')}
-          </p>
+          {!threeD && (
+            <p className="text-xs text-slate-500">
+              {t('scenario.polar.trackNote')}
+            </p>
+          )}
         </div>
       </div>
 

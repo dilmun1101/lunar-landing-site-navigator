@@ -1,5 +1,8 @@
 import type { ElevationTile } from '@/lib/lola/elevationWindow/elevationWindow';
-import { parseElevationTiff } from '@/lib/lola/parseElevationTiff/parseElevationTiff';
+import {
+  parseElevationTiff,
+  type ElevationRaster,
+} from '@/lib/lola/parseElevationTiff/parseElevationTiff';
 
 // The USGS WMS does not send CORS headers either, so the browser calls its own origin and
 // Vite forwards the request: see server.proxy / preview.proxy in vite.config.ts.
@@ -8,13 +11,15 @@ const WMS_URL = '/usgs-wms';
 
 const KM_PER_DEGREE = (2 * Math.PI * 1737.4) / 360;
 const MAX_PIXELS = 2048;
+/** A request that hangs must end with an error, so that the user can retry */
+const REQUEST_TIMEOUT_MS = 45_000;
 /** LOLA global DEM: 256 pixels per degree ≈ 118 m */
 const NATIVE_CELL_KM = 0.12;
 
 const rad = (degrees: number) => (degrees * Math.PI) / 180;
 const deg = (radians: number) => (radians * 180) / Math.PI;
 
-interface Bounds {
+export interface Bounds {
   west: number;
   east: number;
   south: number;
@@ -67,6 +72,31 @@ function imageSize(bounds: Bounds, radiusKm: number) {
   };
 }
 
+/** One WMS request: the elevations (meters) of the window as a raster of the given size. */
+export async function fetchElevationRaster(
+  bounds: Bounds,
+  width: number,
+  height: number
+): Promise<ElevationRaster> {
+  const params = new URLSearchParams({
+    SERVICE: 'WMS',
+    VERSION: '1.1.1',
+    REQUEST: 'GetMap',
+    LAYERS: 'LOLA_elev',
+    STYLES: '',
+    SRS: 'EPSG:4326',
+    BBOX: [bounds.west, bounds.south, bounds.east, bounds.north].join(','),
+    WIDTH: String(width),
+    HEIGHT: String(height),
+    FORMAT: 'image/tiff',
+  });
+  const response = await fetch(`${WMS_URL}?${params}`, {
+    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+  });
+  if (!response.ok) throw new Error(`LOLA: HTTP ${response.status}`);
+  return parseElevationTiff(await response.arrayBuffer());
+}
+
 /** Requests LOLA elevations (meters) around the point from the USGS Web Map Service. */
 export async function fetchElevationTiles(
   lat: number,
@@ -76,21 +106,7 @@ export async function fetchElevationTiles(
   return Promise.all(
     planWindows(lat, lon, radiusKm).map(async (bounds) => {
       const { width, height } = imageSize(bounds, radiusKm);
-      const params = new URLSearchParams({
-        SERVICE: 'WMS',
-        VERSION: '1.1.1',
-        REQUEST: 'GetMap',
-        LAYERS: 'LOLA_elev',
-        STYLES: '',
-        SRS: 'EPSG:4326',
-        BBOX: [bounds.west, bounds.south, bounds.east, bounds.north].join(','),
-        WIDTH: String(width),
-        HEIGHT: String(height),
-        FORMAT: 'image/tiff',
-      });
-      const response = await fetch(`${WMS_URL}?${params}`);
-      if (!response.ok) throw new Error(`LOLA: HTTP ${response.status}`);
-      const raster = parseElevationTiff(await response.arrayBuffer());
+      const raster = await fetchElevationRaster(bounds, width, height);
       return { ...bounds, ...raster };
     })
   );

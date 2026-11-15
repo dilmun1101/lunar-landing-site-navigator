@@ -16,6 +16,7 @@ import {
 } from '@/features/scenario/demoScenario';
 import ExternalMapLinks from '@/features/scenario/ExternalMapLinks/ExternalMapLinks';
 import HorizonPanorama from '@/features/scenario/HorizonPanorama/HorizonPanorama';
+import NeighbourPanel from '@/features/scenario/NeighbourPanel/NeighbourPanel';
 import PlaybackControls from '@/features/scenario/PlaybackControls/PlaybackControls';
 import SkyPanel from '@/features/scenario/SkyPanel/SkyPanel';
 import { useHorizonProfile } from '@/features/scenario/useHorizonProfile/useHorizonProfile';
@@ -132,6 +133,16 @@ export default function ScenarioPage() {
     note = t('scenario.fetchError');
   }
 
+  // The same controls sit under the timeline and above the full-size sky view
+  const playbackControls = (
+    <PlaybackControls
+      playback={playback}
+      epoch={epoch}
+      durationMs={missionMs}
+      disabled={!real}
+    />
+  );
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between gap-3">
@@ -162,12 +173,7 @@ export default function ScenarioPage() {
         onSeek={real ? (day) => playback.seek(day * DAY_MS) : undefined}
       />
 
-      <PlaybackControls
-        playback={playback}
-        epoch={epoch}
-        durationMs={missionMs}
-        disabled={!real}
-      />
+      {playbackControls}
 
       <SkyPanel
         sun={shown.sun}
@@ -175,6 +181,12 @@ export default function ScenarioPage() {
         sunTrack={shown.sunTrack}
         earthTrack={shown.earthTrack}
         horizon={scenario.horizon}
+        expandedHeader={playbackControls}
+        site={
+          coordinates
+            ? { lat: coordinates.lat, lon: coordinates.lon }
+            : undefined
+        }
         footer={
           coordinates ? (
             <ExternalMapLinks coordinates={coordinates} />
@@ -188,6 +200,16 @@ export default function ScenarioPage() {
         horizon={scenario.horizon}
         maxElevation={panoramaScale}
         hasTerrain={!real || terrain.status === 'ready'}
+      />
+
+      <NeighbourPanel
+        center={
+          coordinates ? { lat: coordinates.lat, lon: coordinates.lon } : null
+        }
+        epoch={epoch}
+        durationDays={days}
+        criteria={criteria}
+        siteView={real}
       />
 
       <SourcesPanel

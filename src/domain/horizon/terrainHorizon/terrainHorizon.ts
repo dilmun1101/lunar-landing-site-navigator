@@ -21,7 +21,7 @@ const rad = (degrees: number) => (degrees * Math.PI) / 180;
 const deg = (radians: number) => (radians * 180) / Math.PI;
 
 /** The point reached from (lat, lon) along the bearing after the given angular distance. */
-function destination(
+export function destination(
   latDeg: number,
   lonDeg: number,
   bearingDeg: number,

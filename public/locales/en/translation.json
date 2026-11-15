@@ -22,8 +22,10 @@
     "title": "Landing site",
     "search": "Search landing sites…",
     "groups": {
-      "apollo": "Historical (Apollo)",
-      "clps": "CLPS / Artemis candidates"
+      "clps": "Artemis candidates",
+      "commercial": "Commercial landings (CLPS)",
+      "international": "Other countries",
+      "apollo": "Historical (Apollo)"
     },
     "custom": {
       "title": "Custom coordinates",
@@ -50,7 +52,11 @@
       "window": "Power + comms",
       "longestDarkness": "Longest darkness",
       "longestCommsGap": "Longest gap in Earth link",
-      "blackoutExceeded": "Longer than the battery limit"
+      "blackoutExceeded": "Longer than the battery limit",
+      "sunElevation": "Sun elevation",
+      "sunElevationMean": "≈ {{value}}° on average while lit",
+      "sunElevationMax": "{{value}}° at most during the mission",
+      "sunElevationNever": "The Sun does not rise during the mission"
     },
     "countdown": {
       "sunset": "Sunset in {{time}}",
@@ -67,7 +73,16 @@
       "sunUp": "The Sun is above the horizon",
       "sunDown": "The Sun is below the horizon",
       "earthUp": "Earth is visible: radio contact is possible",
-      "earthDown": "Earth is hidden: no radio contact"
+      "earthDown": "Earth is hidden: no radio contact",
+      "view": {
+        "label": "Map view",
+        "flat": "2D",
+        "globe": "3D",
+        "terrain": "Terrain"
+      },
+      "expand": "Expand",
+      "collapse": "Collapse",
+      "reload": "Reload map data"
     },
     "polar": {
       "title": "Polar sky chart",
@@ -162,6 +177,45 @@
       "copy": "Copy coordinates",
       "copied": "Copied",
       "hint": "These sites cannot be embedded, so they open in a new tab. Paste the coordinates into their search."
+    },
+    "globe": {
+      "aria": "The Moon: the red dot is the site, the yellow arrow points to the Sun, the blue one to the Earth",
+      "loading": "Loading 3D…",
+      "error": "Could not show the 3D view. Switch back to 2D.",
+      "note": "Drag to rotate the globe, scroll to zoom. Arrows go from the site to the Sun (yellow) and the Earth (blue); a grey arrow means the body is below the horizon.",
+      "reliefFailed": "Could not load the Moon's relief, so the globe is plain.",
+      "reliefRetry": "Reload relief"
+    },
+    "terrain": {
+      "loading": "Loading the terrain around the site…",
+      "error": "Could not load the terrain. Try again later or pick another view.",
+      "aria": "Terrain around the site: the red dot is the site, light and shadows depend on where the Sun is",
+      "note": "A 40 by 40 km patch around the site, heights stretched twice. The yellow disc is the Sun, the blue one the Earth (both drawn larger than in real life); a pale disc is a body behind a mountain. The white arrow points north. Drag to rotate, scroll to zoom.",
+      "retry": "Try again"
+    },
+    "neighbours": {
+      "title": "Nearby points",
+      "distance": "Distance to the points",
+      "km": "{{value}} km",
+      "intro": "The same scenario {{km}} km north, east, south and west of the site. Near the pole a nearby mountain or crater can hide the Sun or the Earth, so the result depends strongly on the exact landing point.",
+      "calculate": "Calculate",
+      "cost": "One LOLA terrain request and two Horizons requests per point.",
+      "waiting": "Wait for the site itself to be calculated first.",
+      "loading": "Calculating nearby points…",
+      "error": "Could not get data for the nearby points.",
+      "retry": "Try again",
+      "spread": "Sunlight ranges from {{sunMin}}% to {{sunMax}}%, the Earth link from {{earthMin}}% to {{earthMax}}%.",
+      "point": "Point",
+      "site": "Site",
+      "noData": "no data",
+      "direction": {
+        "n": "{{km}} km north",
+        "e": "{{km}} km east",
+        "s": "{{km}} km south",
+        "w": "{{km}} km west"
+      },
+      "open": "Open",
+      "openAria": "Open the point \"{{point}}\" as the site"
     }
   },
   "compare": {
@@ -182,6 +236,13 @@
     "best": {
       "title": "Best alternative",
       "text": "Shift launch by {{days}} days: +{{percent}}% sunlight"
+    },
+    "dock": {
+      "collapse": "Hide comparison",
+      "expand": "Show comparison",
+      "count": "Scenarios being compared: {{count}}",
+      "resize": "Resize the comparison panel",
+      "close": "Close comparison"
     }
   },
   "planner": {
@@ -284,7 +345,8 @@
     "longestCommsGap": "The longest continuous stretch when Earth is hidden and there is no direct radio contact.",
     "sunlightDuration": "Total time the Sun is above the horizon during the mission.",
     "earthWindow": "Total time Earth is visible and a direct radio link is possible.",
-    "heatmap": "Rows are landing sites, columns are launch dates. A greener cell means more sunlight and radio contact with Earth during the mission."
+    "heatmap": "Rows are landing sites, columns are launch dates. A greener cell means more sunlight and radio contact with Earth during the mission.",
+    "sunElevation": "How high the Sun stands above the horizon. The lower the Sun, the less power flat solar panels give, so near the pole they are mounted vertically. On Earth the noon Sun stands 30–80° high; at the Moon's south pole it barely clears the horizon, only a few degrees."
   },
   "welcome": {
     "title": "Welcome to Lunar Landing Navigator",
@@ -307,6 +369,8 @@
     "terrain": "Terrain horizon",
     "terrainText": "Horizon profile of 72 points (every 5° of azimuth) built from LOLA (LRO) elevation data. Source:",
     "terrainFlat": "LOLA data is not available for this point: a flat horizon is used, so the result is optimistic. Source:",
+    "libration": "Libration and curvature",
+    "librationText": "Libration (the Moon's wobble) is included: Horizons computes the direction from the site to the Earth with the Moon's actual orientation at every moment. So the Earth does not stand still in the sky but traces a loop: up to ~8° left or right and ~7° up or down from its mean position. Near the pole the Earth hangs low over the horizon, and this loop decides whether it clears the mountains. The Moon's curvature is included in the terrain horizon: distant mountains drop below the edge of the sphere.",
     "validation": "Check",
     "validationText": "At the six Apollo landing sites the Sun matches the NASA ALSJ values within 0.02° and Earth within 0.22°.",
     "criteria": "Thresholds applied",
@@ -346,6 +410,21 @@
     "playback": "Press Play and the mission time moves forward: the Sun and Earth drift across the sky and the bars and labels update. The slider rewinds the time, the buttons change the speed.",
     "panorama": "A 360° view all around you. North is at both edges, then east, south and west going around. The higher the dot, the higher the body is above the horizon. The dark shape is mountains and crater rims.",
     "temporal": "When the mission starts, in universal time (UTC). A lunar day lasts about 29.5 Earth days; the slider moves the date along the lunar cycle, the buttons move it by a day.",
-    "bestWindows": "The best start day is found for every site: the better the result, the more of the mission has both light and a link to Earth. Click a row to open it in detail."
+    "bestWindows": "The best start day is found for every site: the better the result, the more of the mission has both light and a link to Earth. Click a row to open it in detail.",
+    "skyGlobe": "This is a model of the Moon as it would look from space. The red dot is your site. The yellow arrow shows where the Sun is, the blue one where the Earth is. A grey arrow means that body is below the horizon right now and cannot be seen from the site. The bright part of the ball is day, the dark part is night. Drag the ball to turn it.",
+    "skyTerrain": "This is the ground around the site — a 40 by 40 kilometer patch from lunar orbiter laser data. The red dot is the site, the white arrow points north. The yellow disc is the Sun, the blue one the Earth; they are drawn larger than in real life, otherwise you could not see them. A pale disc means the body is behind a mountain right now. The lower the Sun, the longer the shadows; when it is below the horizon it is night. The relief is stretched twice in height. Drag to rotate, scroll to zoom.",
+    "neighbours": "How much the result depends on the exact spot. The table shows the same scenario a few kilometers from the site. The numbers next to the percentages are the difference from the site itself. \"Open\" makes the point the new site."
+  },
+  "sidebar": {
+    "title": "Settings",
+    "collapse": "Hide panel",
+    "expand": "Show panel",
+    "open": "Open parameters",
+    "close": "Close parameters"
+  },
+  "footer": {
+    "team": "Team",
+    "event": "NASA Space Apps Challenge 2026",
+    "author": "Author"
   }
 }
