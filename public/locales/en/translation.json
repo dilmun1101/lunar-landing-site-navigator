@@ -338,5 +338,14 @@
       }
     },
     "disclaimer": "Made for the NASA Space Apps Challenge 2026. Not an official NASA product; thresholds for a viable site are project assumptions."
+  },
+  "help": {
+    "verdict": "The result for the chosen site and dates: Viable, Marginal or Not viable. It depends on how much of the mission has both sunlight (for power) and a direct link to Earth at the same time.",
+    "sky": "The sky seen from above. The edge of the circle is the horizon, the center is a higher point (the scale is zoomed in: near the Moon's pole the Sun and Earth stay very low). North is at the top. The yellow dot is the Sun, the blue dot is Earth, the grey area is the mountains on the horizon: nothing behind them can be seen. The dashed line is the path until the body sets.",
+    "timeline": "Three bars over the days of the mission: when the Sun is above the horizon (yellow), when Earth is visible (blue), and when there is both light and a link (green, the best time to operate). The white \"Now\" mark is the current moment: click the scale to move it.",
+    "playback": "Press Play and the mission time moves forward: the Sun and Earth drift across the sky and the bars and labels update. The slider rewinds the time, the buttons change the speed.",
+    "panorama": "A 360° view all around you. North is at both edges, then east, south and west going around. The higher the dot, the higher the body is above the horizon. The dark shape is mountains and crater rims.",
+    "temporal": "When the mission starts, in universal time (UTC). A lunar day lasts about 29.5 Earth days; the slider moves the date along the lunar cycle, the buttons move it by a day.",
+    "bestWindows": "The best start day is found for every site: the better the result, the more of the mission has both light and a link to Earth. Click a row to open it in detail."
   }
 }

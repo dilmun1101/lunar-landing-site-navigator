@@ -5,6 +5,7 @@ import Button from '@/components/ui/Button/Button';
 import Hint from '@/components/ui/Tooltip/Tooltip';
 import Panel from '@/components/ui/Panel/Panel';
 import SectionTitle from '@/components/ui/SectionTitle/SectionTitle';
+import TitleWithHint from '@/components/ui/TitleWithHint/TitleWithHint';
 import {
   plannerStarts,
   type PlannerMetric,
@@ -155,7 +156,9 @@ export default function PlannerPage() {
       </div>
 
       <Panel className="flex flex-col gap-3">
-        <SectionTitle>{t('planner.best.title')}</SectionTitle>
+        <TitleWithHint hint={t('help.bestWindows')}>
+          {t('planner.best.title')}
+        </TitleWithHint>
         <BestWindowsList
           windows={bestWindows}
           criteria={criteria}

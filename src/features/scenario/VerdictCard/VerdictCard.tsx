@@ -5,7 +5,7 @@ import Badge from '@/components/ui/Badge/Badge';
 import Hint from '@/components/ui/Tooltip/Tooltip';
 import MetricTile from '@/components/ui/MetricTile/MetricTile';
 import Panel from '@/components/ui/Panel/Panel';
-import SectionTitle from '@/components/ui/SectionTitle/SectionTitle';
+import TitleWithHint from '@/components/ui/TitleWithHint/TitleWithHint';
 import { verdictSentence } from '@/domain/metrics/verdictSentence/verdictSentence';
 import { addDays } from '@/domain/time/lunarDay/lunarDay';
 import type { ScenarioView } from '@/features/scenario/demoScenario';
@@ -55,7 +55,9 @@ export default function VerdictCard({
     <Panel className={classNames('flex flex-col gap-5', className)}>
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="flex flex-col gap-2">
-          <SectionTitle>{t('scenario.verdict.title')}</SectionTitle>
+          <TitleWithHint hint={t('help.verdict')}>
+            {t('scenario.verdict.title')}
+          </TitleWithHint>
           <div className="flex flex-wrap items-center gap-3">
             <h1 className="text-2xl font-semibold text-slate-100">
               {scenario.siteName}

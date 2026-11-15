@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import Panel from '@/components/ui/Panel/Panel';
-import SectionTitle from '@/components/ui/SectionTitle/SectionTitle';
+import TitleWithHint from '@/components/ui/TitleWithHint/TitleWithHint';
 import {
   azimuthTicks,
   elevationTicks,
@@ -88,7 +88,9 @@ export default function HorizonPanorama({
 
   return (
     <Panel className={classNames('flex flex-col gap-3', className)}>
-      <SectionTitle>{t('scenario.panorama.title')}</SectionTitle>
+      <TitleWithHint hint={t('help.panorama')}>
+        {t('scenario.panorama.title')}
+      </TitleWithHint>
 
       {/* On a narrow screen the strip scrolls sideways instead of shrinking the text */}
       <div className="overflow-x-auto">
