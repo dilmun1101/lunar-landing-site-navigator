@@ -7,6 +7,7 @@ import type { TerrainGrid } from '@/domain/terrain/terrainGrid/terrainGrid';
 import { terrainElevationAt } from '@/domain/horizon/horizonProfile/horizonProfile';
 import { skyBodyPosition } from '@/domain/terrain/skyBodyPosition/skyBodyPosition';
 import { terrainMesh } from '@/domain/terrain/terrainMesh/terrainMesh';
+import Button from '@/components/ui/Button/Button';
 import GlobeControls from '@/features/scenario/MoonGlobe/GlobeControls';
 import { useSiteTerrain } from '@/features/scenario/useSiteTerrain/useSiteTerrain';
 
@@ -192,7 +193,10 @@ export default function SiteTerrainView({
 
   if (terrain.status === 'error') {
     return (
-      <p className="text-sm text-slate-400">{t('scenario.terrain.error')}</p>
+      <div className="flex flex-col items-start gap-3">
+        <p className="text-sm text-slate-400">{t('scenario.terrain.error')}</p>
+        <Button onClick={terrain.retry}>{t('scenario.terrain.retry')}</Button>
+      </div>
     );
   }
   if (terrain.status !== 'ready') {

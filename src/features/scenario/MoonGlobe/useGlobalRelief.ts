@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { fetchGlobalRelief } from '@/lib/lola/globalRelief/globalRelief';
 import type { ElevationRaster } from '@/lib/lola/parseElevationTiff/parseElevationTiff';
 
@@ -13,21 +13,46 @@ function load(): Promise<ElevationRaster> {
   return pending;
 }
 
-/** The height map of the whole Moon; null while it loads or if it failed (the globe stays plain). */
-export function useGlobalRelief(): ElevationRaster | null {
-  const [raster, setRaster] = useState<ElevationRaster | null>(null);
+/** Forget the downloaded map, so that the next mount downloads it again. */
+export function forgetGlobalRelief(): void {
+  pending = undefined;
+}
+
+export interface GlobalRelief {
+  /** The height map of the whole Moon; null while it loads or if it failed (the globe stays plain). */
+  raster: ElevationRaster | null;
+  failed: boolean;
+  /** Download the map again after a failure */
+  retry: () => void;
+}
+
+export function useGlobalRelief(): GlobalRelief {
+  const [attempt, setAttempt] = useState(0);
+  const [result, setResult] = useState<{
+    attempt: number;
+    raster: ElevationRaster | null;
+  } | null>(null);
+  const retry = useCallback(() => setAttempt((count) => count + 1), []);
 
   useEffect(() => {
     let cancelled = false;
     load()
-      .then((result) => {
-        if (!cancelled) setRaster(result);
+      .then((raster) => {
+        if (!cancelled) setResult({ attempt, raster });
       })
-      .catch(() => {});
+      .catch((error: unknown) => {
+        console.error(error);
+        if (!cancelled) setResult({ attempt, raster: null });
+      });
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [attempt]);
 
-  return raster;
+  const current = result?.attempt === attempt ? result : null;
+  return {
+    raster: current?.raster ?? null,
+    failed: current !== null && current.raster === null,
+    retry,
+  };
 }

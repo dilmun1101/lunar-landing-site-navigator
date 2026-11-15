@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import Button from '@/components/ui/Button/Button';
+import { useCompareDock } from '@/hooks/useCompareDock/useCompareDock';
 import { useCompareList } from '@/state/useCompareList/useCompareList';
 import {
   getSiteName,
@@ -26,6 +27,8 @@ export default function AddToComparisonButton({
       duration,
       coordinates: resolveCoordinates(siteId, customSite),
     });
+    // Show the result: the panel opens by itself
+    useCompareDock.getState().setOpen(true);
   };
 
   return (

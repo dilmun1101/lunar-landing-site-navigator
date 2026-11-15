@@ -51,6 +51,10 @@ export default function PlannerPage() {
   // A beginner sees one simple picture: light and Earth link together
   const metric: PlannerMetric = beginner ? 'window' : expertMetric;
   const [hovered, setHovered] = useState<HoveredCell | null>(null);
+  // A click pins a cell: its details stay below until another cell is picked
+  const [selected, setSelected] = useState<HoveredCell | null>(null);
+  // The pointer shows a preview; without it the pinned cell is shown
+  const shownCell = hovered ?? selected;
 
   const days = durationDays[duration];
   // Columns start at the beginning of the selected UTC day
@@ -99,20 +103,22 @@ export default function PlannerPage() {
     return compareItems.length >= MAX_COMPARE_ITEMS ? 'full' : 'add';
   };
 
-  const hoveredValue = hovered ? values[hovered.row]?.[hovered.col] : undefined;
-  const hoveredSite = hovered ? plannerSites[hovered.row] : undefined;
-  const hoveredState = hoveredSite ? states[hoveredSite.id] : undefined;
+  const shownValue = shownCell
+    ? values[shownCell.row]?.[shownCell.col]
+    : undefined;
+  const shownSite = shownCell ? plannerSites[shownCell.row] : undefined;
+  const shownState = shownSite ? states[shownSite.id] : undefined;
   let details: HeatmapDetails | undefined;
-  if (hovered && hoveredSite && hoveredState?.status === 'ready') {
-    const { sunlight, comms, window } = hoveredState.values;
+  if (shownCell && shownSite && shownState?.status === 'ready') {
+    const { sunlight, comms, window } = shownState.values;
     details = {
-      coordinates: hoveredSite.coordinates,
+      coordinates: shownSite.coordinates,
       metrics: {
-        sunlight: sunlight[hovered.col] ?? 0,
-        comms: comms[hovered.col] ?? 0,
-        window: window[hovered.col] ?? 0,
+        sunlight: sunlight[shownCell.col] ?? 0,
+        comms: comms[shownCell.col] ?? 0,
+        window: window[shownCell.col] ?? 0,
       },
-      best: hoveredState.best,
+      best: shownState.best,
     };
   }
 
@@ -183,13 +189,15 @@ export default function PlannerPage() {
           values={values}
           hovered={hovered}
           onHover={setHovered}
+          selected={selected}
+          onSelect={setSelected}
         />
 
         <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 pt-3">
           <HeatmapTooltip
-            site={hovered ? plannerSites[hovered.row]?.name : undefined}
-            date={hovered ? dates[hovered.col] : undefined}
-            value={hoveredValue}
+            site={shownCell ? plannerSites[shownCell.row]?.name : undefined}
+            date={shownCell ? dates[shownCell.col] : undefined}
+            value={shownValue}
             criteria={criteria}
             details={details}
           />

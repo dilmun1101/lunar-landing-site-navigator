@@ -13,6 +13,9 @@ interface ViabilityHeatmapProps {
   values: (number[] | null)[];
   hovered: HoveredCell | null;
   onHover: (cell: HoveredCell | null) => void;
+  /** The cell pinned by a click: its details stay open when the pointer leaves */
+  selected: HoveredCell | null;
+  onSelect: (cell: HoveredCell | null) => void;
   className?: string;
 }
 
@@ -22,6 +25,8 @@ export default function ViabilityHeatmap({
   values,
   hovered,
   onHover,
+  selected,
+  onSelect,
   className,
 }: ViabilityHeatmapProps) {
   const { t, i18n } = useTranslation();
@@ -81,17 +86,24 @@ export default function ViabilityHeatmap({
                   );
                 }
                 const isHovered = hovered?.row === row && hovered.col === col;
+                const isSelected =
+                  selected?.row === row && selected.col === col;
                 return (
                   <button
                     key={date.toISOString()}
                     type="button"
                     aria-label={`${site.name}, ${dateFormat.format(date)}: ${value}%`}
+                    aria-pressed={isSelected}
+                    onClick={() => onSelect(isSelected ? null : { row, col })}
                     onMouseEnter={() => onHover({ row, col })}
                     onFocus={() => onHover({ row, col })}
                     onBlur={() => onHover(null)}
                     className={classNames(
                       'h-7 cursor-pointer rounded-sm border border-white/5 transition-shadow hover:ring-2 hover:ring-accent focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none',
-                      { 'ring-2 ring-accent': isHovered }
+                      {
+                        'ring-2 ring-accent': isHovered,
+                        'ring-2 ring-white': isSelected && !isHovered,
+                      }
                     )}
                     style={{
                       backgroundColor: `rgb(52 211 153 / ${value / 100})`,
