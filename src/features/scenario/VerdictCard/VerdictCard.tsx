@@ -6,6 +6,7 @@ import Hint from '@/components/ui/Tooltip/Tooltip';
 import MetricTile from '@/components/ui/MetricTile/MetricTile';
 import Panel from '@/components/ui/Panel/Panel';
 import SectionTitle from '@/components/ui/SectionTitle/SectionTitle';
+import { verdictSentence } from '@/domain/metrics/verdictSentence/verdictSentence';
 import { addDays } from '@/domain/time/lunarDay/lunarDay';
 import type { ScenarioView } from '@/features/scenario/demoScenario';
 import { useMode } from '@/hooks/useMode/useMode';
@@ -41,6 +42,15 @@ export default function VerdictCard({
     ? dayFormat.format(endDate)
     : formatUtcDateTime(endDate, i18n.language);
 
+  const sentence = beginner
+    ? verdictSentence({
+        verdict: scenario.verdict,
+        sunlightPercent: scenario.sunlightPercent,
+        earthLinkPercent: scenario.earthLinkPercent,
+        blackoutExceeded: scenario.blackoutExceeded,
+      })
+    : null;
+
   return (
     <Panel className={classNames('flex flex-col gap-5', className)}>
       <div className="flex flex-wrap items-start justify-between gap-4">
@@ -59,6 +69,26 @@ export default function VerdictCard({
               {beginner ? '' : ' UTC'}
             </span>
           </p>
+          {sentence && (
+            <p className="max-w-prose text-sm leading-relaxed text-slate-200">
+              <span className="font-semibold">
+                {t(
+                  `scenario.sentence.intro.${
+                    sentence.verdict === 'not-viable'
+                      ? 'notViable'
+                      : sentence.verdict
+                  }`
+                )}
+              </span>{' '}
+              {t('scenario.sentence.body', {
+                sun: t(`scenario.sentence.freq.${sentence.sun}`),
+                earth: t(`scenario.sentence.freq.${sentence.earth}`),
+              })}
+              {sentence.reason
+                ? ` ${t(`scenario.sentence.reason.${sentence.reason}`)}`
+                : null}
+            </p>
+          )}
         </div>
         {children}
       </div>

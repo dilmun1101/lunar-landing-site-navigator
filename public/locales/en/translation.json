@@ -106,7 +106,26 @@
     "dataNoteFlatApprox": "Data: JPL Horizons (DE441), airless, flat horizon — no LOLA terrain data for this site; coordinates are the approximate region center",
     "noData": "This site has no coordinates yet — showing demo values",
     "fetchError": "Could not load data from JPL Horizons — showing demo values",
-    "loading": "Loading data from JPL Horizons…"
+    "loading": "Loading data from JPL Horizons…",
+    "sentence": {
+      "intro": {
+        "viable": "A good place to land.",
+        "marginal": "Workable, with caveats.",
+        "notViable": "Not suitable for this mission."
+      },
+      "body": "The Sun shines {{sun}}, and Earth is in view {{earth}}.",
+      "freq": {
+        "always": "almost all the time",
+        "mostly": "most of the time",
+        "sometimes": "only part of the time",
+        "rarely": "almost never"
+      },
+      "reason": {
+        "battery": "The night lasts longer than the battery can hold.",
+        "sun": "The main problem is too little sunlight.",
+        "earth": "The main problem is too little time in contact with Earth."
+      }
+    }
   },
   "compare": {
     "title": "Compare scenarios",
