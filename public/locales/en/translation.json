@@ -298,5 +298,32 @@
     "validationText": "At the six Apollo landing sites the Sun matches the NASA ALSJ values within 0.02° and Earth within 0.22°.",
     "criteria": "Thresholds applied",
     "assumption": "The viable and marginal shares are project assumptions, not NASA requirements."
+  },
+  "resources": {
+    "title": "Sources and resources",
+    "newTab": "(opens in a new tab)",
+    "items": {
+      "horizons": {
+        "name": "JPL Horizons",
+        "description": "Positions of the Sun and Earth as seen from a point on the Moon (the data behind every calculation)."
+      },
+      "usgs": {
+        "name": "USGS Astrogeology",
+        "description": "Web service with LRO LOLA elevation data, used to build the terrain horizon."
+      },
+      "quickmap": {
+        "name": "LROC Quickmap",
+        "description": "Interactive map of the Moon from LRO data; good for checking terrain and illumination."
+      },
+      "moonTrek": {
+        "name": "NASA Moon Trek",
+        "description": "NASA 3D lunar exploration portal; shows how terrain shapes the horizon."
+      },
+      "csa": {
+        "name": "CSA Moon Exploration",
+        "description": "Canadian Space Agency: past, current and future lunar missions."
+      }
+    },
+    "disclaimer": "Made for the NASA Space Apps Challenge 2026. Not an official NASA product; thresholds for a viable site are project assumptions."
   }
 }

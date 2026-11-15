@@ -3,6 +3,7 @@ export const externalLinks = {
   quickmap: 'https://quickmap.lroc.asu.edu/',
   moonTrek: 'https://trek.nasa.gov/moon/',
   horizons: 'https://ssd.jpl.nasa.gov/horizons/',
+  usgsAstrogeology: 'https://astrogeology.usgs.gov/',
   csaMoonExploration:
     'https://www.asc-csa.gc.ca/eng/astronomy/moon-exploration/',
 } as const;
