@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import Panel from '@/components/ui/Panel/Panel';
 import SectionTitle from '@/components/ui/SectionTitle/SectionTitle';
@@ -13,6 +14,8 @@ interface SkyPanelProps {
   sunTrack: SkyPoint[];
   earthTrack: SkyPoint[];
   horizon: number[];
+  /** E.g. links to external maps — shown under the chart */
+  footer?: ReactNode;
   className?: string;
 }
 
@@ -22,6 +25,7 @@ export default function SkyPanel({
   sunTrack,
   earthTrack,
   horizon,
+  footer,
   className,
 }: SkyPanelProps) {
   const { t, i18n } = useTranslation();
@@ -123,6 +127,8 @@ export default function SkyPanel({
           </p>
         </div>
       </div>
+
+      {footer && <div className="border-t border-white/10 pt-4">{footer}</div>}
     </Panel>
   );
 }

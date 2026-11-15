@@ -10,6 +10,7 @@ import {
   type ScenarioView,
   type Segment,
 } from '@/features/scenario/demoScenario';
+import ExternalMapLinks from '@/features/scenario/ExternalMapLinks/ExternalMapLinks';
 import PlaybackControls from '@/features/scenario/PlaybackControls/PlaybackControls';
 import SkyPanel from '@/features/scenario/SkyPanel/SkyPanel';
 import { useHorizonProfile } from '@/features/scenario/useHorizonProfile/useHorizonProfile';
@@ -159,6 +160,11 @@ export default function ScenarioPage() {
         sunTrack={shown.sunTrack}
         earthTrack={shown.earthTrack}
         horizon={scenario.horizon}
+        footer={
+          coordinates ? (
+            <ExternalMapLinks coordinates={coordinates} />
+          ) : undefined
+        }
       />
 
       <SourcesPanel
