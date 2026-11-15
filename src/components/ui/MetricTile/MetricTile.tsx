@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import Panel from '@/components/ui/Panel/Panel';
+import Hint from '@/components/ui/Tooltip/Tooltip';
 
 const barColor = {
   sun: 'bg-sun',
@@ -10,6 +11,8 @@ const barColor = {
 
 interface MetricTileProps {
   label: string;
+  /** Beginner-mode explanation of the metric */
+  hint?: string;
   /** Value in percent, 0–100 */
   percent: number;
   color: keyof typeof barColor;
@@ -18,6 +21,7 @@ interface MetricTileProps {
 
 export default function MetricTile({
   label,
+  hint,
   percent,
   color,
   className,
@@ -30,8 +34,9 @@ export default function MetricTile({
 
   return (
     <Panel className={classNames('flex flex-col gap-2 p-3', className)}>
-      <span className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">
+      <span className="flex items-center gap-1.5 text-[11px] font-semibold tracking-wider text-slate-500 uppercase">
         {label}
+        {hint && <Hint text={hint} />}
       </span>
       <span className="font-mono text-3xl font-semibold text-slate-100">
         {value}

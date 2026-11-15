@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import Badge from '@/components/ui/Badge/Badge';
 import Panel from '@/components/ui/Panel/Panel';
+import Hint from '@/components/ui/Tooltip/Tooltip';
 import type { ScenarioView } from '@/features/scenario/demoScenario';
 import { useMode } from '@/hooks/useMode/useMode';
 import { formatDurationFor } from '@/lib/formatDuration/formatDuration';
@@ -89,6 +90,9 @@ export default function ScenarioCard({
                 )}
               />
               {t(`compare.card.${stat.key}`)}
+              {stat.key !== 'solarElevation' && (
+                <Hint text={t(`hints.${stat.key}`)} />
+              )}
             </dt>
             <dd className="mt-auto font-mono text-sm text-slate-100">
               {stat.value}

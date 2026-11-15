@@ -213,5 +213,15 @@
       "label": "“Marginal” from, %",
       "hint": "Share of the mission from which the site is marginal; below it the site is not viable."
     }
+  },
+  "hints": {
+    "what": "What is this?",
+    "sunlight": "Share of the mission when the Sun is above the local horizon. No sunlight means solar panels produce nothing and the lander gets cold.",
+    "earthLink": "Share of the mission when Earth is visible from the site, so the lander can talk to Mission Control directly by radio.",
+    "window": "Share of the mission when there is both sunlight for power and a direct link to Earth. This is the best time to operate.",
+    "longestDarkness": "The longest continuous stretch without sunlight. The battery has to last that long.",
+    "longestCommsGap": "The longest continuous stretch when Earth is hidden and there is no direct radio contact.",
+    "sunlightDuration": "Total time the Sun is above the horizon during the mission.",
+    "earthWindow": "Total time Earth is visible and a direct radio link is possible."
   }
 }
