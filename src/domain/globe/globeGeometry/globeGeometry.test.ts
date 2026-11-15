@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   directionToBody,
+  graticule,
   isAboveHorizon,
   localFrame,
   surfacePoint,
@@ -86,5 +87,25 @@ describe('isAboveHorizon', () => {
     expect(isAboveHorizon(directionToBody(-80, 10, 40, -2), -80, 10)).toBe(
       false
     );
+  });
+});
+
+describe('graticule', () => {
+  it('has 5 parallels and 12 meridians at a 30 degree step', () => {
+    const numbers = graticule(30, 8);
+    // (5 + 12) lines * 8 segments * 6 numbers
+    expect(numbers.length).toBe((5 + 12) * 8 * 6);
+  });
+
+  it('keeps every point on the requested radius', () => {
+    const numbers = graticule(30, 8, 1.5);
+    for (let i = 0; i < numbers.length; i += 3) {
+      const r = Math.hypot(
+        numbers[i] as number,
+        numbers[i + 1] as number,
+        numbers[i + 2] as number
+      );
+      expect(r).toBeCloseTo(1.5, 9);
+    }
   });
 });

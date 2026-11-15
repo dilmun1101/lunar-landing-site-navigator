@@ -80,3 +80,34 @@ export function directionToBody(
  */
 export const isAboveHorizon = (direction: Vec3, lat: number, lon: number) =>
   dot(direction, surfacePoint(lat, lon)) > 0;
+
+/**
+ * Lines of the latitude/longitude grid as flat segment endpoints
+ * (x1, y1, z1, x2, y2, z2, ...), ready for a LineSegments geometry.
+ * Parallels go every `stepDeg` except the poles, meridians run pole to pole.
+ */
+export function graticule(
+  stepDeg = 30,
+  segmentsPerLine = 64,
+  radius = 1.002
+): number[] {
+  const out: number[] = [];
+  const push = (a: Vec3, b: Vec3) => out.push(...a, ...b);
+
+  for (let lat = -90 + stepDeg; lat < 90; lat += stepDeg) {
+    for (let i = 0; i < segmentsPerLine; i++) {
+      const lon1 = (i * 360) / segmentsPerLine;
+      const lon2 = ((i + 1) * 360) / segmentsPerLine;
+      push(surfacePoint(lat, lon1, radius), surfacePoint(lat, lon2, radius));
+    }
+  }
+
+  for (let lon = 0; lon < 360; lon += stepDeg) {
+    for (let i = 0; i < segmentsPerLine; i++) {
+      const lat1 = -90 + (i * 180) / segmentsPerLine;
+      const lat2 = -90 + ((i + 1) * 180) / segmentsPerLine;
+      push(surfacePoint(lat1, lon, radius), surfacePoint(lat2, lon, radius));
+    }
+  }
+  return out;
+}
