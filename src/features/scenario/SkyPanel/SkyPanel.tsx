@@ -109,6 +109,7 @@ export default function SkyPanel({
             {threeD && site ? (
               <>
                 <GlobeBoundary
+                  key={reloads}
                   fallback={
                     <p className="text-sm text-slate-400">
                       {t('scenario.globe.error')}
