@@ -11,6 +11,8 @@ const WMS_URL = '/usgs-wms';
 
 const KM_PER_DEGREE = (2 * Math.PI * 1737.4) / 360;
 const MAX_PIXELS = 2048;
+/** A request that hangs must end with an error, so that the user can retry */
+const REQUEST_TIMEOUT_MS = 45_000;
 /** LOLA global DEM: 256 pixels per degree ≈ 118 m */
 const NATIVE_CELL_KM = 0.12;
 
@@ -88,7 +90,9 @@ export async function fetchElevationRaster(
     HEIGHT: String(height),
     FORMAT: 'image/tiff',
   });
-  const response = await fetch(`${WMS_URL}?${params}`);
+  const response = await fetch(`${WMS_URL}?${params}`, {
+    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+  });
   if (!response.ok) throw new Error(`LOLA: HTTP ${response.status}`);
   return parseElevationTiff(await response.arrayBuffer());
 }

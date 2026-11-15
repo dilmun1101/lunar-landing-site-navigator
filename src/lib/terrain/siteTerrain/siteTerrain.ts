@@ -22,6 +22,13 @@ const pending = new Map<string, Promise<TerrainGrid>>();
 export const peekSiteTerrain = (site: TerrainSite): TerrainGrid | null =>
   memory.get(horizonKey(site)) ?? null;
 
+/** Forget the grid and any request in flight, so that the next fetch asks the service again. */
+export function forgetSiteTerrain(site: TerrainSite): void {
+  const key = horizonKey(site);
+  memory.delete(key);
+  pending.delete(key);
+}
+
 /**
  * Terrain around the site: LOLA elevations are requested from the USGS web service,
  * the corners of the square need a circle of radius * sqrt(2).

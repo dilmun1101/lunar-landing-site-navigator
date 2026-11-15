@@ -8,6 +8,8 @@ import type { SkyPoint } from '@/features/scenario/demoScenario';
 import { useMode } from '@/hooks/useMode/useMode';
 import Legend from '@/features/scenario/Legend/Legend';
 import ExpandableView from '@/components/ui/ExpandableView/ExpandableView';
+import { forgetGlobalRelief } from '@/features/scenario/MoonGlobe/useGlobalRelief';
+import { forgetSiteTerrain } from '@/lib/terrain/siteTerrain/siteTerrain';
 import GlobeBoundary from '@/features/scenario/MoonGlobe/GlobeBoundary';
 import PolarSkyChart from '@/features/scenario/PolarSkyChart/PolarSkyChart';
 import { webglAvailable } from '@/lib/webgl/webglAvailable';
@@ -51,6 +53,13 @@ export default function SkyPanel({
   const [view, setView] = useState<SkyView>('flat');
   const canShowGlobe = site !== undefined && webglAvailable();
   const threeD = canShowGlobe && view !== 'flat';
+  // A new key rebuilds the 3D view, which then downloads the map again
+  const [reloads, setReloads] = useState(0);
+  const reloadMap = () => {
+    if (site && view === 'terrain') forgetSiteTerrain(site);
+    else forgetGlobalRelief();
+    setReloads((count) => count + 1);
+  };
 
   const elevationFormat = new Intl.NumberFormat(i18n.language, {
     minimumFractionDigits: 1,
@@ -98,41 +107,54 @@ export default function SkyPanel({
         <div className="flex flex-col gap-2">
           <ExpandableView header={expandedHeader}>
             {threeD && site ? (
-              <GlobeBoundary
-                fallback={
-                  <p className="text-sm text-slate-400">
-                    {t('scenario.globe.error')}
-                  </p>
-                }
-              >
-                <Suspense
+              <>
+                <GlobeBoundary
                   fallback={
                     <p className="text-sm text-slate-400">
-                      {t('scenario.globe.loading')}
+                      {t('scenario.globe.error')}
                     </p>
                   }
                 >
-                  {view === 'terrain' ? (
-                    <SiteTerrainView
-                      lat={site.lat}
-                      lon={site.lon}
-                      sun={sun}
-                      earth={earth}
-                      horizon={horizon}
-                      className="size-full"
-                    />
-                  ) : (
-                    <MoonGlobe
-                      lat={site.lat}
-                      lon={site.lon}
-                      sun={sun}
-                      earth={earth}
-                      ariaLabel={t('scenario.globe.aria')}
-                      className="size-full"
-                    />
-                  )}
-                </Suspense>
-              </GlobeBoundary>
+                  <Suspense
+                    fallback={
+                      <p className="text-sm text-slate-400">
+                        {t('scenario.globe.loading')}
+                      </p>
+                    }
+                  >
+                    {view === 'terrain' ? (
+                      <SiteTerrainView
+                        key={reloads}
+                        lat={site.lat}
+                        lon={site.lon}
+                        sun={sun}
+                        earth={earth}
+                        horizon={horizon}
+                        className="size-full"
+                      />
+                    ) : (
+                      <MoonGlobe
+                        key={reloads}
+                        lat={site.lat}
+                        lon={site.lon}
+                        sun={sun}
+                        earth={earth}
+                        ariaLabel={t('scenario.globe.aria')}
+                        className="size-full"
+                      />
+                    )}
+                  </Suspense>
+                </GlobeBoundary>
+                <button
+                  type="button"
+                  onClick={reloadMap}
+                  title={t('scenario.sky.reload')}
+                  aria-label={t('scenario.sky.reload')}
+                  className="absolute top-2 left-2 z-10 flex size-8 items-center justify-center rounded-lg border border-white/15 bg-space-900/80 text-lg leading-none text-slate-300 backdrop-blur transition-colors hover:text-accent focus-visible:outline-2 focus-visible:outline-earth"
+                >
+                  <span aria-hidden="true">↻</span>
+                </button>
+              </>
             ) : (
               <PolarSkyChart
                 className="size-full"

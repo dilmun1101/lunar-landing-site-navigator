@@ -7,6 +7,8 @@ import {
   RGBAFormat,
   SRGBColorSpace,
 } from 'three';
+import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 import type { SkyPosition } from '@/domain/ephemeris/sunEarthPosition/sunEarthPosition';
 import {
   directionToBody,
@@ -15,6 +17,7 @@ import {
 } from '@/domain/globe/globeGeometry/globeGeometry';
 import { reliefPixels } from '@/domain/globe/reliefTexture/reliefTexture';
 import type { ElevationRaster } from '@/lib/lola/parseElevationTiff/parseElevationTiff';
+import Button from '@/components/ui/Button/Button';
 import BodyArrow from './BodyArrow';
 import GlobeControls from './GlobeControls';
 import { useGlobalRelief } from './useGlobalRelief';
@@ -87,7 +90,8 @@ export default function MoonGlobe({
   const grid = useMemo(() => new Float32Array(graticule()), []);
 
   // The real relief arrives a moment later; until then (or if it fails) the ball is plain.
-  const relief = useGlobalRelief();
+  const { t } = useTranslation();
+  const { raster: relief, failed, retry } = useGlobalRelief();
   const textures = useMemo(() => {
     if (!relief) return null;
     const color = grayTexture(relief, LOWLAND_GRAY, HIGHLAND_GRAY);
@@ -103,7 +107,11 @@ export default function MoonGlobe({
   );
 
   return (
-    <div className={className} role="img" aria-label={ariaLabel}>
+    <div
+      className={classNames('relative', className)}
+      role="img"
+      aria-label={ariaLabel}
+    >
       <Canvas
         frameloop="demand"
         dpr={[1, 2]}
@@ -157,6 +165,14 @@ export default function MoonGlobe({
 
         <GlobeControls home={home} />
       </Canvas>
+      {failed && (
+        <div className="absolute bottom-2 left-2 flex max-w-[calc(100%-1rem)] flex-wrap items-center gap-2 rounded-lg bg-space-900/80 p-2 text-xs text-slate-300">
+          <span>{t('scenario.globe.reliefFailed')}</span>
+          <Button onClick={retry} className="px-2 py-1 text-xs">
+            {t('scenario.globe.reliefRetry')}
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

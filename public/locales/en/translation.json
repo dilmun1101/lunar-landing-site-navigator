@@ -75,7 +75,8 @@
         "terrain": "Terrain"
       },
       "expand": "Expand",
-      "collapse": "Collapse"
+      "collapse": "Collapse",
+      "reload": "Reload map data"
     },
     "polar": {
       "title": "Polar sky chart",
@@ -175,13 +176,16 @@
       "aria": "The Moon: the red dot is the site, the yellow arrow points to the Sun, the blue one to the Earth",
       "loading": "Loading 3D…",
       "error": "Could not show the 3D view. Switch back to 2D.",
-      "note": "Drag to rotate the globe, scroll to zoom. Arrows go from the site to the Sun (yellow) and the Earth (blue); a grey arrow means the body is below the horizon."
+      "note": "Drag to rotate the globe, scroll to zoom. Arrows go from the site to the Sun (yellow) and the Earth (blue); a grey arrow means the body is below the horizon.",
+      "reliefFailed": "Could not load the Moon's relief, so the globe is plain.",
+      "reliefRetry": "Reload relief"
     },
     "terrain": {
       "loading": "Loading the terrain around the site…",
       "error": "Could not load the terrain. Try again later or pick another view.",
       "aria": "Terrain around the site: the red dot is the site, light and shadows depend on where the Sun is",
-      "note": "A 40 by 40 km patch around the site, heights stretched twice. The yellow disc is the Sun, the blue one the Earth (both drawn larger than in real life); a pale disc is a body behind a mountain. The white arrow points north. Drag to rotate, scroll to zoom."
+      "note": "A 40 by 40 km patch around the site, heights stretched twice. The yellow disc is the Sun, the blue one the Earth (both drawn larger than in real life); a pale disc is a body behind a mountain. The white arrow points north. Drag to rotate, scroll to zoom.",
+      "retry": "Try again"
     }
   },
   "compare": {
