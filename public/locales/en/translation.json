@@ -162,7 +162,10 @@
     "tooltip": {
       "site": "Site",
       "date": "Date",
-      "value": "Value"
+      "value": "Value",
+      "coordinates": "Coordinates",
+      "metrics": "Start date",
+      "best": "Best start of the site"
     },
     "hint": "Hover a cell to see details",
     "legend": {

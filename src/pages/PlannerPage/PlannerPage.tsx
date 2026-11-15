@@ -13,7 +13,9 @@ import BestWindowsList, {
   type BestWindow,
   type CompareState,
 } from '@/features/planner/BestWindowsList/BestWindowsList';
-import HeatmapTooltip from '@/features/planner/HeatmapTooltip/HeatmapTooltip';
+import HeatmapTooltip, {
+  type HeatmapDetails,
+} from '@/features/planner/HeatmapTooltip/HeatmapTooltip';
 import MetricToggle from '@/features/planner/MetricToggle/MetricToggle';
 import { plannerSites } from '@/features/planner/plannerSites';
 import { usePlannerData } from '@/features/planner/usePlannerData/usePlannerData';
@@ -97,6 +99,21 @@ export default function PlannerPage() {
   };
 
   const hoveredValue = hovered ? values[hovered.row]?.[hovered.col] : undefined;
+  const hoveredSite = hovered ? plannerSites[hovered.row] : undefined;
+  const hoveredState = hoveredSite ? states[hoveredSite.id] : undefined;
+  let details: HeatmapDetails | undefined;
+  if (hovered && hoveredSite && hoveredState?.status === 'ready') {
+    const { sunlight, comms, window } = hoveredState.values;
+    details = {
+      coordinates: hoveredSite.coordinates,
+      metrics: {
+        sunlight: sunlight[hovered.col] ?? 0,
+        comms: comms[hovered.col] ?? 0,
+        window: window[hovered.col] ?? 0,
+      },
+      best: hoveredState.best,
+    };
+  }
 
   const rows = plannerSites.map((site) => states[site.id]);
   const ready = rows.filter((row) => row?.status === 'ready').length;
@@ -171,6 +188,7 @@ export default function PlannerPage() {
             date={hovered ? dates[hovered.col] : undefined}
             value={hoveredValue}
             criteria={criteria}
+            details={details}
           />
           <div className="flex items-center gap-2 text-xs text-slate-500">
             {t('planner.legend.low')}
