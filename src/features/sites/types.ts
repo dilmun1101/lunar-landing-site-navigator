@@ -1,4 +1,5 @@
-export type SiteGroup = 'clps' | 'apollo';
+/** clps — Artemis candidate regions; commercial — landings of NASA CLPS companies */
+export type SiteGroup = 'clps' | 'commercial' | 'international' | 'apollo';
 
 export interface SiteCoordinates {
   /** Latitude, degrees (south is negative) */
@@ -16,6 +17,6 @@ export interface CatalogSite {
   group: SiteGroup;
   /** No coordinates — Horizons data cannot be requested for the site */
   coordinates?: SiteCoordinates;
-  /** Historical landing time, ISO 8601 UTC (Apollo only) */
+  /** Historical landing time, ISO 8601 UTC (missions that have landed) */
   landing?: string;
 }

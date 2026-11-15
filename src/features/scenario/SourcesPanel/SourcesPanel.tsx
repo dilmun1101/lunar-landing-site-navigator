@@ -68,6 +68,9 @@ export default function SourcesPanel({
           </a>
         </dd>
 
+        <dt className="text-slate-500">{t('sources.libration')}</dt>
+        <dd className="text-slate-200">{t('sources.librationText')}</dd>
+
         <dt className="text-slate-500">{t('sources.validation')}</dt>
         <dd className="text-slate-200">{t('sources.validationText')}</dd>
 

@@ -8,7 +8,7 @@ interface LandingDateProps {
   className?: string;
 }
 
-/** For Apollo sites: shows the real landing time and sets it as the scenario time. */
+/** For sites with a real landing (Apollo, commercial, other countries): shows the real landing time and sets it as the scenario time. */
 export default function LandingDate({ className }: LandingDateProps) {
   const { t, i18n } = useTranslation();
   const siteId = useScenarioStore((state) => state.siteId);

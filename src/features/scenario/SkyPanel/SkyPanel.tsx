@@ -148,6 +148,9 @@ export default function SkyPanel({
                 <button
                   type="button"
                   onClick={reloadMap}
+                  // Not a click on the picture: it must not open the full-size view
+                  onPointerDown={(event) => event.stopPropagation()}
+                  onPointerUp={(event) => event.stopPropagation()}
                   title={t('scenario.sky.reload')}
                   aria-label={t('scenario.sky.reload')}
                   className="absolute top-2 left-2 z-10 flex size-8 items-center justify-center rounded-lg border border-white/15 bg-space-900/80 text-lg leading-none text-slate-300 backdrop-blur transition-colors hover:text-accent focus-visible:outline-2 focus-visible:outline-earth"

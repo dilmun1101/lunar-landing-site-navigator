@@ -1,3 +1,4 @@
+import type { SunElevationStats } from '@/domain/metrics/sunElevation/sunElevation';
 import type { Duration, Verdict } from '@/types';
 
 // DEMO DATA: static display values. Calculations are not connected yet.
@@ -28,6 +29,8 @@ export interface ScenarioView {
   longestCommsGap: Duration;
   /** The darkness is longer than the battery limit from the criteria */
   blackoutExceeded: boolean;
+  /** How high the Sun stands during the mission (power of solar panels) */
+  sunElevation: SunElevationStats | null;
   /** null — the body is currently below the horizon */
   sunset: Duration | null;
   earthset: Duration | null;
@@ -91,6 +94,7 @@ export const demoScenario: ScenarioView = {
   longestDarkness: { days: 3, hours: 0 },
   longestCommsGap: { days: 4, hours: 12 },
   blackoutExceeded: false,
+  sunElevation: { max: 3.1, meanLit: 1.6 },
   sunset: { days: 4, hours: 11 },
   earthset: { days: 2, hours: 3 },
   sun: { azimuth: 120, elevation: 2.4 },

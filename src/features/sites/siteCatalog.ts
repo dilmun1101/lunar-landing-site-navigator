@@ -1,22 +1,50 @@
 import type { CatalogSite } from '@/features/sites/types';
 
-// CLPS / Artemis list: Artemis III candidate regions (NASA, 2022),
-// check against the current list before the final version.
+// Artemis candidate regions: the nine regions announced by NASA in October 2024
+// (refined from the 13 regions of 2022), listed without priority.
 //
 // Coordinates:
 //  • Apollo — landing sites (LROC), rounded to 0.01°; landing — the time of touchdown (UTC, NASA mission reports).
-//  • Connecting Ridge, Nobile Rim 2 — points from scientific publications.
-//  • Other south polar regions (approximate: true) — the CENTER of the crater or region
-//    per Wikipedia/publications. A position on the crater rim differs by kilometers,
-//    and illumination near the pole changes a lot over such distances, so before
-//    the final version replace them with exact points from NASA data.
-//  • Leibnitz Beta Plateau — coordinates not found, no data is calculated for it.
+//  • Commercial and other countries' landings — the lander's position from LROC images or the
+//    operators (NSSDC, LROC, ISRO, JAXA); landing — the reported time of touchdown, UTC.
+//    Luna 9 was never imaged from orbit, so its point is approximate.
+//  • Nobile Rim 2 — a point from scientific publications.
+//  • Mons Mouton — the summit per the IAU gazetteer; Mons Mouton Plateau — the center of the
+//    LROC NAC mosaic of the region.
+//  • Other regions (approximate: true) — the CENTER of the crater or region per publications.
+//    NASA has not published exact points: it will pick sites inside the regions once the
+//    launch dates are known. Illumination near the pole changes a lot over a few kilometers,
+//    so the result for these regions is an estimate.
 export const siteCatalog: CatalogSite[] = [
+  {
+    id: 'peak-near-cabeus-b',
+    name: 'Peak near Cabeus B',
+    group: 'clps',
+    coordinates: { lat: -84.9, lon: -35.5, approximate: true },
+  },
+  {
+    id: 'haworth',
+    name: 'Haworth',
+    group: 'clps',
+    coordinates: { lat: -86.9, lon: -4.0, approximate: true },
+  },
   {
     id: 'malapert-massif',
     name: 'Malapert Massif',
     group: 'clps',
     coordinates: { lat: -86.0, lon: 0.0, approximate: true },
+  },
+  {
+    id: 'mons-mouton-plateau',
+    name: 'Mons Mouton Plateau',
+    group: 'clps',
+    coordinates: { lat: -84.3, lon: 30.6, approximate: true },
+  },
+  {
+    id: 'mons-mouton',
+    name: 'Mons Mouton',
+    group: 'clps',
+    coordinates: { lat: -84.6, lon: 31.0, approximate: true },
   },
   {
     id: 'nobile-rim-1',
@@ -31,47 +59,67 @@ export const siteCatalog: CatalogSite[] = [
     coordinates: { lat: -84.20156, lon: 60.69989 },
   },
   {
-    id: 'haworth',
-    name: 'Haworth',
-    group: 'clps',
-    coordinates: { lat: -86.9, lon: -4.0, approximate: true },
-  },
-  {
-    id: 'faustini-rim-a',
-    name: 'Faustini Rim A',
-    group: 'clps',
-    coordinates: { lat: -87.3, lon: 77.0, approximate: true },
-  },
-  { id: 'leibnitz-beta-plateau', name: 'Leibnitz Beta Plateau', group: 'clps' },
-  {
-    id: 'connecting-ridge',
-    name: 'Connecting Ridge',
-    group: 'clps',
-    coordinates: { lat: -89.527, lon: -154.592 },
-  },
-  {
     id: 'de-gerlache-rim-2',
     name: 'de Gerlache Rim 2',
     group: 'clps',
     coordinates: { lat: -88.5, lon: -87.1, approximate: true },
   },
   {
-    id: 'peak-near-cabeus-b',
-    name: 'Peak Near Cabeus B',
-    group: 'clps',
-    coordinates: { lat: -84.9, lon: -35.5, approximate: true },
-  },
-  {
-    id: 'amundsen-rim',
-    name: 'Amundsen Rim',
-    group: 'clps',
-    coordinates: { lat: -84.25, lon: 68.6, approximate: true },
-  },
-  {
     id: 'slater-plain',
     name: 'Slater Plain',
     group: 'clps',
     coordinates: { lat: -88.08, lon: 111.29, approximate: true },
+  },
+
+  {
+    id: 'im-1',
+    name: 'IM-1 Odysseus — Malapert A',
+    group: 'commercial',
+    coordinates: { lat: -80.13, lon: 1.44 },
+    landing: '2024-02-22T23:23:00Z',
+  },
+  {
+    id: 'blue-ghost-1',
+    name: 'Blue Ghost 1 — Mare Crisium',
+    group: 'commercial',
+    coordinates: { lat: 18.56, lon: 61.81 },
+    landing: '2025-03-02T08:34:00Z',
+  },
+  {
+    id: 'im-2',
+    name: 'IM-2 Athena — Mons Mouton',
+    group: 'commercial',
+    coordinates: { lat: -84.7906, lon: 29.1957 },
+    landing: '2025-03-06T17:28:50Z',
+  },
+
+  {
+    id: 'chandrayaan-3',
+    name: 'Chandrayaan-3 — Shiv Shakti Point',
+    group: 'international',
+    coordinates: { lat: -69.373, lon: 32.319 },
+    landing: '2023-08-23T12:33:00Z',
+  },
+  {
+    id: 'slim',
+    name: 'SLIM — Shioli crater',
+    group: 'international',
+    coordinates: { lat: -13.316, lon: 25.251 },
+    landing: '2024-01-19T15:20:00Z',
+  },
+  {
+    id: 'luna-9',
+    name: 'Luna 9 — Oceanus Procellarum',
+    group: 'international',
+    coordinates: { lat: 7.08, lon: -64.37, approximate: true },
+    landing: '1966-02-03T18:45:30Z',
+  },
+  {
+    id: 'luna-17',
+    name: 'Luna 17 / Lunokhod 1 — Mare Imbrium',
+    group: 'international',
+    coordinates: { lat: 38.3282, lon: -34.998 },
+    landing: '1970-11-17T03:47:00Z',
   },
 
   {
