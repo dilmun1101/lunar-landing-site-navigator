@@ -1,11 +1,15 @@
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
+import { type Criteria, defaultCriteria } from '@/domain/criteria/criteria';
+import { verdictFor } from '@/domain/metrics/verdict/verdict';
+import { useMode } from '@/hooks/useMode/useMode';
 
 interface HeatmapTooltipProps {
   site?: string;
   date?: Date;
   /** Percent, 0–100 */
   value?: number;
+  criteria?: Criteria;
   className?: string;
 }
 
@@ -13,9 +17,11 @@ export default function HeatmapTooltip({
   site,
   date,
   value,
+  criteria = defaultCriteria,
   className,
 }: HeatmapTooltipProps) {
   const { t, i18n } = useTranslation();
+  const beginner = useMode() === 'beginner';
   const hasCell =
     site !== undefined && date !== undefined && value !== undefined;
 
@@ -31,7 +37,19 @@ export default function HeatmapTooltip({
             year: 'numeric',
           }).format(date),
         },
-        { key: 'value', text: `${value}%` },
+        {
+          key: 'value',
+          // A beginner gets a word, an expert gets the number
+          text: beginner
+            ? t(
+                `verdict.${
+                  verdictFor(value, criteria) === 'not-viable'
+                    ? 'notViable'
+                    : verdictFor(value, criteria)
+                }`
+              )
+            : `${value}%`,
+        },
       ]
     : [];
 
@@ -49,7 +67,13 @@ export default function HeatmapTooltip({
             <span className="text-slate-500">
               {t(`planner.tooltip.${item.key}`)}
             </span>
-            <span className="font-mono text-slate-100">{item.text}</span>
+            <span
+              className={classNames('text-slate-100', {
+                'font-mono': !(beginner && item.key === 'value'),
+              })}
+            >
+              {item.text}
+            </span>
           </span>
         ))
       ) : (

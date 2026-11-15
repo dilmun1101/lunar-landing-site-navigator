@@ -71,7 +71,9 @@ export default function BestWindowsList({
 
   return (
     <div className={classNames('flex flex-col gap-2', className)}>
-      <p className="text-xs text-slate-500">{t('planner.best.hint')}</p>
+      <p className="text-xs text-slate-500">
+        {t(beginner ? 'planner.best.hintBeginner' : 'planner.best.hint')}
+      </p>
       <ol className="flex flex-col gap-2">
         {top.map((item, index) => (
           <li
@@ -94,9 +96,11 @@ export default function BestWindowsList({
                   {dateFormat.format(item.startMs)}
                 </span>
               </span>
-              <span className="font-mono text-sm text-slate-100">
-                {item.percent}%
-              </span>
+              {!beginner && (
+                <span className="font-mono text-sm text-slate-100">
+                  {item.percent}%
+                </span>
+              )}
               <Badge verdict={verdictFor(item.percent, criteria)} />
             </button>
             <button

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import Button from '@/components/ui/Button/Button';
+import Hint from '@/components/ui/Tooltip/Tooltip';
 import Panel from '@/components/ui/Panel/Panel';
 import SectionTitle from '@/components/ui/SectionTitle/SectionTitle';
 import {
@@ -19,6 +20,7 @@ import { usePlannerData } from '@/features/planner/usePlannerData/usePlannerData
 import ViabilityHeatmap, {
   type HoveredCell,
 } from '@/features/planner/ViabilityHeatmap/ViabilityHeatmap';
+import { useMode } from '@/hooks/useMode/useMode';
 import {
   MAX_COMPARE_ITEMS,
   useCompareList,
@@ -41,7 +43,10 @@ export default function PlannerPage() {
   const addToCompare = useCompareList((state) => state.add);
   const compareItems = useCompareList((state) => state.items);
   const navigate = useNavigate();
-  const [metric, setMetric] = useState<PlannerMetric>('window');
+  const beginner = useMode() === 'beginner';
+  const [expertMetric, setMetric] = useState<PlannerMetric>('window');
+  // A beginner sees one simple picture: light and Earth link together
+  const metric: PlannerMetric = beginner ? 'window' : expertMetric;
   const [hovered, setHovered] = useState<HoveredCell | null>(null);
 
   const days = durationDays[duration];
@@ -107,7 +112,9 @@ export default function PlannerPage() {
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-1">
         <p className="text-xs text-slate-500">
-          {t('planner.dataNote', { days: Math.round(days) })}
+          {beginner
+            ? t('planner.dataNoteBeginner', { days: Math.round(days) })
+            : t('planner.dataNote', { days: Math.round(days) })}
         </p>
         <div className="flex items-center justify-between gap-3">
           <p className="text-xs text-slate-500">
@@ -143,8 +150,11 @@ export default function PlannerPage() {
 
       <Panel className="flex flex-col gap-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <SectionTitle>{t('planner.heatmap.title')}</SectionTitle>
-          <MetricToggle value={metric} onChange={setMetric} />
+          <div className="flex items-center gap-2">
+            <SectionTitle>{t('planner.heatmap.title')}</SectionTitle>
+            <Hint text={t('hints.heatmap')} />
+          </div>
+          {!beginner && <MetricToggle value={metric} onChange={setMetric} />}
         </div>
 
         <ViabilityHeatmap
@@ -160,6 +170,7 @@ export default function PlannerPage() {
             site={hovered ? plannerSites[hovered.row]?.name : undefined}
             date={hovered ? dates[hovered.col] : undefined}
             value={hoveredValue}
+            criteria={criteria}
           />
           <div className="flex items-center gap-2 text-xs text-slate-500">
             {t('planner.legend.low')}
