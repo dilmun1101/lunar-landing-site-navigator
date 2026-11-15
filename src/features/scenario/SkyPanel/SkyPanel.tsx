@@ -112,6 +112,8 @@ export default function SkyPanel({
                     lat={site.lat}
                     lon={site.lon}
                     sun={sun}
+                    earth={earth}
+                    horizon={horizon}
                     className="aspect-square w-full"
                   />
                 ) : (

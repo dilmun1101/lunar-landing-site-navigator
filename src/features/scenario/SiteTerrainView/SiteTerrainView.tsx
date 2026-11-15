@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { BufferAttribute, BufferGeometry } from 'three';
 import type { SkyPosition } from '@/domain/ephemeris/sunEarthPosition/sunEarthPosition';
 import type { TerrainGrid } from '@/domain/terrain/terrainGrid/terrainGrid';
+import { terrainElevationAt } from '@/domain/horizon/horizonProfile/horizonProfile';
+import { skyBodyPosition } from '@/domain/terrain/skyBodyPosition/skyBodyPosition';
 import { terrainMesh } from '@/domain/terrain/terrainMesh/terrainMesh';
 import GlobeControls from '@/features/scenario/MoonGlobe/GlobeControls';
 import { useSiteTerrain } from '@/features/scenario/useSiteTerrain/useSiteTerrain';
@@ -11,6 +13,12 @@ import { useSiteTerrain } from '@/features/scenario/useSiteTerrain/useSiteTerrai
 /** The patch is 40 km wide with 1-3 km of relief: heights are stretched to be readable */
 const EXAGGERATION = 2;
 const SUN_DISTANCE_KM = 80;
+/** The Sun and the Earth are drawn far larger than in reality, or they would be invisible dots */
+const SKY_DISTANCE_KM = 200;
+const SUN_DRAW_RADIUS_KM = 7;
+const EARTH_DRAW_RADIUS_KM = 5;
+const SUN_COLOR = '#fbbf24';
+const EARTH_COLOR = '#38bdf8';
 const SHADOW_HALF_WIDTH_KM = 32;
 const MARKER_RADIUS_KM = 0.4;
 const CAMERA_HOME = [0, 14, 34] as const;
@@ -19,19 +27,67 @@ interface SiteTerrainViewProps {
   lat: number;
   lon: number;
   sun: SkyPosition;
+  earth: SkyPosition;
+  /** Terrain horizon (72 values), to tell a body behind a mountain from one in the open sky */
+  horizon: number[];
   className?: string;
 }
 
 interface TerrainSceneProps {
   grid: TerrainGrid;
   sun: SkyPosition;
+  earth: SkyPosition;
+  horizon: number[];
   ariaLabel: string;
   className?: string;
 }
 
-const rad = (degrees: number) => (degrees * Math.PI) / 180;
+interface SkyBodyProps {
+  body: SkyPosition;
+  horizon: number[];
+  radius: number;
+  color: string;
+  glow?: boolean;
+}
 
-function TerrainScene({ grid, sun, ariaLabel, className }: TerrainSceneProps) {
+/** The Sun or the Earth in the sky. Behind the terrain horizon it is shown pale. */
+function SkyBody({ body, horizon, radius, color, glow = false }: SkyBodyProps) {
+  // Below the geometric horizon the body is under the ground: not drawn at all
+  if (body.elevation <= 0) return null;
+  const hidden = body.elevation < terrainElevationAt(horizon, body.azimuth);
+  const position = skyBodyPosition(
+    body.azimuth,
+    body.elevation,
+    SKY_DISTANCE_KM
+  );
+  return (
+    <group position={position}>
+      <mesh>
+        <sphereGeometry args={[radius, 24, 24]} />
+        <meshBasicMaterial
+          color={color}
+          transparent
+          opacity={hidden ? 0.25 : 1}
+        />
+      </mesh>
+      {glow && !hidden && (
+        <mesh>
+          <sphereGeometry args={[radius * 1.7, 24, 24]} />
+          <meshBasicMaterial color={color} transparent opacity={0.18} />
+        </mesh>
+      )}
+    </group>
+  );
+}
+
+function TerrainScene({
+  grid,
+  sun,
+  earth,
+  horizon,
+  ariaLabel,
+  className,
+}: TerrainSceneProps) {
   const geometry = useMemo(() => {
     const mesh = terrainMesh(grid, EXAGGERATION);
     const result = new BufferGeometry();
@@ -43,14 +99,11 @@ function TerrainScene({ grid, sun, ariaLabel, className }: TerrainSceneProps) {
   }, [grid]);
   useEffect(() => () => geometry.dispose(), [geometry]);
 
-  // Direction to the Sun in scene axes: x east, y up, z south
-  const az = rad(sun.azimuth);
-  const el = rad(sun.elevation);
-  const sunPosition: [number, number, number] = [
-    Math.cos(el) * Math.sin(az) * SUN_DISTANCE_KM,
-    Math.sin(el) * SUN_DISTANCE_KM,
-    -Math.cos(el) * Math.cos(az) * SUN_DISTANCE_KM,
-  ];
+  const sunPosition = skyBodyPosition(
+    sun.azimuth,
+    sun.elevation,
+    SUN_DISTANCE_KM
+  );
 
   return (
     <div className={className} role="img" aria-label={ariaLabel}>
@@ -82,6 +135,29 @@ function TerrainScene({ grid, sun, ariaLabel, className }: TerrainSceneProps) {
           <meshStandardMaterial color="#b4b0aa" roughness={1} />
         </mesh>
 
+        <SkyBody
+          body={sun}
+          horizon={horizon}
+          radius={SUN_DRAW_RADIUS_KM}
+          color={SUN_COLOR}
+          glow
+        />
+        <SkyBody
+          body={earth}
+          horizon={horizon}
+          radius={EARTH_DRAW_RADIUS_KM}
+          color={EARTH_COLOR}
+        />
+
+        {/* North: a white arrow just beyond the northern edge of the patch */}
+        <mesh
+          position={[0, 0.3, -(grid.radiusKm + 3)]}
+          rotation={[-Math.PI / 2, 0, 0]}
+        >
+          <coneGeometry args={[0.9, 2.6, 12]} />
+          <meshBasicMaterial color="#f8fafc" />
+        </mesh>
+
         {/* The site: the center of the patch, at the plane's zero */}
         <mesh position={[0, MARKER_RADIUS_KM, 0]}>
           <sphereGeometry args={[MARKER_RADIUS_KM, 16, 16]} />
@@ -107,6 +183,8 @@ export default function SiteTerrainView({
   lat,
   lon,
   sun,
+  earth,
+  horizon,
   className,
 }: SiteTerrainViewProps) {
   const { t } = useTranslation();
@@ -126,6 +204,8 @@ export default function SiteTerrainView({
     <TerrainScene
       grid={terrain.grid}
       sun={sun}
+      earth={earth}
+      horizon={horizon}
       ariaLabel={t('scenario.terrain.aria')}
       className={className}
     />
