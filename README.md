@@ -3,6 +3,8 @@
 A web app for comparing lunar landing sites and dates by power and communication conditions.
 Built by team **Snow Leopard** for the [NASA Space Apps Challenge 2026](https://www.spaceappschallenge.org/).
 
+**Live demo: https://lunar-landing-navigator.netlify.app/scenario**
+
 ## Why this project exists
 
 Missions to the Moon's south pole face extreme lighting and communication constraints.
@@ -21,7 +23,7 @@ It is meant for mission planners, educators and anyone curious why the lunar sou
 ## Features
 
 - **Site catalog**: the nine NASA Artemis candidate regions, commercial landings (IM-1, IM-2, Blue Ghost 1),
-  other countries' missions (Chang'e, Chandrayaan-3, SLIM, Luna) and Apollo, plus custom coordinates.
+  other countries' missions (Chandrayaan-3, SLIM, Luna) and Apollo, plus custom coordinates.
 - **Verdict for a site and date**: share of the mission with sunlight, with a direct Earth link and with both;
   the longest darkness and communication gap; the Sun's elevation; time until sunset and Earthset.
 - **Sky views**: a 2D sky chart, a 3D globe of the Moon and a 3D view of the terrain around the site
@@ -42,6 +44,39 @@ It is meant for mission planners, educators and anyone curious why the lunar sou
   (72 directions, up to 120 km away, with the Moon's curvature) is calculated in the browser.
 - **Check**: at the six Apollo landing sites the Sun matches the NASA ALSJ values within 0.02° and the Earth within 0.22°.
 - The thresholds for "viable" and "marginal" are project assumptions, not NASA requirements; they can be changed in expert mode.
+
+## Data sources and credits
+
+NASA data and resources:
+
+- [JPL Horizons System](https://ssd.jpl.nasa.gov/horizons/): Sun and Earth positions (DE441 ephemeris)
+- [LRO LOLA elevation data (NASA PDS)](https://pds-geosciences.wustl.edu/missions/lro/lola.htm): terrain for the horizon and the 3D views
+- [NASA Artemis III candidate landing regions](https://www.nasa.gov/news-release/nasa-provides-update-on-artemis-iii-moon-landing-regions/)
+- [Apollo Lunar Surface Journal](https://www.nasa.gov/history/alsj/): checking the results at the Apollo sites
+- [NSSDC lunar landing coordinates](https://nssdc.gsfc.nasa.gov/planetary/lunar/lunar_artifact_impacts.html)
+- [NASA Moon Trek](https://trek.nasa.gov/moon/): linked from the app
+
+Other data and resources:
+
+- [USGS Astrogeology](https://astrogeology.usgs.gov/): web map service that serves the LOLA elevations
+- [LROC, Arizona State University](https://www.lroc.asu.edu/) and [LROC QuickMap](https://quickmap.lroc.asu.edu/): lander positions; QuickMap is linked from the app
+- [JAXA SLIM landing report](https://global.jaxa.jp/press/2024/01/file/jaxa_doc01_20240125_e.pdf)
+- [Luna 17 / Lunokhod 1 coordinates (EPSC 2010)](https://meetingorganizer.copernicus.org/EPSC2010/EPSC2010-724.pdf)
+- Wikipedia articles for landing times and coordinates of Chandrayaan-3, Luna 9, IM-1, IM-2, Blue Ghost Mission 1 and Mons Mouton
+- Open-source libraries listed in `package.json` (React, three.js, React Three Fiber, Vite, Tailwind CSS and others)
+
+No NASA logos, flags or mission insignia are used in this project.
+
+## Use of AI (Super Intelligence)
+
+This project was developed with the help of an AI assistant, [Claude by Anthropic](https://www.anthropic.com/claude), used for:
+
+- **Code**: writing, debugging and reviewing the application code.
+- **Text**: this README, interface texts and hints in English and Russian, and the project description.
+- **Research**: finding the current Artemis III candidate regions and the landing coordinates of past missions (each value was taken from the sources listed above).
+- **Design**: the interface layout and the presentation slides (the slides show screenshots of this app, not generated images).
+
+The scientific data is not AI-generated: Sun and Earth positions come from JPL Horizons and the terrain from LRO LOLA, and the calculations are done by the app's own code.
 
 ## Running locally
 

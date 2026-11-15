@@ -6,7 +6,7 @@ import type { CatalogSite } from '@/features/sites/types';
 // Coordinates:
 //  • Apollo — landing sites (LROC), rounded to 0.01°; landing — the time of touchdown (UTC, NASA mission reports).
 //  • Commercial and other countries' landings — the lander's position from LROC images or the
-//    operators (NSSDC, LROC, CNSA, ISRO, JAXA); landing — the reported time of touchdown, UTC.
+//    operators (NSSDC, LROC, ISRO, JAXA); landing — the reported time of touchdown, UTC.
 //    Luna 9 was never imaged from orbit, so its point is approximate.
 //  • Nobile Rim 2 — a point from scientific publications.
 //  • Mons Mouton — the summit per the IAU gazetteer; Mons Mouton Plateau — the center of the
@@ -106,34 +106,6 @@ export const siteCatalog: CatalogSite[] = [
     group: 'international',
     coordinates: { lat: -13.316, lon: 25.251 },
     landing: '2024-01-19T15:20:00Z',
-  },
-  {
-    id: 'change-3',
-    name: "Chang'e 3 — Mare Imbrium",
-    group: 'international',
-    coordinates: { lat: 44.1214, lon: -19.5117 },
-    landing: '2013-12-14T13:11:18Z',
-  },
-  {
-    id: 'change-4',
-    name: "Chang'e 4 — Von Kármán (far side)",
-    group: 'international',
-    coordinates: { lat: -45.4446, lon: 177.5991 },
-    landing: '2019-01-03T02:26:00Z',
-  },
-  {
-    id: 'change-5',
-    name: "Chang'e 5 — Mons Rümker",
-    group: 'international',
-    coordinates: { lat: 43.0576, lon: -51.9161 },
-    landing: '2020-12-01T15:11:00Z',
-  },
-  {
-    id: 'change-6',
-    name: "Chang'e 6 — Apollo basin (far side)",
-    group: 'international',
-    coordinates: { lat: -41.6384, lon: -153.9855 },
-    landing: '2024-06-01T22:23:00Z',
   },
   {
     id: 'luna-9',
