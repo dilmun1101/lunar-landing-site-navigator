@@ -13,8 +13,11 @@ import { webglAvailable } from '@/lib/webgl/webglAvailable';
 
 // three.js is heavy: the globe is loaded only when someone switches to 3D.
 const MoonGlobe = lazy(() => import('@/features/scenario/MoonGlobe/MoonGlobe'));
+const SiteTerrainView = lazy(
+  () => import('@/features/scenario/SiteTerrainView/SiteTerrainView')
+);
 
-type SkyView = 'flat' | 'globe';
+type SkyView = 'flat' | 'globe' | 'terrain';
 
 interface SkyPanelProps {
   sun: SkyPoint;
@@ -43,7 +46,7 @@ export default function SkyPanel({
   const beginner = useMode() === 'beginner';
   const [view, setView] = useState<SkyView>('flat');
   const canShowGlobe = site !== undefined && webglAvailable();
-  const globe = canShowGlobe && view === 'globe';
+  const threeD = canShowGlobe && view !== 'flat';
 
   const elevationFormat = new Intl.NumberFormat(i18n.language, {
     minimumFractionDigits: 1,
@@ -62,7 +65,15 @@ export default function SkyPanel({
   return (
     <Panel className={classNames('flex flex-col gap-4', className)}>
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <TitleWithHint hint={t(globe ? 'help.skyGlobe' : 'help.sky')}>
+        <TitleWithHint
+          hint={t(
+            threeD && view === 'terrain'
+              ? 'help.skyTerrain'
+              : threeD
+                ? 'help.skyGlobe'
+                : 'help.sky'
+          )}
+        >
           {t('scenario.sky.title')}
         </TitleWithHint>
         {canShowGlobe && (
@@ -73,6 +84,7 @@ export default function SkyPanel({
             options={[
               { value: 'flat', label: t('scenario.sky.view.flat') },
               { value: 'globe', label: t('scenario.sky.view.globe') },
+              { value: 'terrain', label: t('scenario.sky.view.terrain') },
             ]}
           />
         )}
@@ -80,7 +92,7 @@ export default function SkyPanel({
 
       <div className="grid items-center gap-6 md:grid-cols-[minmax(0,22rem)_1fr]">
         <div className="flex flex-col gap-2">
-          {globe && site ? (
+          {threeD && site ? (
             <GlobeBoundary
               fallback={
                 <p className="text-sm text-slate-400">
@@ -95,14 +107,23 @@ export default function SkyPanel({
                   </p>
                 }
               >
-                <MoonGlobe
-                  lat={site.lat}
-                  lon={site.lon}
-                  sun={sun}
-                  earth={earth}
-                  ariaLabel={t('scenario.globe.aria')}
-                  className="aspect-square w-full"
-                />
+                {view === 'terrain' ? (
+                  <SiteTerrainView
+                    lat={site.lat}
+                    lon={site.lon}
+                    sun={sun}
+                    className="aspect-square w-full"
+                  />
+                ) : (
+                  <MoonGlobe
+                    lat={site.lat}
+                    lon={site.lon}
+                    sun={sun}
+                    earth={earth}
+                    ariaLabel={t('scenario.globe.aria')}
+                    className="aspect-square w-full"
+                  />
+                )}
               </Suspense>
             </GlobeBoundary>
           ) : (
@@ -114,8 +135,14 @@ export default function SkyPanel({
               horizon={horizon}
             />
           )}
-          {globe ? (
-            <p className="text-xs text-slate-500">{t('scenario.globe.note')}</p>
+          {threeD ? (
+            <p className="text-xs text-slate-500">
+              {t(
+                view === 'terrain'
+                  ? 'scenario.terrain.note'
+                  : 'scenario.globe.note'
+              )}
+            </p>
           ) : (
             !beginner && (
               <p className="text-xs text-slate-500">
@@ -184,7 +211,7 @@ export default function SkyPanel({
           )}
 
           <Legend />
-          {!globe && (
+          {!threeD && (
             <p className="text-xs text-slate-500">
               {t('scenario.polar.trackNote')}
             </p>

@@ -71,7 +71,8 @@
       "view": {
         "label": "Map view",
         "flat": "2D",
-        "globe": "3D"
+        "globe": "3D",
+        "terrain": "Terrain"
       }
     },
     "polar": {
@@ -173,6 +174,12 @@
       "loading": "Loading 3D…",
       "error": "Could not show the 3D view. Switch back to 2D.",
       "note": "Drag to rotate the globe, scroll to zoom. Arrows go from the site to the Sun (yellow) and the Earth (blue); a grey arrow means the body is below the horizon."
+    },
+    "terrain": {
+      "loading": "Loading the terrain around the site…",
+      "error": "Could not load the terrain. Try again later or pick another view.",
+      "aria": "Terrain around the site: the red dot is the site, light and shadows depend on where the Sun is",
+      "note": "A 40 by 40 km patch around the site, heights stretched twice. Light and shadows follow the Sun at the chosen moment. Drag to rotate, scroll to zoom."
     }
   },
   "compare": {
@@ -358,6 +365,7 @@
     "panorama": "A 360° view all around you. North is at both edges, then east, south and west going around. The higher the dot, the higher the body is above the horizon. The dark shape is mountains and crater rims.",
     "temporal": "When the mission starts, in universal time (UTC). A lunar day lasts about 29.5 Earth days; the slider moves the date along the lunar cycle, the buttons move it by a day.",
     "bestWindows": "The best start day is found for every site: the better the result, the more of the mission has both light and a link to Earth. Click a row to open it in detail.",
-    "skyGlobe": "This is a model of the Moon as it would look from space. The red dot is your site. The yellow arrow shows where the Sun is, the blue one where the Earth is. A grey arrow means that body is below the horizon right now and cannot be seen from the site. The bright part of the ball is day, the dark part is night. Drag the ball to turn it."
+    "skyGlobe": "This is a model of the Moon as it would look from space. The red dot is your site. The yellow arrow shows where the Sun is, the blue one where the Earth is. A grey arrow means that body is below the horizon right now and cannot be seen from the site. The bright part of the ball is day, the dark part is night. Drag the ball to turn it.",
+    "skyTerrain": "This is the ground around the site — a 40 by 40 kilometer patch from lunar orbiter laser data. The red dot is the site. The light comes from the Sun: the lower the Sun, the longer the shadows. If the Sun is below the horizon it is night. The relief is stretched twice in height so that it is visible. Drag to rotate, scroll to zoom."
   }
 }
