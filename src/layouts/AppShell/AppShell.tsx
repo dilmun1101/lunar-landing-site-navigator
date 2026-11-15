@@ -25,18 +25,25 @@ export default function AppShell({ className }: AppShellProps) {
   const { t } = useTranslation();
   const collapsed = useSidebarStore((state) => state.collapsed);
   const compareOpen = useCompareDock((state) => state.open);
+  const compareWidth = useCompareDock((state) => state.width);
+  const comparing = useCompareDock((state) => state.resizing);
 
   return (
     <div
       className={classNames(
-        'grid min-h-screen grid-cols-[var(--sidebar-width)_minmax(0,1fr)_var(--compare-width)] grid-rows-[auto_1fr_auto] bg-space-900 text-slate-100 transition-[grid-template-columns] duration-200',
+        'grid min-h-screen grid-cols-[var(--sidebar-width)_minmax(0,1fr)_var(--compare-width)] grid-rows-[auto_1fr_auto] bg-space-900 text-slate-100',
+        // No smoothing while the edge is dragged: the panel must follow the mouse
+        { 'transition-[grid-template-columns] duration-200': !comparing },
         className
       )}
       // Other parts (the full-size picture) read the widths of the side panels from here
       style={
         {
           '--sidebar-width': collapsed ? '3rem' : '20rem',
-          '--compare-width': compareOpen ? '24rem' : '3rem',
+          // Never wider than 60% of the window, so the center cannot be squeezed out
+          '--compare-width': compareOpen
+            ? `min(${compareWidth}px, 60vw)`
+            : '3rem',
         } as CSSProperties
       }
     >

@@ -206,7 +206,8 @@
     "dock": {
       "collapse": "Hide comparison",
       "expand": "Show comparison",
-      "count": "Scenarios being compared: {{count}}"
+      "count": "Scenarios being compared: {{count}}",
+      "resize": "Resize the comparison panel"
     }
   },
   "planner": {
